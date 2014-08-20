@@ -113,30 +113,6 @@
        <!-- MENU  -->		
 		<%@ include file="menu.jsp" %>
 
-        <div id="page-wrapper">
-
-            <div class="container-fluid">
-                <!-- /.row -->
-                <div class="row">
-					<div class="row">
-				  			<div class="col-lg-12">
-						    	<div class="panel panel-primary">
-						    		<div class="panel-heading">
-								    	<h3 class="panel-title">List CI's</h3>
-								  	</div>
-						    		<div id="listBizserviceT"></div>
-						    	</div>		
-					    	</div>
-				  		</div>
-                </div>
-                <!-- /.row -->
-				  <div class="row">
-				
-				  </div>
-				<!-- /.row -->
-            </div>
-            <!-- /.container-fluid -->
-
         <div id="page-wrapper">        
         	<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">
@@ -188,9 +164,7 @@
         </div>
         <!-- /#page-wrapper -->
 
-    </div>
-    <!-- /#wrapper -->
-
+	</div>
 	<!-- jQuery Version 1.11.0 -->	
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	

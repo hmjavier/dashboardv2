@@ -7,7 +7,7 @@ var cnocConnector = {
 	logout : '',
 	ipserver : '',
 	incidents : '',	
-	/*
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -51,8 +51,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
-	
+	},
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -98,7 +98,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -193,21 +193,6 @@ var cnocConnector = {
 			 setTimeout(function(){
 				 dTable.fnAdjustColumnSizing();
 			 },10);
-		}
-		
-		if(divTable === "listNodesP"){
-			$("#" + divTable).delegate("tbody tr", "click", function () {
-				dTable.$('tr.row_selected').removeClass('row_selected');
-				
-				$(this).addClass('row_selected');
-				
-				var nTds = $('td', dTable.$('tr.row_selected'));
-				var node = $(nTds[0]).text();
-				$( "#nodeResources").mask("Waiting...");
-				$(".form-control").val("");
-				cnocConnector.invokeMashup(cnocConnector.service1, {"endpoint" : "http://10.237.7.25/omk/opCharts/nodes/"+node+"/resources/cbqos-out/indicies.json"},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
-			});
-			
 		}
 		
 		if(divTable === "listIncidentsI") {
