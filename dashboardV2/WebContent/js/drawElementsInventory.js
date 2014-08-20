@@ -3,7 +3,15 @@
  */
 
 var drawElementsInventory = {
-	init : function(codeNet) {
+	init : function(codeNet) {		
+		
+    	cnocConnector.invokeMashup(
+	    		cnocConnector.service1, // Service ID
+	    		{"code_net" : ""}, // Parameters
+	    		drawElementsInventory.showInventory, // Callback
+	    		"chartInventory", // Container
+	    		"tableInventory" // Div
+    	);
 		
 		$(".btn-group > .btn").click(function(){
 		    $(this).addClass("active").siblings().removeClass("active");
@@ -13,9 +21,6 @@ var drawElementsInventory = {
 			this.builder(codeNet);
 
 		} else {
-			/*Genera Menu*/
-			generateMenu();
-			
 			cnocConnector.invokeMashup(
 					cnocConnector.service9, {}, drawElementsInventory.selectCustom, "SelectCustomer", "opt");
 		}		
@@ -26,11 +31,9 @@ var drawElementsInventory = {
 		var rowsData = new Array();
 		var rowsHeaders = new Array();
 		
-		console.log(datos);
-		console.log(inventory);
+//		console.log(inventory);
 	    
 	    if (inventory == 'Transport Inventory') {
-	    	console.log("if");
 	    	try {
 				if (datos.records.record.length > 1) {
 					for ( var i = 0; i < datos.records.record.length; i++) {
@@ -215,12 +218,10 @@ var drawElementsInventory = {
 			}, {
 				"sTitle" : "IP WAN PE"
 			} ];
-	    } else {
-	    	console.log("else");
+	    } else {	    	
 	    	try {
-				if (datos.records.record.length > 1) {
-					console.log("else if");
-					console.log(datos.records.record.length);
+				if (datos.records.record.length > 1) {					
+//					console.log(datos.records.record.length);
 					for ( var i = 0; i < datos.records.record.length; i++) {						
 						var fields = new Array();
 						fields.push(datos.records.record[i].sector.toString());
@@ -259,8 +260,8 @@ var drawElementsInventory = {
 						fields.push(datos.records.record[i].alcance.toString());
 						rowsData.push(fields);
 					}
-					console.log(rowsData);					
-				} else { console.log("else else");
+//					console.log(rowsData);
+				} else { 
 					var fields = new Array();
 					fields.push(datos.records.record.sector.toString());
 					fields.push(datos.records.record.codigo_red.toString());
@@ -368,10 +369,7 @@ var drawElementsInventory = {
 				}, {
 					"sTitle" : "ALCANCE"
 				} ];
-	    }
-	    
-	    console.log(rowsData);
-		console.log(rowsHeaders);
+	    }	    
 		
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		

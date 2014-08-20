@@ -140,7 +140,7 @@ var cnocConnector = {
 			var scrollY = "200";
 			if(divTable === "listCustomerCostosC"){
 				scrollY = "320";
-			}else if(divTable === "listBizserviceTi"){
+			} else if(divTable === "listBizserviceTi" || divTable === "openTicketsListTi"){
 				scrollY = "400";
 			}
 			
@@ -194,8 +194,23 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 		}
-
-		if(divTable === "listIncidentsI"){
+		
+		if(divTable === "listNodesP"){
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+				dTable.$('tr.row_selected').removeClass('row_selected');
+				
+				$(this).addClass('row_selected');
+				
+				var nTds = $('td', dTable.$('tr.row_selected'));
+				var node = $(nTds[0]).text();
+				$( "#nodeResources").mask("Waiting...");
+				$(".form-control").val("");
+				cnocConnector.invokeMashup(cnocConnector.service1, {"endpoint" : "http://10.237.7.25/omk/opCharts/nodes/"+node+"/resources/cbqos-out/indicies.json"},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
+			});
+			
+		}
+		
+		if(divTable === "listIncidentsI") {
 			$("#" + divTable).delegate("tbody tr", "click", function () {					
 				dTable.$('tr.row_selected').removeClass('row_selected');
 				$(this).addClass('row_selected');
@@ -214,54 +229,279 @@ var cnocConnector = {
 		}
 		
 		if (divTable === "listBizserviceTi") {
+			
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					dTable.$('tr.row_selected').removeClass('row_selected');
 					$(this).addClass('row_selected');					
 					var nTds = $('td', dTable.$('tr.row_selected'));
+					
+					var data = {
+						category: "incident",
+						title: "",
+						description: "",
+						company: $(nTds[1]).text(),
+						networkCode: $(nTds[0]).text(),
+						assigmentGroup: $(nTds[2]).text(),
+						siteId: $(nTds[6]).text(),
+						siteName: $(nTds[5]).text(),
+						subcategory: "CUSTOMER",
+						impact: "3",
+						urgency: "3",
+						contactPerson: "",
+						contactMail: "",
+						affectedService: $(nTds[3]).text(),
+						uniqueIdentifier: $(nTds[4]).text()
+					};
 
 					var modal = bootbox.dialog({
-					    message: $("#frm").html(),
-					    title: "Your awesome modal",
-					    buttons: [{
-					      label: "Save",
-					      className: "btn btn-primary",
-					      callback: function() {
-					        var titleTicket = modal.find(".titleTicket").val();
-					        var subtitleTicket = modal.find(".subtitleTicket").val();
-					        var contactTicket = modal.find(".contactTicket").val();
-					        
-					        var data = {
-									"network_code":$(nTds[0]).text(),
-									"company":$(nTds[1]).text(),
-									"sector":$(nTds[2]).text(),
-									"logical_name":$(nTds[3]).text(),
-									"unique_identifier":$(nTds[4]).text(),
-									"location":$(nTds[5]).text(),
-									"location_code":$(nTds[6]).text(),
-									"titleTicket": titleTicket,
-									"subtitleTicket": subtitleTicket,
-									"contactTicket": contactTicket
-								};					        
-					        return false;
-					      }
-					    }, {
-					      label: "Close",
-					      className: "btn btn-default",
-					      callback: function() {
-					        
-					      }
-					    }],
-					    show: false,
-					    onEscape: function() {
-					      modal.modal("hide");
-					    }
-					  });
+						message: $("#frm").html(),
+						title: "Open Ticket: " + 
+							data.affectedService + " - " + 
+							data.uniqueIdentifier + " - " + 
+							data.siteName,
+						buttons: [{
+							label: "Open Ticket",
+							className: "btn btn-primary glyphicon glyphicon-floppy-disk",
+							callback: function() {
+								
+								var button = modal.find( '.glyphicon-floppy-disk' );
+								var title = modal.find(".titleTCK");
+								var description = modal.find(".descriptionTCK");
+								var contactPerson = modal.find(".contactPersonTCK");
+								var contactMail = modal.find(".contactEmailTCK");
+								var sd = modal.find( '#sdTCK' );
+								var im = modal.find( '#imTCK' );
+								var message = modal.find( '#messageTCK' );
+								
+								data.title = title.val();
+								data.description = description.val();
+								data.contactPerson = contactPerson.val();
+								data.contactMail = contactMail.val();
+								
+								$( sd ).attr("disabled", "disabled");
+								$( im ).attr("disabled", "disabled");
+								$( message ).attr("disabled", "disabled");
+								
+								$(button).attr("disabled", "disabled");
+								$(button).text("Waiting...");
+								
+								$( title ).attr("disabled", "disabled");
+								$( description ).attr("disabled", "disabled");
+								$( contactPerson ).attr("disabled", "disabled");
+								$( contactMail ).attr("disabled", "disabled");
+								
+								$( sd ).val("Waiting...");
+								$( im ).val("Waiting...");
+								$( message ).val("Waiting...");
+								
+								if (data.title == "" || data.title == null || data.title == undefined) {
+									
+									$( title ).removeAttr("disabled");
+									$( description ).removeAttr("disabled");
+									$( contactPerson ).removeAttr("disabled");
+									$( contactMail ).removeAttr("disabled");
+									
+									$( sd ).val("ERROR");
+									$( im ).val("ERROR");									
+									$( message ).val("Title is required.");
+									
+									$( button ).text("Open Ticket");
+									$( button ).removeAttr("disabled");
+								
+								} else if (data.description == "" || data.description == null || data.description == undefined) {
+									
+									$( title ).removeAttr("disabled");
+									$( description ).removeAttr("disabled");
+									$( contactPerson ).removeAttr("disabled");
+									$( contactMail ).removeAttr("disabled");
+									
+									$( sd ).val("ERROR");									
+									$( im ).val("ERROR");
+									$( message ).val("Description is required.");									
+									
+									$( button ).text("Open Ticket");
+									$( button ).removeAttr("disabled");
+								
+								} else if (data.contactPerson == "" || data.contactPerson == null || data.contactPerson == undefined) {
+									
+									$( title ).removeAttr("disabled");
+									$( description ).removeAttr("disabled");
+									$( contactPerson ).removeAttr("disabled");
+									$( contactMail ).removeAttr("disabled");
+								
+									$( sd ).val("ERROR");
+									$( im ).val("ERROR");
+									$( message ).val("Contact Person is required.");
+									
+									$( button ).text("Open Ticket");
+									$( button ).removeAttr("disabled");
+								
+								} else if (data.contactMail == "" || data.contactMail == null || data.contactMail == undefined) {
+									
+									$( title ).removeAttr("disabled");
+									$( description ).removeAttr("disabled");
+									$( contactPerson ).removeAttr("disabled");
+									$( contactMail ).removeAttr("disabled");
+								
+									$( sd ).val("ERROR");
+									$( im ).val("ERROR");
+									$( message ).val("Contact Email is required.");
+									
+									$( button ).text("Open Ticket");
+									$( button ).removeAttr("disabled");
+									
+								} else {
+									$.ajax({
+										url: cnocConnector.service2,
+										type: 'POST',
+										dataType: 'json',
+										chache: false,
+										data: data,
+										success: function(data) {
+											if (data == '' || data == null) { 
+												
+												$( title ).removeAttr("disabled");
+												$( description ).removeAttr("disabled");
+												$( contactPerson ).removeAttr("disabled");
+												$( contactMail ).removeAttr("disabled");
+											
+												$( sd ).val("ERROR");
+												$( im ).val("ERROR");
+												$( message ).val("No information Retrived.");
+												
+												$( button ).text("Open Ticket");
+												$( button ).removeAttr("disabled");
+												
+											} else {
+												
+												$( title ).removeAttr("disabled");
+												$( description ).removeAttr("disabled");
+												$( contactPerson ).removeAttr("disabled");
+												$( contactMail ).removeAttr("disabled");
+												
+												$( sd ).val(data.incidentId);
+												$( sd ).removeAttr("disabled");
+												
+												$( im ).val(data.number);
+												$( im ).removeAttr("disabled");
+												
+												$( message ).val(data.message);
+												$( message ).removeAttr("disabled");
+												
+												$( button ).text("Open Ticket");
+												$( button ).removeAttr("disabled");
+											}
+										},
+										error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
+									});
+								}
+								
+								return false;
+							}
+						}, {
+							label: "Close",
+							className: "btn btn-default",
+							callback: function() { }
+						}],
+						show: false,
+						onEscape: function() {
+							modal.modal("hide");
+						}
+					});
 
 					  modal.modal("show");
 					
 			});
 		}
+		
+		if (divTable === "openTicketsListTi") {
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+				dTable.$('tr.row_selected').removeClass('row_selected');
+				$(this).addClass('row_selected');					
+				var nTds = $('td', dTable.$('tr.row_selected'));
+				
+				var data = {
+					number: $(nTds[0]).text(),
+					updateAction : ""
+				};
+				
+				var modal = bootbox.dialog({
+					message: $("#updateTicketDialog").html(),
+					title: "Update Ticket: " + data.number,
+					buttons: [{
+						label: "Update Ticket",
+						className: "btn btn-primary glyphicon glyphicon-floppy-disk",
+						callback: function() {
+							
+							var button = modal.find( '.glyphicon-floppy-disk' );							
+							var message = modal.find( '#messageUpdate' );
+							var updateAction = modal.find( '.updateAction' );
+							
+							data.updateAction = updateAction.val();
+							
+							$( updateAction ).attr("disabled", "disabled");
+							$( message ).attr("disabled", "disabled");
+							$( button ).attr("disabled", "disabled");
+							$( button ).text("Waiting...");
+							$( message ).val("Waiting...");
+							
+							if (data.updateAction == "" || data.updateAction == null || data.updateAction == undefined) {
+								$( updateAction).removeAttr("disabled");
+								
+								$( message ).val("ERROR: Update Action is required.");
+								$( message ).removeAttr("disabled");
+								
+								$( button ).text("Open Ticket");
+								$( button ).removeAttr("disabled");
+							
+							} else {
+								$.ajax({
+									url: cnocConnector.service4,
+									type: 'POST',
+									dataType: 'json',
+									chache: false,
+									data: data,
+									success: function(data) {
+										if (data == '' || data == null) {
+											$( updateAction).removeAttr("disabled");
+											
+											$( message ).val("ERROR: No information Retrived.");
+											$( message ).removeAttr("disabled");
+											
+											$( button ).text("Open Ticket");
+											$( button ).removeAttr("disabled");
+										
+										} else {
+											$( updateAction).removeAttr("disabled");
+											
+											$( message ).val(data.message);
+											$( message ).removeAttr("disabled");
+											
+											$( button ).text("Open Ticket");
+											$( button ).removeAttr("disabled");
 
+										}
+									},
+									error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
+								});
+							}
+							
+							return false;
+						}
+					}, {
+						label: "Close",
+						className: "btn btn-default",
+						callback: function() { }
+					}],
+					show: false,
+					onEscape: function() {
+						modal.modal("hide");
+					}
+				});
+
+				modal.modal("show");
+			});
+		}
 		
 		if (divTable === "listNodesG") {
 			$("#" + divTable).delegate("tbody tr", "click", function () {
@@ -670,10 +910,10 @@ var cnocConnector = {
 			}else if(module==="performance"){
 				drawElementsPerformance.init($(this).val());
 			}else if(module==="performanceGraph"){
-				drawElementsPerformanceGraph.init($(this).val());				
+				drawElementsPerformanceGraph.init($(this).val());
 			}else if(module==="tickets"){
 				drawElementsTickets.init($(this).val());
-			}			
+			}
 		});
 		cnocConnector.codeNetGlobal = $("#" + container).val();
 	},drawSelectNodePerformance : function(datos, container, module) {

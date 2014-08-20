@@ -1,0 +1,36 @@
+{
+	"reports": {
+		"report": [
+			{
+				"id": "CSC",
+				"to": "serv-campo@reduno.com.mx",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			},
+			{
+				"id": "GFC",
+				"to": "gfcorporativo@reduno.com.mx",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			},
+			{
+				"id": "CNOC NOTI",
+				"to": "cnocnoti@reduno.com.mx",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			},
+			{
+				"id": "ESCALACION CASE",
+				"to": "",
+				"cc": ""
+			},
+			{
+				"id": "SMS-INT",
+				"to": "sms@cfg1.uninet.net.mx",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			},
+			{
+				"id": "SMS-CLIE",
+				"to": "sms@cfg1.uninet.net.mx",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			}
+		]
+	}
+}

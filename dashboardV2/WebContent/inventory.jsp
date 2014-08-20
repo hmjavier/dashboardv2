@@ -108,6 +108,9 @@
 
 	<!-- Bootstrap Core CSS -->
 	<script src="js/bootstrap.js"></script>
+	
+	<!-- Modal dialog -->
+	<script type="text/javascript" src="js/bootbox.min.js"></script>
 
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
@@ -148,13 +151,10 @@
 		 	drawElementsInventory.init();
 		 	
 		 	$("#go").click(function() {
-		 		
-		 		console.log(cnocConnector.codeNetGlobal);
 			    
 		 		var inventory = $('.btn-group > .btn.active').text();
 			    
 			    if (inventory == 'Transport Inventory') {
-			    	console.log("if");
 			    	cnocConnector.invokeMashup(
 				    		cnocConnector.service1, // Service ID
 				    		{"code_net" : cnocConnector.codeNetGlobal}, // Parameters
@@ -162,8 +162,7 @@
 				    		"chartInventory", // Container
 				    		"tableInventory" // Div
 				    	);
-			    } else {
-			    	console.log("else");
+			    } else if (inventory == 'Equipment Inventory') {
 			    	cnocConnector.invokeMashup(
 				    		cnocConnector.service2, // Service ID
 				    		{"code_net" : cnocConnector.codeNetGlobal}, // Parameters
@@ -171,6 +170,8 @@
 				    		"chartInventory", // Container
 				    		"tableInventory" // Div
 				    	);
+			    } else {
+			    	bootbox.alert("Please select Inventory Type");
 			    }
 			    
 			});

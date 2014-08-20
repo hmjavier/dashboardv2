@@ -6,8 +6,8 @@
 var drawElementsGral = {
 		dataChartMemory : [],
 		
-		init : function(codeNet) {		
-			
+		init : function(codeNet) {
+
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
