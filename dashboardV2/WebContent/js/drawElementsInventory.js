@@ -5,8 +5,6 @@
 var drawElementsInventory = {
 	init : function(codeNet) {
 		
-		console.log(codeNet);
-		
 		$(".btn-group > .btn").click(function(){
 		    $(this).addClass("active").siblings().removeClass("active");
 		});
@@ -15,6 +13,9 @@ var drawElementsInventory = {
 			this.builder(codeNet);
 
 		} else {
+			/*Genera Menu*/
+			generateMenu();
+			
 			cnocConnector.invokeMashup(
 					cnocConnector.service9, {}, drawElementsInventory.selectCustom, "SelectCustomer", "opt");
 		}		

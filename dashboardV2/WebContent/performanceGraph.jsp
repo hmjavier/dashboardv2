@@ -40,6 +40,8 @@
 	<!-- jQuery Datepicker -->
 	<link rel="stylesheet" type="text/css" href="css/datepicker.css">
 	
+	<!-- jQuery IMPRIMIR -->
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css">
 	
 	<style>
 		.tooltipMap{
@@ -71,6 +73,29 @@
 </head>
 
 <body>
+	<div id="portada" class="portada" style="display: none;">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-primary" style="padding-left: 10px; padding-right: 10px;" >
+					<div class="panel-heading">
+						    <img alt="" src="css/images/logo.png" height="50px">
+					</div>
+					<div class="panel-body" style="margin-top: 45%; text-align: center;">
+						<!-- <h1 class="clientPdf"></h1>-->					 
+					 	<h1>Performace Charts</h1>
+					 	<h4 class="startDatePdf"></h4>
+					 	<h4 class="endDatePdf"></h4>
+					</div>
+					<div class="panel-footer" style="margin-top: 45%;">
+                    	<div class="copyright-info" style="color: #7D7F80; text-align: center; font-size: 9px;">
+	                       Customer Network Operation Center (CNOC)<br> &copy; 2014 CNOC
+	                       Tools .Todos los derechos reservados.                        
+	               		</div>
+					</div>
+				</div>				
+			</div>
+		</div>
+	</div>
 	<div class="overlay" id="overlay" style="display:none;"></div>
 	<div class="box panel panel-primary" id="box" >
 		<div class="panel-heading">
@@ -81,77 +106,8 @@
 	</div>
     <div id="wrapper">
 		
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        	<!-- 
-        	<div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Dashboard CNOC</a>
-            </div>
-            -->
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-				<div id="cmbCliente">
-					</br>
-					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:90%;" tabindex="2"></select>
-				</div>      
-            </div>               
-            <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">  
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="navTheme">
-                        <li>
-	                        <a href="#" class="themeW" rel="css/bootstrapW.css"><i class="fa fa-fw fa-dashboard"></i> White </a>
-	                    </li>
-	                    <li>
-	                        <a href="#" class="themeB" rel="css/bootstrap.css"><i class="fa fa-fw fa-warning"></i> Black </a>
-	                    </li>
-                    </ul>
-                </li>
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-	                        <a href="main.jsp"><i class="fa fa-fw fa-dashboard"></i> Home </a>
-	                    </li>
-	                    <li>
-	                        <a href="incidents.jsp"><i class="fa fa-fw fa-warning"></i> Incidents </a>
-	                    </li>
-	                    <li>
-	                        <a href="changes.jsp"><i class="fa fa-fw fa-refresh"></i> Changes </a>
-	                    </li>
-	                    <li>
-	                        <a href="performance.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="inventory.jsp"><i class="fa fa-fw fa-briefcase"></i> Inventory </a>
-	                    </li>
-                    </ul>
-                </li>
-    			
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Javier Hernandez <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>                
-            </ul>
-            <!-- /.navbar-collapse -->
-        </nav>
+       <!-- MENU  -->		
+		<%@ include file="menu.jsp" %>
 
         <div id="page-wrapper">
 
@@ -159,7 +115,7 @@
                 <!-- /.row -->
 
 
-                <div class="row">
+                <div class="row dateRange">
                 	<div class="col-lg-3"></div>
 					<div class="col-lg-6">
 				    	<div class="form-group">
@@ -178,29 +134,110 @@
     				<div class="col-lg-3"></div>
                 </div>
                 <!-- /.row -->
-				  <div class="row">
-			        <div class="col-lg-4">   	
+				  <div class="row selectMetric">				  	
+			        <div class="col-lg-12">   	
 				      	<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <h3 class="panel-title">Node Resource</h3>
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
-						  	<div id="cmbNodesPerformance">
-								
-							</div>
-						  	<div id="treeContainerInterfaz"></div>
-						  	<div id="treeContainerDetail"></div>  		  
+							<div class="row" style="padding-left: 15px;">
+								<div class="col-lg-4">
+									<div class="radio ">
+									  <label >
+									    <input type="radio" name="opciones" id="metrics" value="health" checked>
+									    Health
+									  </label>
+									</div>
+									<div class="radio">
+									  <label>
+									    <input type="radio" name="opciones" id="metrics" value="cpu">
+									    CPU
+									  </label>
+									</div>
+									<div class="radio">
+									  <label>
+									    <input type="radio" name="opciones" id="metrics" value="memoryIO">
+									    Memory IO
+									  </label>
+									</div>
+									<div class="radio">
+									  <label>
+									    <input type="radio" name="opciones" id="metrics" value="memoryProc">
+									    Memory Proc
+									  </label>
+									</div>	    
+									    Node Name: 
+									    <div id="cmbNodesPerformanceC" style="height: 50px;">
+									    	<div id="cmbNodesPerformance"></div>
+									    </div>									    
+									
+								</div>
+								<div class="col-lg-4">
+									<div class="radio ">
+									  <label >
+									    <input type="radio" name="opciones" id="metrics" value="utilisation">
+									    Utilisation
+									  </label>
+									</div>
+									<div class="radio ">
+									  <label >
+									    <input type="radio" name="opciones" id="metrics" value="errorsdiscards">
+									    Errors Discards
+									  </label>
+									</div>
+									<div class="radio ">
+									  <label >
+									    <input type="radio" name="opciones" id="metrics" value="pktshc">
+									    PKTS HC
+									  </label>
+									</div>
+									<div class="radio">
+									  <label>
+									    <input type="radio" name="opciones" id="metrics" value="qos">
+									    QoS
+									  </label>
+									</div>
+									Interface Name:
+									<div id="cmbNodesPerformanceInterfazC" style="height: 50px;">
+										<div id="cmbNodesPerformanceInterfaz"></div>
+									</div>									
+								</div>
+							</div>	  
 						  </div>
 						</div>     
 				    </div>
-				    
-				    <div class="col-lg-8" id="GraficasPerformance">
+  				</div>
+  				<div class="row">				  			    
+				    <div class="col-lg-12" id="GraficasPerformance">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Chart</h3>
+						    	<h3 class="panel-title">
+									<div class="row" >
+										<div class="col-lg-10">
+											Charts
+										</div>
+										<div class="col-lg-2 headerCharts">											
+											<div class="input-group input-group-sm">
+										      <span class="input-group-btn">
+										        <button class="btn btn-success glyphicon glyphicon-stats leermas imprimir" type="button"> Download PDF</button>								        
+										      </span>								      
+											</div>
+										</div>
+									</div>		    									    	
+						    	</h3>
 						  	</div>
 						  	<div class="panel-body">
-						  		<div id="containerChartPerformance"></div>
+						  		<div id="containerChartPerformanceF">
+						  			<div class="row" style="padding-left: 15px; padding-right: 15px;">
+						  				<div class="col-lg-6" id="GraficasPerformance">
+						  					<div id="containerChartPerformance1"></div>
+						  				</div>
+						  				<div class="col-lg-6" id="GraficasPerformance">
+						  					<div id="containerChartPerformance2"></div>
+						  				</div>
+						  			</div>
+						  		</div>
 						  	</div>
 				    	</div>
 				    </div>
@@ -228,7 +265,9 @@
 	<script type="text/javascript" src="js/jquery.i18n.properties-min-1.0.9.js"></script>
 	<script type="text/javascript" src="js/chosen/chosen.jquery.min.js"></script>
 		
-
+	<!-- Modal dialog -->
+	<script type="text/javascript" src="js/bootbox.min.js"></script>
+	
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
 	<script src="js/drawElementsPerformanceGraph.js"></script>
@@ -241,7 +280,7 @@
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
 		
 	<!-- remove css/js -->
-	<script type="text/javascript" src="js/script.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>	
 	
 	<!-- date Picker -->
 	<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
@@ -252,6 +291,9 @@
 	var stylesMap = null;
 	
 	$(document).ready(function(){
+			
+		//$( "#cmbNodesPerformanceInterfaz" ).mask("Waiting...");
+		
 			jQuery.i18n.properties({
 			    name:'config', 
 			    path:'prop/', 
@@ -261,6 +303,7 @@
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service1 = serviceR1;
 			    		cnocConnector.service2 = serviceG3;
+			    		cnocConnector.menu = serviceMenu;
 			    		
 			    }
 			});
@@ -268,58 +311,114 @@
 		 	drawElementsPerformanceGraph.init();
 
 		 	$('.datesPerformance').datepicker({
-				format: "dd-M-yyyy",
+				format: "yyyy/mm/dd",
 				todayBtn: true,
 			    autoclose: true,
 			    todayHighlight: true//,
 			    //startDate: '-5d'
 			});
 			
+		 	$("input[name=opciones]:radio").change(function () {
+		 		drawElementsPerformanceGraph.dataChartInterface.length = 0;
+		 		if( $(this).val() === "utilisation" || $(this).val() === "qos" || $(this).val() === "errorsdiscards" || $(this).val() === "pktshc"){
+					$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
+		 			cnocConnector.drawInterfaceGraph($(this).val());
+		 		}else{
+		 			$("#cmbNodesPerformanceInterfaz").empty();
+		 		}
+		    });
+		 	
+		 	
 			$("#selectGraph").click(function(event){
-				
-				$("#containerChartPerformance").empty();
+				$("#containerChartPerformance1").empty();
+				$("#containerChartPerformance2").empty();
 
 				var startDate = $("#startDate").val();
 				var endDate = $("#endDate").val();
-
+				var metrics = $('input:radio[name=opciones]:checked').val();
+				
 				if(startDate === "" || endDate === "" ){
 					alert("Elige un rango de fecha");
 				}else{
 					var nodes = [];
 		            
-		            $('option:selected', $('#SelectNode')).each(function() {
-		            	nodes.push($(this).val());
-		            });
-					
+					if(metrics === "utilisation" || metrics === "errorsdiscards" || metrics === "qos" || metrics === "pktshc"){
+						$('option:selected', $('#cmbInterfazGraph')).each(function() {
+			            	nodes.push($(this).val());
+			         	});
+						
+					}else if(metrics != "utilisation"){
+						 $('option:selected', $('#SelectNode')).each(function() {
+				            	nodes.push($(this).val());
+				         });
+					}
+
 					if(nodes.length<1){
 						alert("Elija un nodo");
 					}else{
-						
-						var sD = new Date(startDate);
+						console.log(startDate);
+						var sD = new Date(startDate+" 00:00:00");
 						startDate = ((sD.getTime()/1000));
 						
-						var eD = new Date(endDate);
+						console.log(endDate);
+						var eD = new Date(endDate +" 00:00:00");
 						endDate = ((eD.getTime()/1000));
-						
-						console.log(nodes);
+
+						var idNum = 0;
 						for(var idx=0; idx<nodes.length; idx++){
-							var tmp = nodes[idx].split("|");
-							var name = tmp[0];
-							var nmis = tmp[1];
-							drawElementsPerformanceGraph.containerChart = "containerChartPerformance"+idx;
-							drawElementsPerformanceGraph.nodePerformance = name;
+							var tmp = "";
+							var name = "";
+							var nmis = "";
+							var idResource ="";
+							
+							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc"){
+								tmp = nodes[idx].split("|");
+								name = tmp[0];
+								idResource = tmp[1];
+								nmis = tmp[2];								
+							}else{
+								tmp = nodes[idx].split("|");
+								name = tmp[0];
+								nmis = tmp[1];
+							}
+							
+							if(metrics === "cpu" && (name.indexOf("_UPS") > 0)){
+								//idNum = idNum;
+							}else{
+								idNum ++;
+							}
+							
+							drawElementsPerformanceGraph.containerChart = "containerChartPerformance-"+idNum;
 							drawElementsPerformanceGraph.nmis = nmis;
-							//drawElementsPerformanceGraph.nmis = "10.237.7.25";
-							drawElementsPerformanceGraph.dataChartPerformance.length = 0;
 							drawElementsPerformanceGraph.endUnix = endDate;
 							drawElementsPerformanceGraph.endDate = "";
 							drawElementsPerformanceGraph.startDate = startDate;
+							
 							console.log(name);
 							console.log(nmis);
+							console.log(metrics);
+							console.log(idResource);
 							console.log(drawElementsPerformanceGraph.containerChart);
 							//drawElementsPerformanceGraph.drawChartCPU(drawElementsPerformance.nodePerformance, drawElementsPerformance.startDate, drawElementsPerformance.endDate, drawElementsPerformance.endUnix);
-							drawElementsPerformanceGraph.drawChartCPU();
-						}					
+							
+							if(metrics === "health"){
+								drawElementsPerformanceGraph.drawChartHealth(name);
+							}else if(metrics === "cpu"){
+								drawElementsPerformanceGraph.drawChartCPU(name);	
+							}else if(metrics === "memoryIO"){
+								drawElementsPerformanceGraph.drawChartMemoryIO(name);	
+							}else if(metrics === "memoryProc"){
+								drawElementsPerformanceGraph.drawChartMemoryProc(name);								
+							}else if(metrics === "utilisation"){
+								drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
+							}else if(metrics === "errorsdiscards"){
+								drawElementsPerformanceGraph.drawInterfaceErrors(name, idResource);								
+							}else if(metrics === "pktshc"){
+								drawElementsPerformanceGraph.drawInterfacePkts(name, idResource);								
+							}else if(metrics === "qos"){
+								drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);								
+							}
+						}								
 					}
 				}
 			});

@@ -294,6 +294,7 @@ var drawElements = {
 
 	},
 	init : function(codeNet) {		
+		
 		if (codeNet != undefined) {
 
 			$("#countClose").empty();
@@ -303,7 +304,9 @@ var drawElements = {
 
 			this.builder(codeNet);
 		} else {
-
+			/*Genera Menu*/
+			generateMenu();
+			
 			cnocConnector.invokeMashup(cnocConnector.service9, {},
 					drawElements.selectCustom, "SelectCustomer", "opt");
 

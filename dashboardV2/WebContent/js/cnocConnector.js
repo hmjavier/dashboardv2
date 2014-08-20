@@ -7,7 +7,7 @@ var cnocConnector = {
 	logout : '',
 	ipserver : '',
 	incidents : '',	
-	
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -51,8 +51,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
-	/*
+	},*/
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -98,7 +98,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -194,23 +194,7 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 		}
-		
-		
-		if(divTable === "listNodesP"){
-			$("#" + divTable).delegate("tbody tr", "click", function () {					
-				dTable.$('tr.row_selected').removeClass('row_selected');
-				
-				$(this).addClass('row_selected');
-				
-				var nTds = $('td', dTable.$('tr.row_selected'));
-				var node = $(nTds[0]).text();
-				$( "#nodeResources").mask("Waiting...");
-				$(".form-control").val("");
-				cnocConnector.invokeMashup(cnocConnector.service1, {"endpoint" : "http://10.237.7.25/omk/opCharts/nodes/"+node+"/resources/cbqos-out/indicies.json"},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
-			});
-			
-		}
-		
+
 		if(divTable === "listIncidentsI"){
 			$("#" + divTable).delegate("tbody tr", "click", function () {					
 				dTable.$('tr.row_selected').removeClass('row_selected');
@@ -258,14 +242,13 @@ var cnocConnector = {
 									"subtitleTicket": subtitleTicket,
 									"contactTicket": contactTicket
 								};					        
-					        //console.log(data);
 					        return false;
 					      }
 					    }, {
 					      label: "Close",
 					      className: "btn btn-default",
 					      callback: function() {
-					        console.log("just do something on close");
+					        
 					      }
 					    }],
 					    show: false,
@@ -275,24 +258,6 @@ var cnocConnector = {
 					  });
 
 					  modal.modal("show");
-					
-					//console.log(data);
-									
-					/*bootbox.dialog({
-		                  message: $("#frm").html(),
-		                  title: "Custom title",         
-		                  buttons: {
-		                    success: {
-		                      label: "Success!",
-		                      className: "btn-info",
-		                      callback: function(event) {
-		                    	  	//console.log($("#frm titleTicket"));
-		                            console.log($("#frm .titleTicket").val);
-		                    	  console.log(find("#frm .titleTicket").val);		                    	  
-		                      }
-		                    }
-		                  }
-		            });*/
 					
 			});
 		}
@@ -309,9 +274,13 @@ var cnocConnector = {
 					$(".form-control").val("");
 					cnocConnector.nodeGlobal = id;
 					
+					/* GET DATA FOR TREE NODE RESOURCE */										
+					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : id},drawElementsGral.treeData, "", "");
+					
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : id},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
+
 			});
 		}
 		
@@ -585,7 +554,7 @@ var cnocConnector = {
             },
             series: series
         });
-	},drawChartPerformanceGraph:function(series, container, otherMetrics){
+	},drawChartPerformanceGraph:function(series, container, otherMetrics, name){
 		$('#'+container).highcharts({
             chart: {
                 type: 'spline',
@@ -593,7 +562,7 @@ var cnocConnector = {
             },credits: {
                 enabled: false
             },title: {
-                text: drawElementsPerformanceGraph.nodePerformance,
+                text: name,
                 x: -20 //center
             },
             subtitle: {
@@ -674,14 +643,14 @@ var cnocConnector = {
 
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
-						"<option value='"
+						"<option rel='"+datos.records.record[i].dept_name.toString()+"' value='"
 								+ datos.records.record[i].network_code.toString() + "'>"
 								+ datos.records.record[i].dept_name.toString()
 								+ "</option>");
 			}
 		} else {
 			jQuery("#" + container).append(
-					"<option value='"
+					"<option rel='"+datos.records.record.dept_name.toString()+"' value='"
 							+ datos.records.record.network_code.toString()
 							+ "'>" + datos.records.record.dept_name.toString()
 							+ "</option>");
@@ -701,7 +670,7 @@ var cnocConnector = {
 			}else if(module==="performance"){
 				drawElementsPerformance.init($(this).val());
 			}else if(module==="performanceGraph"){
-				drawElementsPerformanceGraph.init($(this).val());
+				drawElementsPerformanceGraph.init($(this).val());				
 			}else if(module==="tickets"){
 				drawElementsTickets.init($(this).val());
 			}			
@@ -711,14 +680,13 @@ var cnocConnector = {
 		
 		$("#cmbNodesPerformance").empty();
 		$("#cmbNodesPerformance").append("<select id='"+container+"' data-placeholder='Select Interfaz' style='width:100%; margin-left: 5%;' ><option id='' value=''></option></select>");
-		//$( "#"+container ).chosen( 'destroy' );
 		
 		if (datos.records.record.length > 1) {
 
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
 						"<option value='"
-								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() + "'>"
+								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() +"|"+datos.records.record[i].model.toString() + "'>"
 								+ datos.records.record[i].name.toString()
 								+ "</option>");
 			}
@@ -731,67 +699,78 @@ var cnocConnector = {
 
 		}
 		
-		/*
-		if (datos.length > 1) {
-
-			for ( var i = 0; i < datos.length; i++) {
-				jQuery("#" + container).append(
-						"<option value='"
-								+ datos[i].toString() + "'>"
-								+ datos[i].toString()
-								+ "</option>");
-			}
-		} else {
-			jQuery("#" + container).append(
-					"<option value='"
-							+ datos.toString()
-							+ "'>" + datos.toString()
-							+ "</option>");
-
-		}*/
-		
-		/*$('#'+container).multiselect({
-        	includeSelectAllOption: true,
-        	enableFiltering: true,
-        	maxHeight: 150
-        });*/
-		
 		$("#" + container).chosen({
 			allow_single_deselect : true
 		}).change(function() {
+			
 			var data = $(this).val().split("|");
-			var name = data[0];
+			var name = data[0].toUpperCase();
 			var nmis = data[1];
-			//var nmis = "10.237.7.25";
+			var model = data[2];
+			
 			drawElementsPerformance.dataChartPerformance.length = 0;
-			cnocConnector.invokeMashup(cnocConnector.service1, {
-					"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
-					"ip":nmis
-				},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");			
-			//drawElementsPerformance.drawChartCPU($(this).val(), "1404190800", "08-Jul-2014 00:00:00", "1404882000");
-			
 			drawElementsPerformance.nodePerformance = name;
-			drawElementsPerformance.nmis = nmis;
-			
-			
+			drawElementsPerformance.nmis = nmis;					
 			var startDate = ((new Date().getTime()).toString()).substring(0,10)-86400;
 			var endDate = ((new Date().getTime()).toString()).substring(0,10);
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.endUnix = endDate;
 			drawElementsPerformance.endDate = "";
 			drawElementsPerformance.startDate = startDate;
-			
-			drawElementsPerformance.drawChartCPU();			
+
+			if(model === 'PingOnly'){
+				drawElementsPerformance.selectPingOnly();
+				drawElementsPerformance.drawChartHealth();
+			}else{
+				if(name.indexOf("_UPS") > 0){
+					drawElementsPerformance.selectUps();
+					drawElementsPerformance.drawChartHealth();
+				}else{
+					
+					cnocConnector.invokeMashup(cnocConnector.service1, {
+						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+						"ip":nmis
+					},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
+					
+					drawElementsPerformance.drawChartHealth();
+				}
+			}			
 		});
 		
 		$( "#nodeResources").unmask();
 		
+	},drawTree: function(idTree){
+		drawElementsPerformance.idResourceInterfaz = "";
+		$('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+		$('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Collapse this branch').on('click', function (e) {
+			//alert($(this).text());
+			var parentLi = ($(this).text()).trim();
+			
+			if(parentLi === "Performance" || parentLi === "Interface" || parentLi === "QOS" || parentLi === "Memory" || parentLi === "Battery" || parentLi === "Voltage" || (parentLi.indexOf("_RT") > 0) || (parentLi.indexOf("_UPS") > 0)){
+				var children = $(this).parent('li.parent_li').find(' > ul > li');
+		        if (children.is(':visible')) {
+		    		children.hide('fast');
+		    		$(this).attr('title', 'Expand this branch').find(' > i').addClass('glyphicon glyphicon-plus').removeClass('glyphicon glyphicon-minus');
+		        }
+		        else {
+		    		children.show('fast');
+		    		$(this).attr('title', 'Collapse this branch').find(' > i').addClass('glyphicon glyphicon-minus').removeClass('glyphicon glyphicon-plus');
+		        }
+		        e.stopPropagation();
+			}else{				
+				/*drawElementsPerformance.dataChartPerformance.length = 0;
+				var tmp = $(this).text().split("--");
+				alert("arbol: "+tmp[2]);
+				drawElementsPerformance.idResourceInterfaz = (tmp[2]).trim();
+				drawElementsPerformance.drawInterfaceUtil();*/
+			}
+
+	    });
 	},drawSelectNodePerformanceGraph:function(datos, container, module){
 
 		$("#cmbNodesPerformance").empty();
-		$("#cmbNodesPerformance").append("<select id='"+container+"' data-placeholder='Select Interfaz' multiple='multiple' style='width:100%; margin-left: 5%;' ></select>");
-		//$( "#"+container ).chosen( 'destroy' );
-		
+		$("#cmbNodesPerformance").append("<select id='"+container+"' data-placeholder='Select Node' multiple='multiple' style='width:100%; margin-left: 5%;' ></select>");
+
 		if (datos.records.record.length > 1) {
 
 			for ( var i = 0; i < datos.records.record.length; i++) {
@@ -813,35 +792,33 @@ var cnocConnector = {
 		$('#'+container).multiselect({
         	includeSelectAllOption: true,
         	enableFiltering: true,
-        	maxHeight: 450
+        	maxHeight: 450,
+        	onChange: function(element, checked) {
+        		var metrics = $('input:radio[name=opciones]:checked').val(); 
+        		if(metrics === "utilisation" || metrics === "errorsdiscards" || metrics === "qos" || metrics === "pktshc"){
+        			$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
+        			cnocConnector.drawInterfaceGraph();
+        		}        		
+            }
         });
-
-	},drawTree: function(idTree){
-		drawElementsPerformance.idResourceInterfaz = "";
-		$('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
-		$('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Collapse this branch').on('click', function (e) {
-			//alert($(this).text());
-			var parentLi = ($(this).text()).trim();
-			
-			if(parentLi === "Performance" || parentLi === "Interface" || parentLi === "QOS" || parentLi === "Memory"){
-				var children = $(this).parent('li.parent_li').find(' > ul > li');
-		        if (children.is(':visible')) {
-		    		children.hide('fast');
-		    		$(this).attr('title', 'Expand this branch').find(' > i').addClass('glyphicon glyphicon-plus').removeClass('glyphicon glyphicon-minus');
-		        }
-		        else {
-		    		children.show('fast');
-		    		$(this).attr('title', 'Collapse this branch').find(' > i').addClass('glyphicon glyphicon-minus').removeClass('glyphicon glyphicon-plus');
-		        }
-		        e.stopPropagation();
-			}else{				
-				/*drawElementsPerformance.dataChartPerformance.length = 0;
-				var tmp = $(this).text().split("--");
-				alert("arbol: "+tmp[2]);
-				drawElementsPerformance.idResourceInterfaz = (tmp[2]).trim();
-				drawElementsPerformance.drawInterfaceUtil();*/
-			}
-
-	    });
+		
+		$( "#cmbNodesPerformanceC" ).unmask();
+		
+	},drawInterfaceGraph:function(metric){
+		
+		drawElementsPerformanceGraph.dataChartInterface.length = 0;
+		
+			$('option:selected', $('#SelectNode')).each(function() {
+	        	var data = $(this).val().split("|");
+				var name = data[0].toUpperCase();
+				var nmis = data[1];
+				drawElementsPerformanceGraph.nmis = nmis;
+				
+					cnocConnector.invokeMashup(cnocConnector.service1, {
+					"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+					"ip":nmis
+				},drawElementsPerformanceGraph.drawInterfacesNodes, "SelectInterfaz", "cmbInterfazP");
+	        	
+	        });
 	}
 };

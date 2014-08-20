@@ -78,4 +78,80 @@ function themeChanges(filename, flag){
 		removejscssfile("js/highChartsTheme1.js", "js");
 	}
 	
-	}
+}
+
+function generateMenu(){
+	$.ajax({
+        type: 'GET',
+        dataType: 'jsonp',
+        url: cnocConnector.menu,
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            //window.location = "index.html";
+        },
+        success: function(response){
+        	var menu = response.aut.module[2].split(";");
+        	var customer = response.aut.module[0];
+
+        	$(".nameCustomer").text(customer);
+        	
+        	$.each(menu, function( index, value ) {
+        		console.log(index + ": " + value);
+        		if(value === "gen=true"){
+        			
+        			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
+        			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
+        			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
+        			general +="<li><a href='performanceGraph.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance Report </a></li>";
+        			
+        			$(".menuCnoc").append(general);
+
+        		}else if(value === "tck=true"){
+
+        			var tickets = "<li><a href='tickets.jsp'><i class='fa fa-fw fa-tag'></i> Tickets </a></li>";
+        			$(".menuCnoc").append(tickets);
+        			
+        		}else if(value === "inv=true"){
+
+        			var inventory = "<li><a href='inventory.jsp'><i class='fa fa-fw fa-list-alt'></i> Inventory </a></li>";
+        			$(".menuCnoc").append(inventory);
+        			
+        		}else if(value === "esc=true"){
+        			
+        			var esclations = "<li><a href='inventory.jsp'><i class='fa fa-fw fa-cloud-upload'></i> Escalaciones </a></li>";
+        			$(".menuCnoc").append(esclations);
+        		}
+        	});
+        }
+	});	
+}
+
+function viewNodeDetail(){
+	$(".detalleNodo").show();
+	$(".nodeDetailView").hide();
+}
+
+function hideNodeDetail(){
+	$(".detalleNodo").hide();
+	$(".nodeDetailView").show();
+}
+
+
+$('.leermas.imprimir').click(function(){
+	$(".startDatePdf").empty();
+	$(".endDatePdf").empty();
+	$(".startDatePdf").append("Start Date: "+$("#startDate").val());
+	$(".endDatePdf").append("End Date: "+$("#endDate").val());
+	
+	$(".dateRange").hide();
+	$(".selectMetric").hide();
+	$(".headerCharts").hide();
+	$(".portada").show();
+	window.print();
+	$(".portada").hide();
+	$(".dateRange").show();
+	$(".selectMetric").show();
+	$(".headerCharts").show();
+	
+});

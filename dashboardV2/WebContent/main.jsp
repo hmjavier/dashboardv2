@@ -57,79 +57,7 @@
 	  <div id="tTops"></div>
 	</div>
     <div id="wrapper">
-		
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        	<!-- 
-        	<div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Dashboard CNOC</a>
-            </div>
-            -->
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-				<div id="cmbCliente">
-					</br>
-					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:90%;" tabindex="2"></select>
-				</div>      
-            </div>               
-            <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">  
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="navTheme">
-                        <li>
-	                        <a href="#" class="themeW" rel="css/bootstrapW.css"><i class="fa fa-fw "></i> White </a>
-	                    </li>
-	                    <li>
-	                        <a href="#" class="themeB" rel="css/bootstrap.css"><i class="fa fa-fw "></i> Black </a>
-	                    </li>
-                    </ul>
-                </li>
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-	                        <a href="main.jsp"><i class="fa fa-fw fa-home"></i> Home </a>
-	                    </li>
-	                    <li>
-	                        <a href="incidents.jsp"><i class="fa fa-fw fa-warning"></i> Incidents </a>
-	                    </li>
-	                    <li>
-	                        <a href="changes.jsp"><i class="fa fa-fw fa-refresh"></i> Changes </a>
-	                    </li>
-	                    <li>
-	                        <a href="performance.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="inventory.jsp"><i class="fa fa-fw fa-briefcase"></i> Inventory </a>
-	                    </li>
-                    </ul>
-                </li>
-    			
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Javier Hernandez <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>                
-            </ul>
-            <!-- /.navbar-collapse -->
-        </nav>
-
+		<%@ include file="menu.jsp" %> 
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -184,7 +112,7 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <span class="pull-left">Degraded</span>
+                                    <span class="pull-left">Warning</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
@@ -202,7 +130,7 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <span class="pull-left">Unreachable</span>
+                                    <span class="pull-left">Critical</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
@@ -270,7 +198,7 @@
 			
 				<br>
 				  <div class="row">
-				    <div class="col-lg-4">
+				    <div class="col-lg-3">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 						    	<h3 class="panel-title">Node List</h3>
@@ -278,137 +206,12 @@
 							<div id="listNodes" class="listNodes"></div>
 							<br>
 							<br>
-						</div>     
+						</div>   
 				    </div>
-				    <div class="col-lg-5">
-				      	<div class="panel panel-primary">
+				    <div class="col-lg-4">
+				    	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Detail</h3>
-						  </div>
-						  <div class="panel-body">		  	
-							<!-- <div id="listNodeDetail"></div>-->
-							<!-- <div class="alert alert-info" style="display: none;" id="msgPingOnly">
-							    <a href="#" class="close" data-dismiss="alert">&times;</a>
-							    <strong>Note!</strong> Monitoring Ping Only.
-							</div>-->
-							<div id="msgPingOnly"></div>
-							<div id="listNodeDetail">				
-							  	<div class="row" style="padding-left: 7px; padding-right: 7px;">
-							  		
-							  		<div class="col-lg-12 form-group has-success">
-									  <label class="control-label" for="inputSuccess">Node Name:</label>
-									  <input class="form-control" type="text" id="name">
-									</div>
-								</div>		
-										    
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-12 form-group has-success">
-										<label class="control-label" for="inputSuccess">Sys Description:</label>
-							    		<input class="form-control" type="text" id="sysdescr" >
-							  		</div>
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-4 form-group has-success">
-									  <label class="control-label" for="inputSuccess">Node Type:</label>
-									  <input class="form-control" type="text" id="nodetype">
-									</div>
-									<div class="col-lg-4 form-group has-success">
-										<label class="control-label" for="inputSuccess">Vendor:</label>
-							    		<input class="form-control" type="text" id="nodevendor" >
-							  		</div>
-									<div class="col-lg-4 form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Model:</label>
-							    		<input class="form-control" type="text" id="model" >
-							  		</div>			  					  	
-								</div>				
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-6  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Serial Num:</label>
-							    		<input class="form-control" type="text" id="serialnum">
-							  		</div>
-									<div class="col-lg-6  form-group has-success">
-										<label class="control-label" for="inputSuccess">Sysname:</label>
-							    		<input class="form-control" type="text" id="sysname" >
-							  		</div>			  		
-								</div>
-								
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">					
-							  		<!-- <div class="col-lg-6  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Last Update Sec:</label>
-							    		<input class="form-control" type="text" id="lastupdatesec">
-							  		</div>-->
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-4  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Sys Contact:</label>
-							    		<input class="form-control" type="text" id="syscontact">
-							  		</div>
-									<div class="col-lg-4  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Up Time:</label>
-							    		<input class="form-control" type="text" id="sysuptime">
-							  		</div>
-									<div class="col-lg-4  form-group has-success">
-										<label class="control-label" for="inputSuccess">Last Update:</label>
-							    		<input class="form-control" type="text" id="lastupdate">
-							  		</div>
-							  		<!-- <div class="col-lg-4 form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Time Column:</label>
-							    		<input class="form-control" type="text" id="time_column">
-							  		</div>-->
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-4  form-group has-success">
-										<label class="control-label" for="inputSuccess">Interface Collect:</label>
-							    		<input class="form-control" type="text" id="intfcollect">
-							  		</div>
-							  		<div class="col-lg-4  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Processor Ram:</label>
-							    		<input class="form-control" type="text" id="processorram">
-							  		</div>
-							  		<div class="col-lg-4  form-group has-success">
-										<label class="control-label" for="inputSuccess">Memory Used I/O:</label>
-							    		<input class="form-control" type="text" id="musedio">
-							  		</div>
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-4  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">NRT:</label>
-							    		<input class="form-control" type="text" id="nrt">
-							  		</div>
-									<div class="col-lg-4  form-group has-success">
-										<label class="control-label" for="inputSuccess">Reachability:</label>
-							    		<input class="form-control" type="text" id="reachability">
-							  		</div>
-							  		<div class="col-lg-4  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Availability:</label>
-							    		<input class="form-control" type="text" id="availability">
-							  		</div>
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-6  form-group has-success">
-										<label class="control-label" for="inputSuccess">Per Cpu:</label>
-							    		<input class="form-control" type="text" id="per_cpu">
-							  		</div>
-							  		<div class="col-lg-6  form-group has-success">
-							  			<label class="control-label" for="inputSuccess">Per Memory Used:</label>
-							    		<input class="form-control" type="text" id="per_mused">
-							  		</div>
-								</div>
-								<div class="row" style="padding-left: 7px; padding-right: 7px;">
-									<div class="col-lg-12  form-group has-success">
-							    		<div id="listInterfaces"></div>
-							  		</div>
-								</div>
-						  </div>
-						  <br>
-						  </div>
-						</div>     
-				    </div>
-				    
-				    <div class="col-lg-3">
-						<div class="panel panel-primary">
-						  <div class="panel-heading">
-						    <h3 class="panel-title">RELATIONS</h3>
+						    <h3 class="panel-title">Relationships</h3>
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
@@ -423,10 +226,163 @@
 					      </ul>
 						  </div>
 						</div>
-				      
+						<div class="panel panel-primary">
+						  <div class="panel-heading">
+						    <h3 class="panel-title">Node Resource</h3>
+						  </div>
+						  <div class="treeContainer panel-body" id="treeContainer">
+						  	<div id="treeContainerInterfaz"></div>
+						  	<div id="treeContainerDetail"></div>  		  
+						  </div>
+						</div>						
 				    </div>
+				    
+				    <div class="col-lg-5">
+				    	<div class="panel panel-primary">
+						  <div class="panel-heading">
+						    <h3 class="panel-title">Node Detail</h3>
+						  </div>
+						  <div class="panel-body" style="font-size: 9px;">		  	
+							<!-- <div id="listNodeDetail"></div>-->
+							<!-- <div class="alert alert-info" style="display: none;" id="msgPingOnly">
+							    <a href="#" class="close" data-dismiss="alert">&times;</a>
+							    <strong>Note!</strong> Monitoring Ping Only.
+							</div>-->
+							<div id="msgPingOnly"></div>
+							<div id="listNodeDetail">				
+							  	<div class="row" style="padding-left: 7px; padding-right: 7px;">
+							  		
+							  		<div class="col-lg-6 form-group has-success">
+									  <label class="control-label" for="inputSuccess">Node Name:</label>
+									  <input class="form-control" type="text" id="name">
+									</div>
+									
+									<div class="col-lg-6 form-group has-success">
+										<label class="control-label" for="inputSuccess">Sys Description:</label>
+							    		<input class="form-control" type="text" id="sysdescr" >
+							  		</div>
+									
+								</div>		
+								<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-4 form-group has-success">
+										  <label class="control-label" for="inputSuccess">Node Type:</label>
+										  <input class="form-control" type="text" id="nodetype">
+										</div>
+										<div class="col-lg-4 form-group has-success">
+											<label class="control-label" for="inputSuccess">Vendor:</label>
+								    		<input class="form-control" type="text" id="nodevendor" >
+								  		</div>
+										<div class="col-lg-4 form-group has-success">
+											<label class="control-label" for="inputSuccess"> </label>
+								  			<a class="btn btn-primary btn-sm nodeDetailView form-control" href="#" role="button" id="nodeDetailView">View detail &raquo;</a>		
+								  		</div>			  					  	
+								</div>
+								<!-- <div class="row" style="padding-left: 12px; padding-right: 7px;">
+									
+								</div>-->
+								<div id="detalleNodo" class="detalleNodo row" style="display: none; padding-left: 14px; padding-right: 14px;">													
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-4 form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Model:</label>
+								    		<input class="form-control" type="text" id="model" >
+								  		</div>	
+										<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Serial Num:</label>
+								    		<input class="form-control" type="text" id="serialnum">
+								  		</div>
+										<div class="col-lg-4  form-group has-success">
+											<label class="control-label" for="inputSuccess">Sysname:</label>
+								    		<input class="form-control" type="text" id="sysname" >
+								  		</div>			  		
+									</div>
+									
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">					
+								  		<!-- <div class="col-lg-6  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Last Update Sec:</label>
+								    		<input class="form-control" type="text" id="lastupdatesec">
+								  		</div>-->
+									</div>
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Sys Contact:</label>
+								    		<input class="form-control" type="text" id="syscontact">
+								  		</div>
+										<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Up Time:</label>
+								    		<input class="form-control" type="text" id="sysuptime">
+								  		</div>
+										<div class="col-lg-4  form-group has-success">
+											<label class="control-label" for="inputSuccess">Last Update:</label>
+								    		<input class="form-control" type="text" id="lastupdate">
+								  		</div>
+								  		<!-- <div class="col-lg-4 form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Time Column:</label>
+								    		<input class="form-control" type="text" id="time_column">
+								  		</div>-->
+									</div>
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-4  form-group has-success">
+											<label class="control-label" for="inputSuccess">Interface Collect:</label>
+								    		<input class="form-control" type="text" id="intfcollect">
+								  		</div>
+								  		<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Processor Ram:</label>
+								    		<input class="form-control" type="text" id="processorram">
+								  		</div>
+								  		<div class="col-lg-4  form-group has-success">
+											<label class="control-label" for="inputSuccess">Memory Used I/O:</label>
+								    		<input class="form-control" type="text" id="musedio">
+								  		</div>
+									</div>
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">NRT:</label>
+								    		<input class="form-control" type="text" id="nrt">
+								  		</div>
+										<div class="col-lg-4  form-group has-success">
+											<label class="control-label" for="inputSuccess">Reachability:</label>
+								    		<input class="form-control" type="text" id="reachability">
+								  		</div>
+								  		<div class="col-lg-4  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Availability:</label>
+								    		<input class="form-control" type="text" id="availability">
+								  		</div>
+									</div>
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-6  form-group has-success">
+											<label class="control-label" for="inputSuccess">Per Cpu:</label>
+								    		<input class="form-control" type="text" id="per_cpu">
+								  		</div>
+								  		<div class="col-lg-6  form-group has-success">
+								  			<label class="control-label" for="inputSuccess">Per Memory Used:</label>
+								    		<input class="form-control" type="text" id="per_mused">
+								  		</div>
+									</div>
+									<div class="row" style="padding-left: 7px; padding-right: 7px;">
+										<div class="col-lg-12  form-group has-success">
+								    		<div id="listInterfaces"></div>
+								  		</div>
+									</div>
+									<div class="row" style="padding-left: 12px; padding-right: 7px;">
+										<a class="btn btn-primary btn-sm nodeDetailViewHide" href="#" role="button" id="nodeDetailViewHide">Hide Detail &laquo;</a>
+									</div>
+								</div>								
+						  </div>
+						  <br>
+						  </div>
+						</div> 
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Chart</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="containerChartPerformance"></div>
+						  	</div>
+				    	</div>
+					</div>
 				  </div>
 
+				<!-- /.row -->	
             </div>
             <!-- /.container-fluid -->
 
@@ -455,6 +411,7 @@
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
 	<script src="js/drawElementsGral.js"></script>
+	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
 	<!-- higcharts -->
@@ -469,6 +426,9 @@
 	<!-- remove css/js -->
 	<script type="text/javascript" src="js/script.js"></script>	
 	
+	<!-- TREE BOOTSTRAP -->
+	<script src="js/bootstrap-tree.js" /></script>
+	
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
 	</script>
@@ -477,13 +437,16 @@
 	var stylesMap = null;
 	
 	$(document).ready(function(){
+
 			jQuery.i18n.properties({
 			    name:'config', 
 			    path:'prop/', 
 			    mode:'both',
 			    callback: function() {
+			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.logout = serviceLogout;
-			    		cnocConnector.service1 = serviceC1;
+			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.service1 = serviceR1;
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service11 = serviceG1;
@@ -501,6 +464,8 @@
 			    		cnocConnector.service23 = serviceG13;
 			    		cnocConnector.service24 = serviceG14;
 			    		cnocConnector.service25 = serviceG15;
+			    		cnocConnector.service26 = serviceG16;
+			    		cnocConnector.service27 = serviceC1;
 			    		
 			    }
 			});
@@ -553,7 +518,7 @@
 			
 			$('#listChangesG').click(function(e){
 				$("#headerGridsDetailG").text("Change Detail");
-				cnocConnector.invokeMashup(cnocConnector.service1, {"code_net" : cnocConnector.codeNetGlobal,"flag_stat" : "'t'"},drawElementsGral.gridChangesList, "tTops", "changesListTableG");						
+				cnocConnector.invokeMashup(cnocConnector.service27, {"code_net" : cnocConnector.codeNetGlobal,"flag_stat" : "'t'"},drawElementsGral.gridChangesList, "tTops", "changesListTableG");						
 			});
 			
 			$('#relatedIncidents').click(function(e){
@@ -566,6 +531,14 @@
 				$("#headerGridsDetailG").text("Incident Detail");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
 				cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.detailChangesNode, "tTops", "listChangeGNode");
+			});
+			
+			$( ".nodeDetailView").click(function(event){	
+				viewNodeDetail();
+			});
+			
+			$( ".nodeDetailViewHide").click(function(event){	
+				hideNodeDetail();
 			});
 			
 			$( ".logout").click(function(event){	

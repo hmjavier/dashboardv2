@@ -5,7 +5,7 @@
 
 var drawElementsPerformanceGraph = {
 		containerChart:"",
-		dataChartPerformance : [],
+		dataChartInterface : [],
 		nodePerformance : "",
 		nmis : "",
 		idResourceInterfaz: "",
@@ -17,125 +17,95 @@ var drawElementsPerformanceGraph = {
 		endDate: "",
 		startDate: "",
 		
-		init : function(codeNet) {
-
+		init : function(codeNet) {			
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
 			
 			} else {
+				/*Genera Menu*/
+				generateMenu();
+				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformanceGraph.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){				
-			//cnocConnector.invokeMashup(cnocConnector.service1, {"endpoint" : "http://10.237.7.25/omk/opCharts/nodes"},drawElementsPerformanceGraph.drawListNodes, "listNodes", "listNodesP");
+		},builder: function(codenet){		
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformanceGraph.drawListNodes, "listNodes", "listNodesP");
-		},sample:function(datos, container, divtable){
-			$("#sample").html(datos.records.record.datablock);
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performanceGraph");
 			drawElementsPerformanceGraph.builder($("#SelectCustomer").val());
 
 		},drawListNodes: function (datos, container, divTable){
+			
+			$( "#cmbNodesPerformanceC" ).mask("Waiting...");
 			var selText = cnocConnector.drawSelectNodePerformanceGraph(datos, "SelectNode", "performance");
+
+		},drawChartHealth:function(name){
 			
-			/*jQuery("#" + container).empty();	
-			console.log(datos.length);
-			var tableT = "";
-			for(var i=0; i<datos.length; i++){
-				tableT += "<tr class='success'><td>"+datos[i]+"</td></tr>";
-			}
-			try {
-				var rowsHeaders = [{
-					"sTitle" : "Node Name"
-				}];
-			} catch (err) {	};
-			
-			var grid = cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);*/
-		
-		},drawChartCPU: function(){
 			drawElementsPerformanceGraph.chartIdPerformance = "1";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.metricUnit = "";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
+			drawElementsPerformanceGraph.subtitlePerformance = "Availability";
+			drawElementsPerformanceGraph.metricUnit = "% Health Statistics";
+			var availability = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"health","node":"'+name+'","translation":"","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, availability, drawElementsPerformanceGraph.containerChart, "availability", "#0C66ED", false, name);
+			
+		},drawChartCPU: function(name){
+			drawElementsPerformanceGraph.chartIdPerformance = "1";
+			drawElementsPerformanceGraph.subtitlePerformance = "";
+			drawElementsPerformanceGraph.metricUnit = "";
 			drawElementsPerformanceGraph.subtitlePerformance = "CPU Util";
 			drawElementsPerformanceGraph.metricUnit = "% CPU Util.";
-			var avgBusy1 = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"avgBusy1"}}',"ip":drawElementsPerformanceGraph.nmis};
-			var avgBusy5 = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"avgBusy5"}}',"ip":drawElementsPerformanceGraph.nmis};
+			var cpu = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cpu","node":"'+name+'","translation":"","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, cpu, drawElementsPerformanceGraph.containerChart, "cpu", "#0C66ED", false, name);	
 			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, avgBusy1, drawElementsPerformanceGraph.containerChart, "avgBusy1", "#0C66ED", false);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, avgBusy5, drawElementsPerformanceGraph.containerChart, "avgBusy5","#2BC70D", false);	
-			
-		},drawChartMemoryIO: function(){
+		},drawChartMemoryIO: function(name){
 			drawElementsPerformanceGraph.chartIdPerformance = "2";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.idResourceInterfaz = "";
-			drawElementsPerformanceGraph.metricUnit = " ";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
+			drawElementsPerformanceGraph.metricUnit = "% Mem. Utilisation";
 			drawElementsPerformanceGraph.subtitlePerformance = "Mem Util IO";
-			drawElementsPerformanceGraph.metricUnit = " ";
-			var MemoryFreeIO = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryFreeIO"}}'};
-			var MemoryUsedIO = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryUsedIO"}}'};
-			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryFreeIO, "containerChartPerformance", "MemoryFreeIO", "#0C66ED", false);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryUsedIO, "containerChartPerformance", "MemoryUsedIO","#2BC70D", false);
-		},drawChartMemoryProc: function(){
+			//var MemoryFreeIO = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryFreeIO"}}'};
+			//var MemoryUsedIO = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryUsedIO"}}'};
+			var MemoryIO = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"mem-io","node":"'+name+'","translation":"","resource":"nodehealth","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryIO, drawElementsPerformanceGraph.containerChart, "MemoryIO", "#0C66ED", false, name);
+			//drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryUsedIO, "containerChartPerformance", "MemoryUsedIO","#2BC70D", false);
+		},drawChartMemoryProc: function(name){
 			
 			drawElementsPerformanceGraph.chartIdPerformance = "3";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.idResourceInterfaz = "";
-			drawElementsPerformanceGraph.metricUnit = "";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
+			drawElementsPerformanceGraph.metricUnit = "% Mem. Utilisation";
 			drawElementsPerformanceGraph.subtitlePerformance = "Mem Util PROC";
-			drawElementsPerformanceGraph.metricUnit = " ";
-			var MemoryFreePROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryFreePROC"}}'};
-			var MemoryUsedPROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"MemoryUsedPROC"}}'};
+
+			var MemoryProc = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"mem-proc","node":"'+name+'","translation":"","resource":"nodehealth","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryProc, drawElementsPerformanceGraph.containerChart, "MemoryProc", "#0C66ED", false, name);
+		},drawInterfaceUtil: function(name, idResourceInterfaz){		
 			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
-			
-		},drawInterfaceUtil: function(){		
 			drawElementsPerformanceGraph.chartIdPerformance = "4";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
+			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.metricUnit = "";
-			drawElementsPerformanceGraph.subtitlePerformance += drawElementsPerformanceGraph.intfNodePerformance;
 			drawElementsPerformanceGraph.metricUnit = "% Avg Util ";
-			var ifOutOctets = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"interface","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutOctets"}}'};
-			var ifInOctets = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"interface","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInOctets"}}'};
+			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type": "autil","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, autil, drawElementsPerformanceGraph.containerChart, "autil", null, false, name);
 			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutOctets, "containerChartPerformance", "ifOutOctets", "#0C66ED", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInOctets, "containerChartPerformance", "ifInOctets","#2BC70D", true);
-			
-		},drawInterfaceErrors: function(){
+		},drawInterfaceErrors: function(name, idResourceInterfaz){
 			drawElementsPerformanceGraph.chartIdPerformance = "5";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
 			drawElementsPerformanceGraph.metricUnit = "";
-			drawElementsPerformanceGraph.subtitlePerformance += drawElementsPerformanceGraph.intfNodePerformance;
 			drawElementsPerformanceGraph.metricUnit = "Percentage";
-			var ifOutErrors = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type": "pkts_hc","index_graph_type": "errpkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutErrors","axis": "0"}}'};
-			var ifInErrors = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type": "pkts_hc","index_graph_type": "errpkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInErrors","axis": "0"}}'};
-			var ifOutDiscards = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type": "pkts_hc","index_graph_type": "errpkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutDiscards","axis": "0"}}'};
-			var ifInDiscards = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type": "pkts_hc","index_graph_type": "errpkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInDiscards","axis": "0"}}'};
 			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutErrors, "containerChartPerformance", "ifOutErrors", "#0C66ED", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInErrors, "containerChartPerformance", "ifInErrors","#2BC70D", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutDiscards, "containerChartPerformance", "ifOutDiscards", "#A709B5", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInDiscards, "containerChartPerformance", "ifInDiscards","#00B5A2", true);
+			var errpkts_hc = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"lineType": "line", "graph_type":"pkts_hc","index_graph_type": "errpkts_hc","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, errpkts_hc, drawElementsPerformanceGraph.containerChart, "errpkts_hc",null, true, name);
 			
-		},drawInterfacePkts: function(){
+		},drawInterfacePkts: function(name, idResourceInterfaz){
 			drawElementsPerformanceGraph.chartIdPerformance = "6";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
 			drawElementsPerformanceGraph.metricUnit = "";
 			drawElementsPerformanceGraph.subtitlePerformance += drawElementsPerformanceGraph.intfNodePerformance;
 			drawElementsPerformanceGraph.metricUnit = "Packets/Second";
 						
-			var ifOutMcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutMcastPkts"}}'};
-			var ifOutUcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutUcastPkts"}}'};
-			var ifInUcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInUcastPkts"}}'};
-			var ifInMcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInMcastPkts"}}'};
-			var ifInBcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifInBcastPkts"}}'};
-			var ifOutBcastPkts = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"ifOutBcastPkts"}}'};
+			var pkts_hc = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"lineType": "line", "graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformanceGraph.nmis};			
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, pkts_hc, drawElementsPerformanceGraph.containerChart, "pkts_hc",null, true, name);
 			
 			//{"model":"nmis_rrd","model_view":"graph","parameters":{"1405040812":"10-Jul-2014","end_date_raw":1405040812,"start_date_raw":1404436012,"graph_type":"pkts_hc","index_graph_type": "pkts_hc","resource_index": "5","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"","item":""}}
 			
@@ -147,67 +117,129 @@ var drawElementsPerformanceGraph = {
 			
 			//{"model":"nmis_graph","model_view":"raw","parameters":{"1405040812":"10-Jul-2014","end_date_raw":1405040812,"start_date_raw":1404436012,"graph_type":"pkts_hc", "lineType": "line","index_graph_type": "pkts_hc","resource_index": "5","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"","item":"","axis":"0"}}
 			
-			
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutMcastPkts, "containerChartPerformance", "ifOutMcastPkts","#0FFF00", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutUcastPkts, "containerChartPerformance", "ifOutUcastPkts","#0CE840", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInUcastPkts, "containerChartPerformance", "ifInUcastPkts","#0061FF", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInMcastPkts, "containerChartPerformance", "ifInMcastPkts","#33297A", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifInBcastPkts, "containerChartPerformance", "ifInBcastPkts","#A80DFF", true);
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, ifOutBcastPkts, "containerChartPerformance", "ifOutBcastPkts","#C4FF0D", true);
-
-			
-			
-		},drawInterfaceQos: function(classQos){
+		},drawInterfaceQos: function(name, idResourceInterfaz){
 			drawElementsPerformanceGraph.chartIdPerformance = "7";
-			drawElementsPerformanceGraph.dataChartPerformance.length = 0;
 			drawElementsPerformanceGraph.metricUnit = "";
-			var DropByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}'};
-			var PrePolicyByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}'};
+			
+			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qos, drawElementsPerformanceGraph.containerChart, "qos",null, true, name);
+			//var DropByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}'};
+			//var PrePolicyByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}'};
 			//{"model":"nmis_rrd","model_view":"graph","parameters":{"1405040812":"10-Jul-2014","end_date_raw":1405040812,"start_date_raw":1404436012,"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "5","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"PrePolicyByte","item":"class-default--WAN--Precedencia2"}}
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, DropByte, "containerChartPerformance", "DropByte","#0C66ED");
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
+			//drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, DropByte, "containerChartPerformance", "DropByte","#0C66ED");
+			//drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
 			
-		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
+		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics, name){
 			
-			$("#containerChartPerformance").append("<div id="+container+"><div>");
+			var containerT =  container.split("-");
+			var result =  containerT[1] %= 2;
+			
 			var dataChartPerformance = [];
+			
 			function onDataReceived(series) {
 				//drawElementsPerformanceGraph.dataChartPerformance.push(series);
 				//cnocConnector.drawChartPerformanceGraph(drawElementsPerformanceGraph.dataChartPerformance, container, otherMetrics);
 				dataChartPerformance.push(series);				
-				cnocConnector.drawChartPerformanceGraph(dataChartPerformance, container, otherMetrics);
+				cnocConnector.drawChartPerformanceGraph(dataChartPerformance, container, otherMetrics, name);
 	       	}
 			
-			$.ajax({
-	   			type : 'GET',
-	   			dataType : 'jsonp',
-	   			url : url,
-	   			data : params,
-	   			error : function(jqXHR, textStatus, errorThrown) {
-	   				console.log(jqXHR);
-	   			},
-	   			success: function(response) {	   				
-	   				console.log(response);
-	   				var dataChart = "";
-	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc"){	   					
-	   					var json = response.replyData.data;
-	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
-	   					for(var idx=0; idx<json.length; idx++){
-	   						dataChart = "";
-	   						var jsonData = response.replyData.data[idx].data;
-	   						//var colorP = response.replyData.data[idx].color;
-	   						var name = response.replyData.data[idx].name;
-	   						dataChart = {color:colorP[idx], name:name, data: jsonData};
-	   						onDataReceived(dataChart);
-	   					}
-	   				}else{
-	   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
-	   					onDataReceived(dataChart);
-	   				}	   				
-	   				
-	   			}
-	   		});
+			//if((name.indexOf("_UPS") < 0) && labelMetric === "cpu"){
+				
+				if(result == 1){
+					$("#containerChartPerformance1").append("<div id="+container+" class='panel panel-primary'><div>");
+				}else{
+					$("#containerChartPerformance2").append("<div id="+container+" class='panel panel-primary'><div>");
+				}
+
+				$.ajax({
+		   			type : 'GET',
+		   			dataType : 'jsonp',
+		   			url : url,
+		   			data : params,
+		   			error : function(jqXHR, textStatus, errorThrown) {
+		   				console.log(jqXHR);
+		   			},
+		   			success: function(response) {	
+		   				var dataChart = "";
+		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos"){	   					
+		   					var json = response.replyData.data;
+		   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
+		   					for(var idx=0; idx<json.length; idx++){
+		   						dataChart = "";
+		   						var jsonData = response.replyData.data[idx].data;
+		   						var nameGraph = response.replyData.data[idx].name;
+		   						
+		   						if(labelMetric === "autil"){
+		   							drawElementsPerformanceGraph.subtitlePerformance = response.replyData.options.titleText;
+		   						}
+		   						
+		   						dataChart = {color:colorP[idx], name:nameGraph, data: jsonData};
+		   						onDataReceived(dataChart);
+		   					}
+		   				}else{
+		   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
+		   					onDataReceived(dataChart);
+		   				}	   				
+		   				
+		   			}
+		   		});
+				
+			//}
 			
+			
+			
+		},drawInterfacesNodes:function(datos){
+			$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
+			try{
+				if (datos.results.datum.length > 1) {
+					for(var i=0; i<datos.results.datum.length; i++){
+						var nodeTmp = datos.results.datum[i].url.toString().split("/");
+						var node = nodeTmp[4];
+						var interfaces = node +"|"+datos.results.datum[i].tokens[1]+"|"+datos.results.datum[i].tokens[2]+"|"+drawElementsPerformanceGraph.nmis;
+						drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
+					}					
+				}else{
+					var nodeTmp = datos.results.datum.url.toString().split("/");
+					var node = nodeTmp[4];
+					var interfaces = node +"|"+datos.results.datum.tokens[1]+"|"+datos.results.datum.tokens[2]+"|"+drawElementsPerformanceGraph.nmis;
+					drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
+				}
+			}catch(e){
+				console.log(e);
+			}		
+
+			$("#cmbNodesPerformanceInterfaz").empty();
+			$("#cmbNodesPerformanceInterfaz").append("<select id='cmbInterfazGraph' data-placeholder='Select Interfaz' multiple='multiple' style='width:100%; margin-left: 5%;' ></select>");
+			
+			if (drawElementsPerformanceGraph.dataChartInterface.length > 1) {
+				for ( var i = 0; i < drawElementsPerformanceGraph.dataChartInterface.length; i++) {
+					
+					var data = drawElementsPerformanceGraph.dataChartInterface[i].toString().split("|");
+					
+					jQuery("#cmbInterfazGraph").append(
+							"<option value='"
+									+ data[0]+"|"+data[2]+"|"+data[3]+"'>"
+									+ data[0]+"|"+data[1]
+									+ "</option>");
+				}
+			}else{
+				var data = drawElementsPerformanceGraph.dataChartInterface.toString().split("|");
+				
+				jQuery("#cmbInterfazGraph").append(
+						"<option value='"
+								+ data[0]+"|"+data[2]+"|"+data[3]+"'>"
+								+ data[0]+"|"+data[1]
+								+ "</option>");
+			}
+			
+ 			
+ 			$('#cmbInterfazGraph').multiselect({
+	        	includeSelectAllOption: true,
+	        	enableFiltering: true,
+	        	maxHeight: 450
+	        });
+
+ 			$( "#cmbNodesPerformanceInterfazC" ).unmask();
 		},refreshChart:function(){
 			
 			var startDate = ((new Date().getTime()).toString()).substring(0,10)-86400;

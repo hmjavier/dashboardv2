@@ -15,12 +15,15 @@ var drawElementsPerformanceV1 = {
 		startDate: "",
 		
 		init : function(codeNet) {
-
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
 			
 			} else {
+				
+				/*Genera Menu*/
+				generateMenu();				
+				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 

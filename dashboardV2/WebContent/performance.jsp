@@ -76,78 +76,9 @@
 	</div>
     <div id="wrapper">
 		
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        	<!-- 
-        	<div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Dashboard CNOC</a>
-            </div>
-            -->
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-				<div id="cmbCliente">
-					</br>
-					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:90%;" tabindex="2"></select>
-				</div>      
-            </div>               
-            <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">  
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="navTheme">
-                        <li>
-	                        <a href="#" class="themeW" rel="css/bootstrapW.css"><i class="fa fa-fw fa-dashboard"></i> White </a>
-	                    </li>
-	                    <li>
-	                        <a href="#" class="themeB" rel="css/bootstrap.css"><i class="fa fa-fw fa-warning"></i> Black </a>
-	                    </li>
-                    </ul>
-                </li>
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-	                        <a href="main.jsp"><i class="fa fa-fw fa-dashboard"></i> Home </a>
-	                    </li>
-	                    <li>
-	                        <a href="incidents.jsp"><i class="fa fa-fw fa-warning"></i> Incidents </a>
-	                    </li>
-	                    <li>
-	                        <a href="changes.jsp"><i class="fa fa-fw fa-refresh"></i> Changes </a>
-	                    </li>
-	                    <li>
-	                        <a href="forms.html"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="inventory.jsp"><i class="fa fa-fw fa-briefcase"></i> Inventory </a>
-	                    </li>
-                    </ul>
-                </li>
-    			
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Javier Hernandez <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>                
-            </ul>
-            <!-- /.navbar-collapse -->
-        </nav>
-
+		<!-- MENU  -->		
+		<%@ include file="menu.jsp" %> 
+		
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -262,7 +193,8 @@
 			    		cnocConnector.logout = serviceLogout;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service1 = serviceR1;
-			    		cnocConnector.service2 = serviceG3;
+			    		cnocConnector.service2 = serviceR2;
+			    		cnocConnector.menu = serviceMenu;
 			    		
 			    }
 			});
@@ -270,7 +202,7 @@
 		 	drawElementsPerformance.init();
 
 		 	$('.datesPerformance').datepicker({
-				format: "dd-M-yyyy",
+				format: "yyyy/mm/dd",
 				todayBtn: true,
 			    autoclose: true,
 			    todayHighlight: true//,
@@ -288,10 +220,10 @@
 					if(node === ""){
 						alert("Elija un nodo");
 					}else{
-						var sD = new Date(startDate);
+						var sD = new Date(startDate +" 00:00:00");
 						startDate = ((sD.getTime()/1000));
 						
-						var eD = new Date(endDate);
+						var eD = new Date(endDate +" 00:00:00");
 						endDate = ((eD.getTime()/1000));
 						
 						drawElementsPerformance.dataChartPerformance.length = 0;
@@ -299,7 +231,11 @@
 						drawElementsPerformance.endDate = "";
 						drawElementsPerformance.startDate = startDate;
 						
-						drawElementsPerformance.drawChartCPU(drawElementsPerformance.nodePerformance, drawElementsPerformance.startDate, drawElementsPerformance.endDate, drawElementsPerformance.endUnix);
+						if(drawElementsPerformance.nodePerformance.indexOf("_UPS") > 0){
+							drawElementsPerformance.drawChartHealth();
+						}else{
+							drawElementsPerformance.drawChartCPU(drawElementsPerformance.nodePerformance, drawElementsPerformance.startDate, drawElementsPerformance.endDate, drawElementsPerformance.endUnix);
+						}						
 					}
 				}
 			});

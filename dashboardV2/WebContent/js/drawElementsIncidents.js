@@ -5,12 +5,15 @@
 
 var drawElementsIncidents = {
 		init : function(codeNet) {
-
+			
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
 			
 			} else {
+				/*Genera Menu*/
+				generateMenu();
+				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsIncidents.selectCustom, "SelectCustomer", "opt");
 				this.builder(codeNet);
 			}
