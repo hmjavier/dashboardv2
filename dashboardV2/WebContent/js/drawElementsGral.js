@@ -43,7 +43,7 @@ var drawElementsGral = {
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "general");
-			drawElementsGral.builder($("#SelectCustomer").val());
+			drawElementsGral.builder($("#SelectCustomer").val());			
 
 		},countStatus: function(datos, container, divPanel){
 			var rowsData = new Array();
@@ -64,8 +64,8 @@ var drawElementsGral = {
 			$.ajax({
 				type : 'GET',
 				dataType : 'json',
-				//url : 'http://localhost:8080/dashboardMap/getLocationNodeList?network_code='+codenet,
-				url : 'https://dashboard-i2.cnoc.telmexit.com/dashboardMap/getLocationNodeList?network_code='+codenet,
+				url: cnocConnector.service20,
+				data: {network_code:codenet},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
@@ -184,8 +184,8 @@ var drawElementsGral = {
 			$.ajax({
 				type : 'GET',
 				dataType : 'json',
-				//url : 'http://localhost:8080/dashboardMap/getInternationalNodeList?network_code='+codenet,
-				url : 'https://dashboard-i2.cnoc.telmexit.com/dashboardMap/getInternationalNodeList?network_code='+codenet,
+				url : cnocConnector.service28 = serviceG17,
+				data: {network_code:codenet},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR);
 					$( "#mapGral").unmask();

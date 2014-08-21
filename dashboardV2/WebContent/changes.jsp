@@ -358,7 +358,7 @@
 		
 		
 		cnocConnector.invokeMashup(cnocConnector.getLdap,{},function (data){
-			if(data.aut.module[0]==="CLIENTE"){
+			if(data.aut.module[1]==="CLIENTE"){
 				$("#changesGroups").show();
 				$("#changesListT").removeClass("col-lg-12");
 				$("#changesListT").addClass("col-lg-9");
@@ -391,10 +391,10 @@
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElements.builder();
 			});
-			/*
+			
 			var refresh = setInterval(function(){
 				drawElements.init();
-			},cnocConnector.refresh);*/
+			},300000);
 
 	});
 	</script>

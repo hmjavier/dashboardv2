@@ -81,6 +81,7 @@ function themeChanges(filename, flag){
 }
 
 function generateMenu(){
+	$(".menuCnoc").empty();
 	$.ajax({
         type: 'GET',
         dataType: 'jsonp',
@@ -91,9 +92,11 @@ function generateMenu(){
         },
         success: function(response){
         	var menu = response.aut.module[2].split(";");
-        	var customer = response.aut.module[0];
-
-        	$(".nameCustomer").text(customer);
+        	//var customer = response.aut.module[0];
+        	cnocConnector.userName = response.aut.module[0];
+        	
+        	
+        	$(".nameCustomer").text(cnocConnector.userName);
         	
         	$.each(menu, function( index, value ) {
         		console.log(index + ": " + value);
@@ -104,6 +107,7 @@ function generateMenu(){
         			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
         			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
         			general +="<li><a href='performanceGraph.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance Report </a></li>";
+        			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
         			
         			$(".menuCnoc").append(general);
 
@@ -119,7 +123,7 @@ function generateMenu(){
         			
         		}else if(value === "esc=true"){
         			
-        			var esclations = "<li><a href='inventory.jsp'><i class='fa fa-fw fa-cloud-upload'></i> Escalaciones </a></li>";
+        			var esclations = "<li><a href='escalation.jsp'><i class='fa fa-fw fa-cloud-upload'></i> Escalaciones </a></li>";
         			$(".menuCnoc").append(esclations);
         		}
         	});
