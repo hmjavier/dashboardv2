@@ -21,8 +21,9 @@ var drawElementsInventory = {
 			this.builder(codeNet);
 
 		} else {
-			cnocConnector.invokeMashup(
-					cnocConnector.service9, {}, drawElementsInventory.selectCustom, "SelectCustomer", "opt");
+			/*Genera Menu*/
+			generateMenu();
+			cnocConnector.invokeMashup(cnocConnector.service9, {}, drawElementsInventory.selectCustom, "SelectCustomer", "opt");
 		}		
 
 	}, showInventory: function(datos, container, divTable) {		

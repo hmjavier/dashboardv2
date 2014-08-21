@@ -27,9 +27,6 @@
 	<!-- Chosen -->
 	<link rel="stylesheet" type="text/css" href="js/chosen/chosen.min.css">
 
-	<!-- DataTables -->
-	<link rel="stylesheet" type="text/css" href="js/DataTables-1.10.1/css/jquery.dataTables.min.css">
-	
 	<!-- DataTables Bootstrap-->
 	<link rel="stylesheet" type="text/css" href="js/DataTables-Bootstrap/css/dataTables.bootstrap.css">
 	

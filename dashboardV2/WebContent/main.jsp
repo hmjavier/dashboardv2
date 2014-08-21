@@ -466,6 +466,7 @@
 			    		cnocConnector.service25 = serviceG15;
 			    		cnocConnector.service26 = serviceG16;
 			    		cnocConnector.service27 = serviceC1;
+			    		cnocConnector.service28 = serviceG17;
 			    		
 			    }
 			});
@@ -565,9 +566,9 @@
 				drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
 
-			/*var refresh = setInterval(function(){
+			var refresh = setInterval(function(){
 				drawElementsGral.init();
-			},cnocConnector.refresh);*/
+			},300000);
 	});
 	</script>
 

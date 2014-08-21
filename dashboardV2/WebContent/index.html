@@ -132,6 +132,7 @@
 	var module="";
 	var codenets="";
 	var ou="";
+	var name="";
 	var usernameA ='ogescami';
 	var passwordA ='oscarGtz86';
         var login = function(username, password){
@@ -146,9 +147,10 @@
                     }, {
                         onSuccess: function(response, responseHeaders) {
                             var result = response;
-				module = response.aut.module;
-				codenets=response.aut.codenet;
-				ou = response.aut.typeuser;
+							module = response.aut.module;
+							codenets=response.aut.codenet;
+							ou = response.aut.typeuser;
+							name = response.aut.name;
                             /*if(typeof response !== "string") {
 				alert("entro");
                                 result = Object.toJSON(response);

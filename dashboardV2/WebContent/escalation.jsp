@@ -50,77 +50,8 @@
 	</div>
     <div id="wrapper">
 		
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        	<!-- 
-        	<div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Dashboard CNOC</a>
-            </div>
-            -->
-            <!-- Brand and toggle get grouped for better mobile display -->
-<!--             <div class="navbar-header"> -->
-<!-- 				<div id="cmbCliente"> -->
-<!-- 					</br> -->
-<!-- 					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:90%;" tabindex="2"></select> -->
-<!-- 				</div>       -->
-<!--             </div>                -->
-            <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">  
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="navTheme">
-                        <li>
-	                        <a href="#" class="themeW" rel="css/bootstrapW.css"><i class="fa fa-fw "></i> White </a>
-	                    </li>
-	                    <li>
-	                        <a href="#" class="themeB" rel="css/bootstrap.css"><i class="fa fa-fw "></i> Black </a>
-	                    </li>
-                    </ul>
-                </li>
-    			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-	                        <a href="main.jsp"><i class="fa fa-fw fa-home"></i> Home </a>
-	                    </li>
-	                    <li>
-	                        <a href="incidents.jsp"><i class="fa fa-fw fa-warning"></i> Incidents </a>
-	                    </li>
-	                    <li>
-	                        <a href="changes.jsp"><i class="fa fa-fw fa-refresh"></i> Changes </a>
-	                    </li>
-	                    <li>
-	                        <a href="performance.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance </a>
-	                    </li>
-	                    <li>
-	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Performance 2</a>
-	                    </li>
-	                    <li>
-	                        <a href="inventory.jsp"><i class="fa fa-fw fa-briefcase"></i> Inventory </a>
-	                    </li>
-                    </ul>
-                </li>
-    			
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Javier Hernandez <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>                
-            </ul>
-            <!-- /.navbar-collapse -->
-        </nav>
+        <!-- MENU  -->		
+		<%@ include file="menu.jsp" %>
 
         <div id="page-wrapper">
 
@@ -129,7 +60,7 @@
 
 
                 <div class="row">
-                	<div class="col-md-5 col-md-offset-4">
+                	<div class="col-md-5 col-md-offset-3">
                 		<div class="btn-group">    
 					    	<button type="button" class="btn btn-info">CSC</button>
 							<button type="button" class="btn btn-info">GFC</button>
@@ -137,8 +68,8 @@
 							<button type="button" class="btn btn-info">ESCALACION CASE</button>
 							<button type="button" class="btn btn-info">SMS-INT</button>
 							<button type="button" class="btn btn-info">SMS-CLIE</button>
-						</div>
-						<button id="getButton" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>
+							<!-- <button id="getButton" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>-->
+						</div>						
                 	</div>
                 </div>
                 <br>
@@ -153,8 +84,9 @@
 						<div class="control-group">
 						  <label class="control-label" for="textinput">IM</label>
 						  <div class="controls">
-						    <input id="im" name="im" type="text" placeholder="IMCCC000000" maxlength="11" size="11" class="input-xlarge">						    
-						  </div>
+						    <input id="im" name="im" type="text" placeholder="IMCCC000000" maxlength="11" size="11" class="input-xlarge">
+						    <button class="btn btn-success glyphicon glyphicon-save" type="button" id="getButton"> Get</button>						    
+						  </div>						  
 						</div>
 						
 						</fieldset>
@@ -220,6 +152,7 @@
 			    		cnocConnector.logout = serviceLogout;
 			    		cnocConnector.service1 = serviceESC1;
 			    		cnocConnector.service2 = serviceESC2;
+			    		cnocConnector.menu = serviceMenu;
 			    }
 			});
 		 	
@@ -233,10 +166,12 @@
 		 		$('#chartEscalation').empty();
 		 		
 		 		if (im == '') {
-		 			bootbox.alert("Please insert IM");
+		 			//bootbox.alert("Please insert IM");
+		 			alert("Please insert IM");
 		 		
 		 		} else if (report == '') {
-		 			bootbox.alert("Please select escalation type");
+		 			//bootbox.alert("Please select escalation type");
+		 			alert("Please select escalation type");
 		 		
 		 		} else if (report == 'CSC') {
 		 			cnocConnector.invokeMashup(

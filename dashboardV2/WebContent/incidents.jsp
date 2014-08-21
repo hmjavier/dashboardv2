@@ -444,7 +444,7 @@
 		 	
 			
 			cnocConnector.invokeMashup(cnocConnector.getLdap,{},function (data){
-				if(data.aut.module[0]==="CLIENTE"){
+				if(data.aut.module[1]==="CLIENTE"){
 					//if(true){
 					$("#containerChartCompaniesSector").remove();
 					$("#containerChartSector").remove();
@@ -480,9 +480,9 @@
 				drawElementsIncidents.builder(cnocConnector.codeNetGlobal);
 			});
 
-			/*var refresh = setInterval(function(){
+			var refresh = setInterval(function(){
 				drawElementsIncidents.init();
-			},cnocConnector.refresh);*/
+			},300000);
 	});
 	</script>
 

@@ -246,7 +246,17 @@
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElements.builder();
 			});
-
+			
+			$("#aUpdateTicket").click(function(event){
+				cnocConnector.invokeMashup(
+						cnocConnector.service3,
+						{"code_net":cnocConnector.codeNetGlobal},
+						drawElementsTickets.drawOpenTicketsList,
+						"openTicketsList",
+						"openTicketsListTi"
+					);
+			});
+			
 			/*
 			var refresh = setInterval(function(){
 				drawElements.init();
