@@ -6,7 +6,8 @@ var cnocConnector = {
 	hostname : '',
 	logout : '',
 	ipserver : '',
-	incidents : '',	
+	incidents : '',
+	userName :'',
 	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
@@ -237,164 +238,8 @@ var cnocConnector = {
 						affectedService: $(nTds[3]).text(),
 						uniqueIdentifier: $(nTds[4]).text()
 					};
-
-					var modal = bootbox.dialog({
-						message: $("#frm").html(),
-						title: "Open Ticket: " + 
-							data.affectedService + " - " + 
-							data.uniqueIdentifier + " - " + 
-							data.siteName,
-						buttons: [{
-							label: "Open Ticket",
-							className: "btn btn-primary glyphicon glyphicon-floppy-disk",
-							callback: function() {
-								
-								var button = modal.find( '.glyphicon-floppy-disk' );
-								var title = modal.find(".titleTCK");
-								var description = modal.find(".descriptionTCK");
-								var contactPerson = modal.find(".contactPersonTCK");
-								var contactMail = modal.find(".contactEmailTCK");
-								var sd = modal.find( '#sdTCK' );
-								var im = modal.find( '#imTCK' );
-								var message = modal.find( '#messageTCK' );
-								
-								data.title = title.val();
-								data.description = description.val();
-								data.contactPerson = contactPerson.val();
-								data.contactMail = contactMail.val();
-								
-								$( sd ).attr("disabled", "disabled");
-								$( im ).attr("disabled", "disabled");
-								$( message ).attr("disabled", "disabled");
-								
-								$(button).attr("disabled", "disabled");
-								$(button).text("Waiting...");
-								
-								$( title ).attr("disabled", "disabled");
-								$( description ).attr("disabled", "disabled");
-								$( contactPerson ).attr("disabled", "disabled");
-								$( contactMail ).attr("disabled", "disabled");
-								
-								$( sd ).val("Waiting...");
-								$( im ).val("Waiting...");
-								$( message ).val("Waiting...");
-								
-								if (data.title == "" || data.title == null || data.title == undefined) {
-									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-									
-									$( sd ).val("ERROR");
-									$( im ).val("ERROR");									
-									$( message ).val("Title is required.");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-								
-								} else if (data.description == "" || data.description == null || data.description == undefined) {
-									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-									
-									$( sd ).val("ERROR");									
-									$( im ).val("ERROR");
-									$( message ).val("Description is required.");									
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-								
-								} else if (data.contactPerson == "" || data.contactPerson == null || data.contactPerson == undefined) {
-									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-								
-									$( sd ).val("ERROR");
-									$( im ).val("ERROR");
-									$( message ).val("Contact Person is required.");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-								
-								} else if (data.contactMail == "" || data.contactMail == null || data.contactMail == undefined) {
-									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-								
-									$( sd ).val("ERROR");
-									$( im ).val("ERROR");
-									$( message ).val("Contact Email is required.");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-									
-								} else {
-									$.ajax({
-										url: cnocConnector.service2,
-										type: 'POST',
-										dataType: 'json',
-										chache: false,
-										data: data,
-										success: function(data) {
-											if (data == '' || data == null) { 
-												
-												$( title ).removeAttr("disabled");
-												$( description ).removeAttr("disabled");
-												$( contactPerson ).removeAttr("disabled");
-												$( contactMail ).removeAttr("disabled");
-											
-												$( sd ).val("ERROR");
-												$( im ).val("ERROR");
-												$( message ).val("No information Retrived.");
-												
-												$( button ).text("Open Ticket");
-												$( button ).removeAttr("disabled");
-												
-											} else {
-												
-												$( title ).removeAttr("disabled");
-												$( description ).removeAttr("disabled");
-												$( contactPerson ).removeAttr("disabled");
-												$( contactMail ).removeAttr("disabled");
-												
-												$( sd ).val(data.incidentId);
-												$( sd ).removeAttr("disabled");
-												
-												$( im ).val(data.number);
-												$( im ).removeAttr("disabled");
-												
-												$( message ).val(data.message);
-												$( message ).removeAttr("disabled");
-												
-												$( button ).text("Open Ticket");
-												$( button ).removeAttr("disabled");
-											}
-										},
-										error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
-									});
-								}
-								
-								return false;
-							}
-						}, {
-							label: "Close",
-							className: "btn btn-default",
-							callback: function() { }
-						}],
-						show: false,
-						onEscape: function() {
-							modal.modal("hide");
-						}
-					});
-
-					  modal.modal("show");
+					
+					drawElementsTickets.openTicket(data);					
 					
 			});
 		}
@@ -410,81 +255,8 @@ var cnocConnector = {
 					updateAction : ""
 				};
 				
-				var modal = bootbox.dialog({
-					message: $("#updateTicketDialog").html(),
-					title: "Update Ticket: " + data.number,
-					buttons: [{
-						label: "Update Ticket",
-						className: "btn btn-primary glyphicon glyphicon-floppy-disk",
-						callback: function() {
-							
-							var button = modal.find( '.glyphicon-floppy-disk' );							
-							var message = modal.find( '#messageUpdate' );
-							var updateAction = modal.find( '.updateAction' );
-							
-							data.updateAction = updateAction.val();
-							
-							$( updateAction ).attr("disabled", "disabled");
-							$( message ).attr("disabled", "disabled");
-							$( button ).attr("disabled", "disabled");
-							$( button ).text("Waiting...");
-							$( message ).val("Waiting...");
-							
-							if (data.updateAction == "" || data.updateAction == null || data.updateAction == undefined) {
-								$( updateAction).removeAttr("disabled");
-								
-								$( message ).val("ERROR: Update Action is required.");
-								$( message ).removeAttr("disabled");
-								
-								$( button ).text("Open Ticket");
-								$( button ).removeAttr("disabled");
-							
-							} else {
-								$.ajax({
-									url: cnocConnector.service4,
-									type: 'POST',
-									dataType: 'json',
-									chache: false,
-									data: data,
-									success: function(data) {
-										if (data == '' || data == null) {
-											$( updateAction).removeAttr("disabled");
-											
-											$( message ).val("ERROR: No information Retrived.");
-											$( message ).removeAttr("disabled");
-											
-											$( button ).text("Open Ticket");
-											$( button ).removeAttr("disabled");
-										
-										} else {
-											$( updateAction).removeAttr("disabled");
-											
-											$( message ).val(data.message);
-											$( message ).removeAttr("disabled");
-											
-											$( button ).text("Open Ticket");
-											$( button ).removeAttr("disabled");
+				drawElementsTickets.updateTicket(data);
 
-										}
-									},
-									error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
-								});
-							}
-							
-							return false;
-						}
-					}, {
-						label: "Close",
-						className: "btn btn-default",
-						callback: function() { }
-					}],
-					show: false,
-					onEscape: function() {
-						modal.modal("hide");
-					}
-				});
-
-				modal.modal("show");
 			});
 		}
 		
