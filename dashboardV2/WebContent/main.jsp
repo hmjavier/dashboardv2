@@ -444,8 +444,8 @@
 			    mode:'both',
 			    callback: function() {
 			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.nmis_urls = nmis_urls;
 			    		cnocConnector.logout = serviceLogout;
-			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.service1 = serviceR1;
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;

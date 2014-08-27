@@ -18,13 +18,13 @@
             <div class="navbar-header" style="margin-left: 2%;">
 				<div id="cmbCliente">
 					</br>
-					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:90%;" tabindex="2"></select>
+					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:360px" tabindex="2"></select>
 				</div>      
             </div>               
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">  
     			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
                     <ul class="dropdown-menu" id="navTheme">
                         <li>
 	                        <a href="#" class="themeW" rel="css/bootstrapW.css"><i class="fa fa-fw "></i> White </a>
@@ -35,7 +35,7 @@
                     </ul>
                 </li>
     			<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
                     <ul class="dropdown-menu menuCnoc">
                         <!-- 
 	                    <li>
@@ -44,9 +44,24 @@
                     
                     </ul>
                 </li>
+                
+                <li>
+                	<div id="nmisUrlMain">
+						<div id="mpls_main">
+							<select data-placeholder="Open MPLS link..." id="mpls_select_main" style="width: 220px;" tabindex="2">
+								<option value=""></option>
+							</select>
+						</div>			
+						<div id="internet_main">
+							<select data-placeholder="Open Internet link..." id="internet_select_main" style="width: 220px;" tabindex="2">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+                </li>
     			
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user nameCustomer"></i><b class="caret"></b></a>
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-user nameCustomer"></i><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
@@ -55,7 +70,7 @@
                             <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
-                </li>                
+                </li>
             </ul>
             <!-- /.navbar-collapse -->
         </nav>

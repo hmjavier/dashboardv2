@@ -300,8 +300,6 @@ var drawElementsTickets = {
 
 		  modal.modal("show");		
 	},updateTicket: function(data){
-		console.log("update ticket");
-		console.log(data);
 		
 		var modal = bootbox.dialog({
 			message: $("#updateTicketDialog").html(),

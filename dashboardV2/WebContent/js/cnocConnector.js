@@ -8,7 +8,7 @@ var cnocConnector = {
 	ipserver : '',
 	incidents : '',
 	userName :'',
-	
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
-	/*
+	},*/
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -65,7 +65,7 @@ var cnocConnector = {
 				statusCode : {
 					401 : function() {
 						alert('Session Time Out');
-						window.location = "/dashboardV2/index.html";
+						window.location = "/dashboard/index.html";
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -78,7 +78,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboardV2/index.html";
+							window.location = "/dashboard/index.html";
 						}
 					} catch (err) {
 						$.ajax({
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				

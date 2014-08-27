@@ -420,6 +420,7 @@
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.getLdap = getLdap;
 			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.nmis_urls = nmis_urls;
 			    		cnocConnector.service1 = serviceI1;
 			    		cnocConnector.service2 = serviceI2;
 			    		cnocConnector.service3 = serviceI3;

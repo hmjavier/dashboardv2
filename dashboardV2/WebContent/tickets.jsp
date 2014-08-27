@@ -218,6 +218,7 @@
 		    		cnocConnector.service3 = serviceTic3;
 		    		cnocConnector.service4 = serviceTic4;
 		    		cnocConnector.menu = serviceMenu;
+		    		cnocConnector.nmis_urls = nmis_urls;
 		    }
 		});
 		

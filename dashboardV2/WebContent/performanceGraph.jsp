@@ -356,11 +356,10 @@
 					if(nodes.length<1){
 						alert("Elija un nodo");
 					}else{
-						console.log(startDate);
+
 						var sD = new Date(startDate+" 00:00:00");
 						startDate = ((sD.getTime()/1000));
 						
-						console.log(endDate);
 						var eD = new Date(endDate +" 00:00:00");
 						endDate = ((eD.getTime()/1000));
 
@@ -393,13 +392,6 @@
 							drawElementsPerformanceGraph.endUnix = endDate;
 							drawElementsPerformanceGraph.endDate = "";
 							drawElementsPerformanceGraph.startDate = startDate;
-							
-							console.log(name);
-							console.log(nmis);
-							console.log(metrics);
-							console.log(idResource);
-							console.log(drawElementsPerformanceGraph.containerChart);
-							//drawElementsPerformanceGraph.drawChartCPU(drawElementsPerformance.nodePerformance, drawElementsPerformance.startDate, drawElementsPerformance.endDate, drawElementsPerformance.endUnix);
 							
 							if(metrics === "health"){
 								drawElementsPerformanceGraph.drawChartHealth(name);
