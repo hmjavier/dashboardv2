@@ -550,6 +550,11 @@
 				home();
 			});
 			
+			Highcharts.setOptions({
+		        global: {
+		            useUTC: false
+		        }
+		    });
 			
 			$(".themeW").click(function(event){
 				var filename = $(this).attr('rel');				
