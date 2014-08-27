@@ -142,6 +142,7 @@
 			    		cnocConnector.service1 = serviceINV1; // ms_inv_transport
 			    		cnocConnector.service2 = serviceINV2; // ms_inv_equipment
 			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
 			});
 

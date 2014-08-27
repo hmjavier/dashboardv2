@@ -95,11 +95,10 @@ function generateMenu(){
         	//var customer = response.aut.module[0];
         	cnocConnector.userName = response.aut.module[0];
         	
-        	
         	$(".nameCustomer").text(cnocConnector.userName);
         	
         	$.each(menu, function( index, value ) {
-        		console.log(index + ": " + value);
+//        		console.log(index + ": " + value);
         		if(value === "gen=true"){
         			
         			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
@@ -127,8 +126,98 @@ function generateMenu(){
         			$(".menuCnoc").append(esclations);
         		}
         	});
+        	
+        	/** Load NMIS URLs **/
+			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {
+				if(datos.records.record.length>1) {
+					$.each(datos.records.record, function(k, v) {
+						if (v.url_nmis != '') {
+							if (v.url_nmis.indexOf("\n") > 0) {
+								var nmis = v.url_nmis.split("\n");
+								$.each(nmis, function(m, n){
+									
+									var string = n.split("/");
+									var text = string[2].split(".");
+									var name = text[0].split("-");
+									
+									$( '#mpls_select_main' ).append(
+											'<option value="' + n + '">' + name[1].toUpperCase() + " " + name[2].toUpperCase() + '</option>'
+										);
+								});
+							} else {
+								$( '#mpls_select_main' ).append(
+										'<option value="' + v.url_nmis + '">' + v.dept_name + '</option>'
+									);
+							}							
+						}
+						
+						if (v.url_nmis_internet != '')
+							$( '#internet_select_main' ).append(
+								'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
+							);
+					});
+					
+					$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
+						if ( $(this).val() != '' ) {
+							window.open( $(this).val() );
+						}
+					});
+					
+					$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+						if ( $(this).val() != '' ) {
+							window.open( $(this).val() );
+						}					
+					});
+			
+				} else {
+					if (datos.records.record.url_nmis != '') {
+						if (datos.records.record.url_nmis.indexOf("\n") > 0) {
+							var nmis = datos.records.record.url_nmis.split("\n");
+							$.each(nmis, function(m, n){
+								
+								var string = n.split("/");
+								var text = string[2].split(".");
+								var name = text[0].split("-");
+								
+								$( '#mpls_select_main' ).append(
+										'<option value="' + n + '">' + name[1].toUpperCase() + " " + name[2].toUpperCase() + '</option>'
+									);
+							});
+						} else {
+							$( '#mpls_select_main' ).append(
+									'<option value="' + datos.records.record.url_nmis + '">' + datos.records.record.dept_name + '</option>'
+								);
+						}
+						
+						$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
+							if ( $(this).val() != '' ) {
+								window.open( $(this).val() );
+							}
+						});
+					
+					} else {
+						$( '#mpls_main' ).empty();						
+					}
+					
+					if (datos.records.record.url_nmis_internet != '') {
+						$( '#internet_select_main' ).append(
+							'<option value="' + datos.records.record.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
+						);
+						
+						$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+							if ( $(this).val() != '' ) {
+								window.open( $(this).val() );
+							}					
+						});
+					
+					} else {
+						$( '#internet_main' ).empty();
+					}
+				}				
+
+			},"","");
         }
-	});	
+	});
 }
 
 function viewNodeDetail(){

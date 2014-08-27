@@ -8,7 +8,7 @@ var cnocConnector = {
 	ipserver : '',
 	incidents : '',
 	userName :'',
-	
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
-	/*
+	},*/
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				

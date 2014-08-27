@@ -233,6 +233,7 @@
 		    		cnocConnector.service4 = serviceTic4;
 		    		cnocConnector.menu = serviceMenu;
 		    		cnocConnector.serviceI17 = serviceI13;
+		    		cnocConnector.nmis_urls = nmis_urls;
 		    }
 		});
 		

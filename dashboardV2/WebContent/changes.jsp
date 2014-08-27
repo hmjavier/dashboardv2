@@ -331,6 +331,7 @@
 		    		cnocConnector.incidents = incidentService;
 		    		cnocConnector.getLdap = getLdap;
 		    		cnocConnector.menu = serviceMenu;
+		    		cnocConnector.nmis_urls = nmis_urls;
 		    		cnocConnector.service1 = serviceC1;
 		    		cnocConnector.service2 = serviceC2;
 		    		cnocConnector.service3 = serviceC3;

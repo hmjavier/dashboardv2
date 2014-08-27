@@ -153,6 +153,7 @@
 			    		cnocConnector.service1 = serviceESC1;
 			    		cnocConnector.service2 = serviceESC2;
 			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
 			});
 		 	
