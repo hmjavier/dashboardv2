@@ -156,6 +156,20 @@
 							    	</div>
 						  		</div>
 		                </div>
+		                <!-- /.row -->		
+		                <!-- /.row -->
+		                <div class="row">
+							<div class="row">
+						  			<div class="col-lg-12">
+								    	<div class="panel panel-primary">
+								    		<div class="panel-heading">
+										    	<h3 class="panel-title">Tickets Activities</h3>
+										  	</div>
+								    		<div id="openTicketsListActivities"></div>
+								    	</div>		
+							    	</div>
+						  		</div>
+		                </div>
 		                <!-- /.row -->						 
 		            </div>
 		            <!-- /.container-fluid -->
@@ -218,6 +232,7 @@
 		    		cnocConnector.service3 = serviceTic3;
 		    		cnocConnector.service4 = serviceTic4;
 		    		cnocConnector.menu = serviceMenu;
+		    		cnocConnector.serviceI17 = serviceI13;
 		    }
 		});
 		

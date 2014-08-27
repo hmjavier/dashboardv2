@@ -31,8 +31,6 @@ var drawElementsPerformance = {
 		},builder: function(codenet){				
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");
 		},sample:function(datos, container, divtable){
-			console.log("sample");
-			console.log(datos);
 			$("#sample").html(datos.records.record.datablock);
 		},selectCustom : function(datos, selector, opt) {
 
@@ -200,15 +198,12 @@ var drawElementsPerformance = {
 					drawElementsPerformance.intfNodePerformance = $(this).text();
 				}				
 				drawElementsPerformance.idResourceInterfaz = idResource;
-				
-				console.log("idResource: "+idResource);
-				
+
 				drawElementsPerformance.drawInterfaceUtil();
 			});
 			
 			$( ".intfChartQos" ).click(function() {
 				var classQos = $(this).text();
-				console.log(classQos);
 				drawElementsPerformance.subtitlePerformance = "";								
 				drawElementsPerformance.idResourceInterfaz = "";
 				var idResource = "";
@@ -223,7 +218,7 @@ var drawElementsPerformance = {
 				}
 				
 				drawElementsPerformance.subtitlePerformance = "QOS: "+tmp[0]+ " -- " +tmp[1]+"</br>"+$(this).text();
-				
+				console.log(drawElementsPerformance.subtitlePerformance);
 				drawElementsPerformance.idResourceInterfaz = idResource;				
 				drawElementsPerformance.drawInterfaceQos(classQos);
 			});
@@ -235,8 +230,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.subtitlePerformance = "Response Time ";
 			drawElementsPerformance.metricUnit = "ms";
 			var response = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"response","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-			console.log(response);
-			
+
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, response, "containerChartPerformance", "response", "#0C66ED", false);
 		},drawChartUpsOutVolt:function(){
 			drawElementsPerformance.chartIdPerformance = "1";
@@ -246,7 +240,6 @@ var drawElementsPerformance = {
 			drawElementsPerformance.subtitlePerformance = "Voltage ";
 			drawElementsPerformance.metricUnit = "Volt";
 			var upsvoltout = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltout","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-			console.log(upsvoltout);
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltout, "containerChartPerformance", "upsvoltout", "#0C66ED", false);
 		},drawChartUpsInVolt:function(){
@@ -257,7 +250,6 @@ var drawElementsPerformance = {
 			drawElementsPerformance.subtitlePerformance = "Voltage ";
 			drawElementsPerformance.metricUnit = "Volt";
 			var upsvoltin = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltin","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-			console.log(upsvoltin);
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltin, "containerChartPerformance", "upsvoltin", "#0C66ED", false);
 		},drawChartUpsBatRemaing:function(){
@@ -268,7 +260,6 @@ var drawElementsPerformance = {
 			drawElementsPerformance.subtitlePerformance = "Battery Remaing";
 			drawElementsPerformance.metricUnit = "";
 			var batteryRemaing = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"batcharremain","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"UpsBatteryRemaing"}}',"ip":drawElementsPerformance.nmis};
-			console.log(batteryRemaing);
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, batteryRemaing, "containerChartPerformance", "batteryRemaing", "#0C66ED", false);
 		},drawChartHealth:function(){
@@ -358,9 +349,10 @@ var drawElementsPerformance = {
 		
 		},drawInterfaceQos: function(classQos){
 			drawElementsPerformance.chartIdPerformance = "7";
-			drawElementsPerformance.subtitlePerformance = "";
+			//drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.metricUnit = "";
+			//drawElementsPerformance.subtitlePerformance = classQos;
+			drawElementsPerformance.metricUnit = "Avg Bits Per Second";
 			var DropByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
 			
 			var PrePolicyByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
@@ -370,10 +362,13 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
 			
 		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
-
+			
+			$( "#" + container ).mask("Waiting...");
+			
 			function onDataReceived(series) {
 				drawElementsPerformance.dataChartPerformance.push(series);
-				cnocConnector.drawChartPerformance(drawElementsPerformance.dataChartPerformance, container, otherMetrics);
+				cnocConnector.drawChartPerformance(drawElementsPerformance.dataChartPerformance, container, otherMetrics);		
+				$( "#" + container ).unmask();
 	       	}
 			
 			$.ajax({
@@ -385,7 +380,7 @@ var drawElementsPerformance = {
 	   				console.log(jqXHR);
 	   			},
 	   			success: function(response) {	   				
-	   				console.log(response);
+
 	   				var dataChart = "";
 	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout"){	   					
 	   					var json = response.replyData.data;

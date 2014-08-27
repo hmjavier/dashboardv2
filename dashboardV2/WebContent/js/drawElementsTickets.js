@@ -300,8 +300,6 @@ var drawElementsTickets = {
 
 		  modal.modal("show");		
 	},updateTicket: function(data){
-		console.log("update ticket");
-		console.log(data);
 		
 		var modal = bootbox.dialog({
 			message: $("#updateTicketDialog").html(),
@@ -378,5 +376,40 @@ var drawElementsTickets = {
 		});
 
 		modal.modal("show");
-	}
+	},activitiesIncidents: function(datos, container, divTable){
+		var rowsData = new Array();
+		try {
+			if (datos.records.record.length > 1) {
+				for ( var i = 0; i < datos.records.record.length; i++) {
+					var fields = new Array();
+					fields.push(datos.records.record[i].number.toString());
+					fields.push(datos.records.record[i].description.toString());
+					fields.push(datos.records.record[i].datestamp.toString());
+					fields.push(datos.records.record[i].type.toString());
+					fields.push(datos.records.record[i].operator.toString());
+					rowsData.push(fields);
+				}
+			} else {
+				var fields = new Array();
+				fields.push(datos.records.record.number.toString());
+				fields.push(datos.records.record.description.toString());
+				fields.push(datos.records.record.datestamp.toString());
+				fields.push(datos.records.record.type.toString());
+				fields.push(datos.records.record.operator.toString());
+				rowsData.push(fields);
+			}
+		} catch (err) {	};
+		var rowsHeaders = [ {
+			"sTitle" : "Incident ID"
+		}, {
+			"sTitle" : "Description"
+		}, {
+			"sTitle" : "Time"
+		}, {
+			"sTitle" : "Type"
+		}, {
+			"sTitle" : "Operator"
+		}];
+		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);	
+	}	
 };

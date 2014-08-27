@@ -65,7 +65,7 @@ var cnocConnector = {
 				statusCode : {
 					401 : function() {
 						alert('Session Time Out');
-						window.location = "/dashboardV2/index.html";
+						window.location = "/dashboard/index.html";
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -78,7 +78,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboardV2/index.html";
+							window.location = "/dashboard/index.html";
 						}
 					} catch (err) {
 						$.ajax({
@@ -246,6 +246,7 @@ var cnocConnector = {
 		
 		if (divTable === "openTicketsListTi") {
 			$("#" + divTable).delegate("tbody tr", "click", function () {
+				$("#openTicketsListActivities").empty();
 				dTable.$('tr.row_selected').removeClass('row_selected');
 				$(this).addClass('row_selected');					
 				var nTds = $('td', dTable.$('tr.row_selected'));
@@ -255,7 +256,10 @@ var cnocConnector = {
 					updateAction : ""
 				};
 				
-				drawElementsTickets.updateTicket(data);
+				cnocConnector.invokeMashup(cnocConnector.serviceI17, {"incident_id" : $(nTds[0]).text()},drawElementsTickets.activitiesIncidents, "openTicketsListActivities", "openTicketsListActivitiesTi");
+				//alert($(nTds[0]).text());
+				
+				//drawElementsTickets.updateTicket(data);
 
 			});
 		}
@@ -704,7 +708,7 @@ var cnocConnector = {
 			var name = data[0].toUpperCase();
 			var nmis = data[1];
 			var model = data[2];
-			
+			console.log(nmis);
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.nodePerformance = name;
 			drawElementsPerformance.nmis = nmis;					
