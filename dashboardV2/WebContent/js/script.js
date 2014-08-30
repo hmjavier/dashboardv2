@@ -82,6 +82,9 @@ function themeChanges(filename, flag){
 
 function generateMenu(){
 	$(".menuCnoc").empty();
+	/*$("#mpls_select_main").empty();
+	$("#internet_select_main").empty();*/	
+
 	$.ajax({
         type: 'GET',
         dataType: 'jsonp',

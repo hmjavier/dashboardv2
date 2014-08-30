@@ -354,6 +354,8 @@
 			cnocConnector.invokeMashup(cnocConnector.service1,{"code_net":cnocConnector.codeNetGlobal, "flag_stat": "'f'" },drawElements.gridChangesList, "lista", "changesListTable");
 		});
 		
+		/*Genera Menu*/
+		generateMenu();
 		
 		drawElements.init();
 		

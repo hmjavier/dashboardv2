@@ -16,16 +16,14 @@ var drawElementsPerformanceGraph = {
 		endUnix: "",
 		endDate: "",
 		startDate: "",
+		vendor:"",
 		
 		init : function(codeNet) {			
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
 			
-			} else {
-				/*Genera Menu*/
-				generateMenu();
-				
+			} else {				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformanceGraph.selectCustom, "SelectCustomer", "opt");
 			}
 
@@ -129,6 +127,26 @@ var drawElementsPerformanceGraph = {
 			//drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, DropByte, "containerChartPerformance", "DropByte","#0C66ED");
 			//drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
 			
+		},drawChartCPUHuawei: function(name){
+			drawElementsPerformanceGraph.chartIdPerformance = "1";
+			drawElementsPerformanceGraph.subtitlePerformance = "";
+			drawElementsPerformanceGraph.metricUnit = "";
+			drawElementsPerformanceGraph.subtitlePerformance = "CPU Util";
+			drawElementsPerformanceGraph.metricUnit = "% CPU Util.";
+			var cpu = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cpu-huawei","node":"'+name+'","translation":"","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, cpu, drawElementsPerformanceGraph.containerChart, "cpu", "#0C66ED", false, name);	
+			
+		},drawChartMemHuawei: function(name){
+			drawElementsPerformanceGraph.chartIdPerformance = "9";
+			drawElementsPerformanceGraph.subtitlePerformance = "";
+			drawElementsPerformanceGraph.metricUnit = "";
+			drawElementsPerformanceGraph.subtitlePerformance = "Memory Util";
+			drawElementsPerformanceGraph.metricUnit = "% Memory Util.";
+			var memoryH = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"mem-proc-huawei","node":"'+name+'","translation":"","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, memoryH, drawElementsPerformanceGraph.containerChart, "memoryH", "#0C66ED", false, name);
+
+			
 		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics, name){
 			
 			var containerT =  container.split("-");
@@ -161,7 +179,7 @@ var drawElementsPerformanceGraph = {
 		   			},
 		   			success: function(response) {	
 		   				var dataChart = "";
-		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos"){	   					
+		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos" || labelMetric === "memoryH" ){	   					
 		   					var json = response.replyData.data;
 		   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 		   					for(var idx=0; idx<json.length; idx++){

@@ -13,8 +13,6 @@ var drawElementsGral = {
 				this.builder(codeNet);
 			
 			} else {
-				/*Genera Menu*/
-				generateMenu();
 				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsGral.selectCustom, "SelectCustomer", "opt");
 			}
@@ -755,6 +753,7 @@ var drawElementsGral = {
 		var name = datos.records.record.name;
 		var nmis = datos.records.record.nmisserver;
 		var model = datos.records.record.model;
+		var vendor = datos.records.record.nodemodel;
 		
 		drawElementsPerformance.dataChartPerformance.length = 0;
 		drawElementsPerformance.nodePerformance = name;
@@ -765,7 +764,8 @@ var drawElementsGral = {
 		drawElementsPerformance.endUnix = endDate;
 		drawElementsPerformance.endDate = "";
 		drawElementsPerformance.startDate = startDate;
-
+		drawElementsPerformance.vendor = vendor;
+		
 		if(model === 'PingOnly'){
 			drawElementsPerformance.selectPingOnly();
 			drawElementsPerformance.drawChartHealth();

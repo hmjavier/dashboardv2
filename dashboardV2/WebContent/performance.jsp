@@ -199,6 +199,9 @@
 			    		
 			    }
 			});
+			
+			/*Genera Menu*/
+			generateMenu();
 	
 		 	drawElementsPerformance.init();
 

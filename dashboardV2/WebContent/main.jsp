@@ -472,6 +472,10 @@
 			});
 		
 		 	//$( "#sortableLeft" ).sortable({revert: true});
+		 	
+			/*Genera Menu*/
+			generateMenu();
+		 	
 		 
 		 	$('#countAll').click(function(){
 		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":""},drawElementsGral.drawListNodes, "listNodes", "listNodesG");

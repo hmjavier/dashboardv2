@@ -8,7 +8,7 @@ var cnocConnector = {
 	ipserver : '',
 	incidents : '',
 	userName :'',
-	/*
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
-	
+	},
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -257,9 +257,8 @@ var cnocConnector = {
 				};
 				
 				cnocConnector.invokeMashup(cnocConnector.serviceI17, {"incident_id" : $(nTds[0]).text()},drawElementsTickets.activitiesIncidents, "openTicketsListActivities", "openTicketsListActivitiesTi");
-				//alert($(nTds[0]).text());
 				
-				//drawElementsTickets.updateTicket(data);
+				drawElementsTickets.updateTicket(data);
 
 			});
 		}
@@ -687,7 +686,7 @@ var cnocConnector = {
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
 						"<option value='"
-								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() +"|"+datos.records.record[i].model.toString() + "'>"
+								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() +"|"+datos.records.record[i].model.toString() +"|"+datos.records.record[i].nodemodel.toString() + "'>"
 								+ datos.records.record[i].name.toString()
 								+ "</option>");
 			}
@@ -708,7 +707,8 @@ var cnocConnector = {
 			var name = data[0].toUpperCase();
 			var nmis = data[1];
 			var model = data[2];
-			console.log(nmis);
+			var vendor = data[3];
+
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.nodePerformance = name;
 			drawElementsPerformance.nmis = nmis;					
@@ -718,6 +718,7 @@ var cnocConnector = {
 			drawElementsPerformance.endUnix = endDate;
 			drawElementsPerformance.endDate = "";
 			drawElementsPerformance.startDate = startDate;
+			drawElementsPerformance.vendor = vendor;
 
 			if(model === 'PingOnly'){
 				drawElementsPerformance.selectPingOnly();
@@ -777,7 +778,7 @@ var cnocConnector = {
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
 						"<option value='"
-								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() + "'>"
+								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() + "|"+datos.records.record[i].nodemodel.toString() + "'>"
 								+ datos.records.record[i].name.toString()
 								+ "</option>");
 			}

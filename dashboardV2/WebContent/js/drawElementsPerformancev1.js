@@ -19,11 +19,7 @@ var drawElementsPerformanceV1 = {
 				
 				this.builder(codeNet);
 			
-			} else {
-				
-				/*Genera Menu*/
-				generateMenu();				
-				
+			} else {						
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 

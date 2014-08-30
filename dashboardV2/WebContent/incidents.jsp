@@ -441,6 +441,9 @@
 			    }
 			});
 
+			/*Genera Menu*/
+			generateMenu();
+			
 			drawElementsIncidents.init();
 		 	
 			

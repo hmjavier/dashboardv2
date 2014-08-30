@@ -80,7 +80,7 @@ function build_CNOC_NOTI (data, container) {
 					    '<td><input type="text" id="caso_cnoc_ES" class="form-control" maxlength="130" value="' + data.records.record.caso_cnoc + '" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
-					    '<td>��REA QUE NOTIFICA:</td>' + 
+					    '<td>������REA QUE NOTIFICA:</td>' + 
 					    '<td><input type="text" id="area_ES" class="form-control" maxlength="130" value="CNOC" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
@@ -141,21 +141,21 @@ function build_CNOC_NOTI (data, container) {
 			},
 			success: function(data) {
 				if (data == '' || data == null) { 
-					//bootbox.alert("No information Retrived");
-					alert("No information Retrived");
+					bootbox.alert("No information Retrived");
+					//alert("No information Retrived");
 				}else {
 					if (data == true) {
-						//bootbox.alert("Report sent");
-						alert("Report sent");
+						bootbox.alert("Report sent");
+						//alert("Report sent");
 					} else {
-						//bootbox.alert("Can't send report");
-						alert("Can't send report");
+						bootbox.alert("Can't send report");
+						//alert("Can't send report");
 					}
 				}
 			},
 			error: function(data, status, er) { 
-				//bootbox.alert(er);
-				alert(er);
+				bootbox.alert(er);
+				//alert(er);
 			}
 		});
 	});
