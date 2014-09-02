@@ -750,10 +750,11 @@ var drawElementsGral = {
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},treeData: function(datos, container, divTable){
+		//console.log(datos);
 		var name = datos.records.record.name;
 		var nmis = datos.records.record.nmisserver;
 		var model = datos.records.record.model;
-		var vendor = datos.records.record.nodemodel;
+		
 		
 		drawElementsPerformance.dataChartPerformance.length = 0;
 		drawElementsPerformance.nodePerformance = name;
@@ -764,7 +765,7 @@ var drawElementsGral = {
 		drawElementsPerformance.endUnix = endDate;
 		drawElementsPerformance.endDate = "";
 		drawElementsPerformance.startDate = startDate;
-		drawElementsPerformance.vendor = vendor;
+		
 		
 		if(model === 'PingOnly'){
 			drawElementsPerformance.selectPingOnly();
@@ -775,14 +776,23 @@ var drawElementsGral = {
 				drawElementsPerformance.drawChartHealth();
 			}else{
 				
-				cnocConnector.invokeMashup(cnocConnector.service1, {
-					"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
-					"ip":nmis
-				},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
+				cnocConnector.invokeMashup(cnocConnector.service29, {
+					"name" : name
+				},function(datos){
+					var vendor = datos.records.record.nodemodel;
+					drawElementsPerformance.vendor = vendor;
+					
+					//console.log(drawElementsPerformance.vendor);
+					
+					cnocConnector.invokeMashup(cnocConnector.service1, {
+						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+						"ip":nmis
+					},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
+					
+					drawElementsPerformance.drawChartHealth();
+				},"","");
 				
-				drawElementsPerformance.drawChartHealth();
 			}
-		}	
-		
+		}			
 	}
 };

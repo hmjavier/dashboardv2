@@ -27,7 +27,8 @@ var drawElementsPerformance = {
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){				
+		},builder: function(codenet){	
+			
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");
 		
 		},selectCustom : function(datos, selector, opt) {

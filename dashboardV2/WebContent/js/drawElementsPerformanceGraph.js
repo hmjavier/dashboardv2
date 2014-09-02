@@ -207,6 +207,7 @@ var drawElementsPerformanceGraph = {
 			
 			
 		},drawInterfacesNodes:function(datos){
+			//console.log(datos);
 			$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
 			try{
 				if (datos.results.datum.length > 1) {

@@ -196,6 +196,7 @@
 			    		cnocConnector.service2 = serviceR2;
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
+			    		cnocConnector.service3 = serviceG18;
 			    		
 			    }
 			});

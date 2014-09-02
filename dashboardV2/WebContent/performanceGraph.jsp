@@ -310,7 +310,7 @@
 			    		cnocConnector.service2 = serviceG3;
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
-			    		
+			    		cnocConnector.service3 = serviceG18;			    		
 			    }
 			});
 			
