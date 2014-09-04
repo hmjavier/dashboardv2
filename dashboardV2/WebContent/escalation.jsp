@@ -116,6 +116,7 @@
 	<!-- jQuery Version 1.11.0 -->	
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	<script type="text/javascript" src="js/jquery.i18n.properties-min-1.0.9.js"></script>	
+	<script type="text/javascript" src="js/chosen/chosen.jquery.min.js"></script>
 
 	<!-- Bootstrap Core CSS -->
 	<script src="js/bootstrap.js"></script>
@@ -156,6 +157,9 @@
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
 			});
+			
+			/*Genera Menu*/
+			generateMenu();
 		 	
 			drawElementsEscalation.init();
 		 	
@@ -167,12 +171,12 @@
 		 		$('#chartEscalation').empty();
 		 		
 		 		if (im == '') {
-		 			//bootbox.alert("Please insert IM");
-		 			alert("Please insert IM");
+		 			bootbox.alert("Please insert IM");
+		 			//alert("Please insert IM");
 		 		
 		 		} else if (report == '') {
-		 			//bootbox.alert("Please select escalation type");
-		 			alert("Please select escalation type");
+		 			bootbox.alert("Please select escalation type");
+		 			//alert("Please select escalation type");
 		 		
 		 		} else if (report == 'CSC') {
 		 			cnocConnector.invokeMashup(

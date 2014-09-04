@@ -11,9 +11,6 @@ var drawElementsIncidents = {
 				this.builder(codeNet);
 			
 			} else {
-				/*Genera Menu*/
-				generateMenu();
-				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsIncidents.selectCustom, "SelectCustomer", "opt");
 				this.builder(codeNet);
 			}

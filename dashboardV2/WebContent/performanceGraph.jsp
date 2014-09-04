@@ -237,6 +237,11 @@
 						  					<div id="containerChartPerformance2"></div>
 						  				</div>
 						  			</div>
+						  			<div class="row" style="padding-left: 15px; padding-right: 15px;">
+						  				<div class="col-lg-12">
+						  					<div id="msgNoDisponible"></div>
+						  				</div>
+						  			</div>
 						  		</div>
 						  	</div>
 				    	</div>
@@ -304,10 +309,14 @@
 			    		cnocConnector.service1 = serviceR1;
 			    		cnocConnector.service2 = serviceG3;
 			    		cnocConnector.menu = serviceMenu;
-			    		
+			    		cnocConnector.nmis_urls = nmis_urls;
+			    		cnocConnector.service3 = serviceG18;			    		
 			    }
 			});
-	
+			
+			/*Genera Menu*/
+			generateMenu();
+				
 		 	drawElementsPerformanceGraph.init();
 
 		 	$('.datesPerformance').datepicker({
@@ -330,6 +339,7 @@
 		 	
 		 	
 			$("#selectGraph").click(function(event){
+				$("#msgNoDisponible").empty();
 				$("#containerChartPerformance1").empty();
 				$("#containerChartPerformance2").empty();
 
@@ -369,6 +379,7 @@
 							var name = "";
 							var nmis = "";
 							var idResource ="";
+							var vendor ="";
 							
 							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc"){
 								tmp = nodes[idx].split("|");
@@ -379,6 +390,7 @@
 								tmp = nodes[idx].split("|");
 								name = tmp[0];
 								nmis = tmp[1];
+								vendor = tmp[2];
 							}
 							
 							if(metrics === "cpu" && (name.indexOf("_UPS") > 0)){
@@ -392,23 +404,49 @@
 							drawElementsPerformanceGraph.endUnix = endDate;
 							drawElementsPerformanceGraph.endDate = "";
 							drawElementsPerformanceGraph.startDate = startDate;
+							drawElementsPerformanceGraph.vendor = vendor;
 							
-							if(metrics === "health"){
-								drawElementsPerformanceGraph.drawChartHealth(name);
-							}else if(metrics === "cpu"){
-								drawElementsPerformanceGraph.drawChartCPU(name);	
-							}else if(metrics === "memoryIO"){
-								drawElementsPerformanceGraph.drawChartMemoryIO(name);	
-							}else if(metrics === "memoryProc"){
-								drawElementsPerformanceGraph.drawChartMemoryProc(name);								
-							}else if(metrics === "utilisation"){
-								drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
-							}else if(metrics === "errorsdiscards"){
-								drawElementsPerformanceGraph.drawInterfaceErrors(name, idResource);								
-							}else if(metrics === "pktshc"){
-								drawElementsPerformanceGraph.drawInterfacePkts(name, idResource);								
-							}else if(metrics === "qos"){
-								drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);								
+							
+							if(drawElementsPerformanceGraph.vendor === "HuaweiRouter"){
+								if(metrics === "health"){
+									drawElementsPerformanceGraph.drawChartHealth(name);
+								}else if(metrics === "cpu"){
+									drawElementsPerformanceGraph.drawChartCPUHuawei(name);	
+								}else if(metrics === "memoryIO"){
+									$("#msgNoDisponible").empty();
+									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");	
+								}else if(metrics === "memoryProc"){
+									drawElementsPerformanceGraph.drawChartMemHuawei(name);								
+								}else if(metrics === "utilisation"){
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
+								}else if(metrics === "errorsdiscards"){
+									$("#msgNoDisponible").empty();
+									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");								
+								}else if(metrics === "pktshc"){
+									$("#msgNoDisponible").empty();
+									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");			
+								}else if(metrics === "qos"){
+									$("#msgNoDisponible").empty();
+									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");			
+								}
+							}else{
+								if(metrics === "health"){
+									drawElementsPerformanceGraph.drawChartHealth(name);
+								}else if(metrics === "cpu"){
+									drawElementsPerformanceGraph.drawChartCPU(name);	
+								}else if(metrics === "memoryIO"){
+									drawElementsPerformanceGraph.drawChartMemoryIO(name);	
+								}else if(metrics === "memoryProc"){
+									drawElementsPerformanceGraph.drawChartMemoryProc(name);								
+								}else if(metrics === "utilisation"){
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
+								}else if(metrics === "errorsdiscards"){
+									drawElementsPerformanceGraph.drawInterfaceErrors(name, idResource);								
+								}else if(metrics === "pktshc"){
+									drawElementsPerformanceGraph.drawInterfacePkts(name, idResource);								
+								}else if(metrics === "qos"){
+									drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);								
+								}
 							}
 						}								
 					}

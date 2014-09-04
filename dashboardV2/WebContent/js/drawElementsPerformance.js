@@ -14,6 +14,7 @@ var drawElementsPerformance = {
 		endUnix: "",
 		endDate: "",
 		startDate: "",
+		vendor:"",
 		
 		init : function(codeNet) {
 
@@ -22,16 +23,14 @@ var drawElementsPerformance = {
 				this.builder(codeNet);
 			
 			} else {
-				/*Genera Menu*/
-				generateMenu();
 				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){				
+		},builder: function(codenet){
+			
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");
-		},sample:function(datos, container, divtable){
-			$("#sample").html(datos.records.record.datablock);
+		
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performance");
@@ -106,20 +105,34 @@ var drawElementsPerformance = {
 			});
 			
 		},selectInterfaz : function(datos, selector, opt) {
+						
+			$("#treeContainerInterfaz").empty();			
 			
-			$("#treeContainerInterfaz").empty();
+			$("#treeContainerInterfaz").append("<div class='tree' id='treeNodeDetailInterfaz'>");
+			
+			var tree = "<ul>";	
 
-			$("#treeContainerInterfaz").append("<div class='tree' id='treeNodeDetailInterfaz'>");		
-			var tree = "<ul>";
-			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
-			tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
-			tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'>CPU</i></span></li>";			
-			tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
-			tree += "<li id='memProc' class='memProc'><span class='treeNode '><i class='icon-minus-sign'>Memory Proc</i></span></li>";
-			tree += "<li id='memIo' class='memIo'><span class='treeNode '>Memory I/O</span></li>";
-			tree += "</ul></li>";
-			tree += "</ul></li></ul>";
-			tree += "<ul>";
+			if(drawElementsPerformance.vendor === "HuaweiRouter"){
+				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance HUAWEI</span><ul>";
+				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
+				tree += "<li id='cpuPH' class='cpuPH'><span class='treeNode'><i class='icon-minus-sign'>CPU</i></span></li>";			
+				tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
+				tree += "<li id='memProcH' class='memProcH'><span class='treeNode '><i class='icon-minus-sign'>Memory Proc</i></span></li>";
+				tree += "</ul></li>";
+				tree += "</ul></li></ul>";
+				tree += "<ul>";
+			}else{
+				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
+				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
+				tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'>CPU</i></span></li>";			
+				tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
+				tree += "<li id='memProc' class='memProc'><span class='treeNode '><i class='icon-minus-sign'>Memory Proc</i></span></li>";
+				tree += "<li id='memIo' class='memIo'><span class='treeNode '>Memory I/O</span></li>";
+				tree += "</ul></li>";
+				tree += "</ul></li></ul>";
+				tree += "<ul>";
+			}
+			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
 				if (datos.results.datum.length > 1) {
@@ -165,6 +178,19 @@ var drawElementsPerformance = {
 			
 			cnocConnector.drawTree();
 			
+			/************************************************************************/
+			/* funciones para equipos tipo Huawei*/
+
+			$( ".cpuPH" ).click(function() {
+				drawElementsPerformance.drawChartCPUHuawei();
+			});
+			
+			$( ".memProcH" ).click(function() {
+				drawElementsPerformance.drawChartMemHuawei();
+			});
+			
+			/************************************************************************/
+			/* funciones para equipos varios*/
 			$( ".healthP" ).click(function() {
 				drawElementsPerformance.drawChartHealth();
 			});
@@ -361,6 +387,29 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, DropByte, "containerChartPerformance", "DropByte","#0C66ED");
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
 			
+		},drawChartCPUHuawei: function(){
+			drawElementsPerformance.chartIdPerformance = "8";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "CPU Util";
+			drawElementsPerformance.metricUnit = "% CPU Util.";
+			var avgBusy1 = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cpu-huawei","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, avgBusy1, "containerChartPerformance", "avgBusy1", "#0C66ED", false);
+
+			
+		},drawChartMemHuawei: function(){
+			drawElementsPerformance.chartIdPerformance = "9";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Memory Util";
+			drawElementsPerformance.metricUnit = "% Memory Util.";
+			var memoryH = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"mem-proc-huawei","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, memoryH, "containerChartPerformance", "memoryH", "#0C66ED", false);
+			
 		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
 			
 			$( "#" + container ).mask("Waiting...");
@@ -382,7 +431,7 @@ var drawElementsPerformance = {
 	   			success: function(response) {	   				
 
 	   				var dataChart = "";
-	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout"){	   					
+	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH"){	   					
 	   					var json = response.replyData.data;
 	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 	   					for(var idx=0; idx<json.length; idx++){
@@ -425,6 +474,8 @@ var drawElementsPerformance = {
 				drawElementsPerformance.drawInterfacePkts();
 			}else if(drawElementsPerformance.chartIdPerformance === "7"){
 				drawElementsPerformance.drawInterfaceQos();
+			}else if(drawElementsPerformance.chartIdPerformance === "8"){
+				//drawElementsPerformance.drawInterfaceQos();
 			}
 			
 		}		

@@ -8,7 +8,7 @@ var cnocConnector = {
 	ipserver : '',
 	incidents : '',
 	userName :'',
-	/*
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
-	
+	},
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -257,9 +257,8 @@ var cnocConnector = {
 				};
 				
 				cnocConnector.invokeMashup(cnocConnector.serviceI17, {"incident_id" : $(nTds[0]).text()},drawElementsTickets.activitiesIncidents, "openTicketsListActivities", "openTicketsListActivitiesTi");
-				//alert($(nTds[0]).text());
 				
-				//drawElementsTickets.updateTicket(data);
+				drawElementsTickets.updateTicket(data);
 
 			});
 		}
@@ -678,7 +677,6 @@ var cnocConnector = {
 		});
 		cnocConnector.codeNetGlobal = $("#" + container).val();
 	},drawSelectNodePerformance : function(datos, container, module) {
-		
 		$("#cmbNodesPerformance").empty();
 		$("#cmbNodesPerformance").append("<select id='"+container+"' data-placeholder='Select Interfaz' style='width:100%; margin-left: 5%;' ><option id='' value=''></option></select>");
 		
@@ -687,7 +685,7 @@ var cnocConnector = {
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
 						"<option value='"
-								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() +"|"+datos.records.record[i].model.toString() + "'>"
+								+ datos.records.record[i].name.toString()+"|"+datos.records.record[i].nmisserver.toString() +"|"+datos.records.record[i].model.toString() +"'>"
 								+ datos.records.record[i].name.toString()
 								+ "</option>");
 			}
@@ -703,12 +701,12 @@ var cnocConnector = {
 		$("#" + container).chosen({
 			allow_single_deselect : true
 		}).change(function() {
-			
+			//console.log($(this).val());
 			var data = $(this).val().split("|");
 			var name = data[0].toUpperCase();
 			var nmis = data[1];
 			var model = data[2];
-			console.log(nmis);
+
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.nodePerformance = name;
 			drawElementsPerformance.nmis = nmis;					
@@ -728,12 +726,21 @@ var cnocConnector = {
 					drawElementsPerformance.drawChartHealth();
 				}else{
 					
-					cnocConnector.invokeMashup(cnocConnector.service1, {
-						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
-						"ip":nmis
-					},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
-					
-					drawElementsPerformance.drawChartHealth();
+					cnocConnector.invokeMashup(cnocConnector.service3, {
+						"name" : name
+					},function(datos){
+						var vendor = datos.records.record.nodemodel;
+						drawElementsPerformance.vendor = vendor;
+						
+						//console.log(drawElementsPerformance.vendor);
+						
+						cnocConnector.invokeMashup(cnocConnector.service1, {
+							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+							"ip":nmis
+						},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
+						
+						drawElementsPerformance.drawChartHealth();
+					},"","");					
 				}
 			}			
 		});
@@ -769,6 +776,7 @@ var cnocConnector = {
 	    });
 	},drawSelectNodePerformanceGraph:function(datos, container, module){
 
+		//console.log(datos);	
 		$("#cmbNodesPerformance").empty();
 		$("#cmbNodesPerformance").append("<select id='"+container+"' data-placeholder='Select Node' multiple='multiple' style='width:100%; margin-left: 5%;' ></select>");
 

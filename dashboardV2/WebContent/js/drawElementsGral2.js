@@ -13,8 +13,6 @@ var drawElementsGral = {
 				this.builder(codeNet);
 			
 			} else {
-				/*Genera Menu*/
-				generateMenu();
 				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsGral.selectCustom, "SelectCustomer", "opt");
 			}

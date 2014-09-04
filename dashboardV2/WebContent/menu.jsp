@@ -10,7 +10,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!-- <a class="navbar-brand" href="main.jsp">Dashboard CNOC</a>-->
                 <img alt="" src="css/images/logo.png" height="50px">
             </div>
             
@@ -18,7 +17,7 @@
             <div class="navbar-header" style="margin-left: 2%;">
 				<div id="cmbCliente">
 					</br>
-					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:360px" tabindex="2"></select>
+					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:80%" tabindex="1"></select>
 				</div>      
             </div>               
             <!-- Top Menu Items -->

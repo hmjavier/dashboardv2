@@ -467,11 +467,16 @@
 			    		cnocConnector.service26 = serviceG16;
 			    		cnocConnector.service27 = serviceC1;
 			    		cnocConnector.service28 = serviceG17;
+			    		cnocConnector.service29 = serviceG18;
 			    		
 			    }
 			});
 		
 		 	//$( "#sortableLeft" ).sortable({revert: true});
+		 	
+			/*Genera Menu*/
+			generateMenu();
+		 	
 		 
 		 	$('#countAll').click(function(){
 		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":""},drawElementsGral.drawListNodes, "listNodes", "listNodesG");

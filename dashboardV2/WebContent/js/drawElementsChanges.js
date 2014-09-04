@@ -304,8 +304,6 @@ var drawElements = {
 
 			this.builder(codeNet);
 		} else {
-			/*Genera Menu*/
-			generateMenu();
 			
 			cnocConnector.invokeMashup(cnocConnector.service9, {},
 					drawElements.selectCustom, "SelectCustomer", "opt");

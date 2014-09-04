@@ -145,6 +145,9 @@
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
 			});
+			
+			/*Genera Menu*/
+			generateMenu();
 
 		 	drawElementsInventory.init();
 		 	

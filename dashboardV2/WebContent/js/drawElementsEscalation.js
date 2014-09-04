@@ -5,9 +5,6 @@
 var drawElementsEscalation = {
 		
 	init : function(codeNet) {
-
-		/*Genera Menu*/
-		generateMenu();
 		
 		$("#SelectCustomer").hide();
 		
@@ -18,43 +15,43 @@ var drawElementsEscalation = {
 	}, getCSC: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			//bootbox.alert("Can't retrieve information");
-			alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
 		else
 			buildCSC(data, container);
 	}, getGFC: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			//bootbox.alert("Can't retrieve information");
-			alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
 		else
 			buildGFC(data, container);
 	}, get_CNOC_NOTI: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			//bootbox.alert("Can't retrieve information");
-			alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
 		else
 			build_CNOC_NOTI(data, container);
 	}, get_ESCALACION_CASE: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			alert("Can't retrieve information");
-			//bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
 		else
 			build_ESCALACION_CASE(data, container);
 	}, get_SMS_INT: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			alert("Can't retrieve information");
-			//bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
 		else
 			build_SMS_INT(data, container);
 	}, get_SMS_CLIE: function(data, container) {				
 		
 		if (data.records == '' || data == null)
-			alert("Can't retrieve information");
-			//bootbox.alert("Can't retrieve information");
+			//alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
 		else
 			build_SMS_CLIE(data, container);
 	}

@@ -232,10 +232,13 @@
 		    		cnocConnector.service3 = serviceTic3;
 		    		cnocConnector.service4 = serviceTic4;
 		    		cnocConnector.menu = serviceMenu;
-		    		cnocConnector.serviceI17 = serviceI13;
+		    		cnocConnector.serviceI17 = serviceTic5;
 		    		cnocConnector.nmis_urls = nmis_urls;
 		    }
 		});
+		
+		/*Genera Menu*/
+		generateMenu();
 		
 		drawElementsTickets.init();
 		
