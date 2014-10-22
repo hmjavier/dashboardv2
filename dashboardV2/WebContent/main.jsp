@@ -70,7 +70,9 @@
                             <div class="panel-heading">
                                 <div class="row">
 									<div class="col-xs-12 text-center">
-                                        <div class="huge" id="countAll"></div>
+										<a href="#nodeList" style="color: #ffffff;">
+                                        	<div class="huge" id="countAll"></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +90,9 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
-                                        <div class="huge" id="countReachable"></div>
+                                    	<a href="#nodeList" style="color: #ffffff;">
+                                        	<div class="huge" id="countReachable"></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +110,9 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
-                                        <div class="huge" id="countDegraded"></div>
+                                    	<a href="#nodeList" style="color: #ffffff;">
+                                        	<div class="huge" id="countDegraded"></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +130,9 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
-                                        <div class="huge" id="countUnreachable"></div>
+                                    	<a href="#nodeList" style="color: #ffffff;">
+                                        	<div class="huge" id="countUnreachable"></div>
+                                        </a>                                        
                                     </div>
                                 </div>
                             </div>
@@ -201,6 +209,7 @@
 				    <div class="col-lg-3">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
 						    	<h3 class="panel-title">Node List</h3>
 						  	</div>
 							<div id="listNodes" class="listNodes"></div>
@@ -231,6 +240,7 @@
 						    <h3 class="panel-title">Node Resource</h3>
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
+						  	<a name="nodeResource"></a>
 						  	<div id="treeContainerInterfaz"></div>
 						  	<div id="treeContainerDetail"></div>  		  
 						  </div>
@@ -376,6 +386,7 @@
 						    	<h3 class="panel-title">Chart</h3>
 						  	</div>
 						  	<div class="panel-body">
+						  		<a name="nodeChart"></a>
 						  		<div id="containerChartPerformance"></div>
 						  	</div>
 				    	</div>

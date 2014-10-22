@@ -307,7 +307,7 @@
 			    		cnocConnector.logout = serviceLogout;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service1 = serviceR1;
-			    		cnocConnector.service2 = serviceG3;
+			    		cnocConnector.service2 = serviceR3;
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    		cnocConnector.service3 = serviceG18;			    		
@@ -337,7 +337,7 @@
 		 		}
 		    });
 		 	
-		 	
+
 			$("#selectGraph").click(function(event){
 				$("#msgNoDisponible").empty();
 				$("#containerChartPerformance1").empty();
@@ -375,11 +375,12 @@
 
 						var idNum = 0;
 						for(var idx=0; idx<nodes.length; idx++){
+							console.log(nodes[idx]);
 							var tmp = "";
 							var name = "";
 							var nmis = "";
 							var idResource ="";
-							var vendor ="";
+							var vendor = "";
 							
 							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc"){
 								tmp = nodes[idx].split("|");
@@ -404,10 +405,9 @@
 							drawElementsPerformanceGraph.endUnix = endDate;
 							drawElementsPerformanceGraph.endDate = "";
 							drawElementsPerformanceGraph.startDate = startDate;
-							drawElementsPerformanceGraph.vendor = vendor;
-							
-							
-							if(drawElementsPerformanceGraph.vendor === "HuaweiRouter"){
+
+							if(vendor === "HuaweiRouter"){
+								//console.log("entro "+idx +" name: "+name);
 								if(metrics === "health"){
 									drawElementsPerformanceGraph.drawChartHealth(name);
 								}else if(metrics === "cpu"){
@@ -445,9 +445,37 @@
 								}else if(metrics === "pktshc"){
 									drawElementsPerformanceGraph.drawInterfacePkts(name, idResource);								
 								}else if(metrics === "qos"){
-									drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);								
+									
+									drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
+									/*var flag = false;
+									cnocConnector.invokeMashup(cnocConnector.service1, {
+										"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/",
+										"ip":nmis
+									},function(data){							
+										for(var x=0; x<data.length; x++){
+											flag = false;
+											if(data[x].name==="cbqos-in"){
+												console.log(name+"Con entrada");
+												flag = true;												
+											}
+										}
+									}, null, null);
+									
+									if(flag){
+										
+										drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
+										
+										drawElementsPerformanceGraph.containerChartIn = "containerChartPerformance-"+idNum+"1";
+										drawElementsPerformanceGraph.drawInterfaceQosIn(name, idResource);
+
+									}else{
+										drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
+									}*/
+																	
 								}
 							}
+							
+
 						}								
 					}
 				}

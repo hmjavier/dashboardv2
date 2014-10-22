@@ -73,7 +73,9 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
-                                        <div class="huge" id="countOpen"></div>
+                                    	<a href="#listChanges" style="color: #ffffff;">
+                                        	<div class="huge" id="countOpen"></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +93,9 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
-                                        <div class="huge" id="countClose"></div>
+                                    	<a href="#listChanges" style="color: #ffffff;">                                    	
+                                        	<div class="huge" id="countClose"></div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -139,6 +143,7 @@
 				  			<div id="changesListT" class="col-lg-12">
 						    	<div class="panel panel-primary">
 						    		<div class="panel-heading">
+						    			<a name="listChanges"></a>
 								    	<h3 class="panel-title">Changes List</h3>
 								  	</div>
 						    		<div id="lista" style="height: 300px;"></div>
@@ -365,7 +370,7 @@
 				$("#changesGroups").show();
 				$("#changesListT").removeClass("col-lg-12");
 				$("#changesListT").addClass("col-lg-9");
-				
+				console.log("entro a los grupos");
 				cnocConnector.invokeMashup(cnocConnector.service11,{"code_net":cnocConnector.codeNetGlobal},drawElements.chartGroups, "changesGroupsChart", "changesGroupsChartC");
 				
 			}

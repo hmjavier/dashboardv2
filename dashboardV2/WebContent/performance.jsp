@@ -21,6 +21,9 @@
 
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- jQuery multiselect -->
+	<link href="css/bootstrap-multiselect.css" rel="stylesheet">
 	
 	<link rel="stylesheet" type="text/css" href="js/chosen/chosen.min.css">
 	<link rel="stylesheet" type="text/css" href="js/TableTools/css/TableTools.css">
@@ -126,6 +129,7 @@
 						    	<h3 class="panel-title">Chart</h3>
 						  	</div>
 						  	<div class="panel-body">
+						  		<a name="nodeChart"></a>
 						  		<div id="containerChartPerformance"></div>
 						  	</div>
 				    	</div>
@@ -153,6 +157,9 @@
 	<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="js/TableTools/js/TableTools.js"></script>
 	<script type="text/javascript" src="js/TableTools/js/ZeroClipboard.js"></script>
+		
+	<!-- Multiselect -->
+	<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>	
 		
 	<!-- Modal dialog -->
 	<script type="text/javascript" src="js/bootbox.min.js"></script>

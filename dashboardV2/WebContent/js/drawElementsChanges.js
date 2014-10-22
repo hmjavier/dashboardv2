@@ -291,6 +291,8 @@ var drawElements = {
 	selectCustom : function(datos, selector, opt) {
 
 		var selText = cnocConnector.drawSelect(datos, selector, "changes");
+		
+		var codeNet = $("#SelectCustomer").val(); 
 
 	},
 	init : function(codeNet) {		
@@ -397,7 +399,7 @@ var drawElements = {
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},chartGroups: function(datos, container, divPie){
-		
+		console.log(datos);
 		var categorias = new Array();
 		var totalIncidents = new Array();
 		var i = 0;
