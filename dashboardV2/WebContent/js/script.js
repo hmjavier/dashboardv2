@@ -94,6 +94,7 @@ function generateMenu(){
             //window.location = "index.html";
         },
         success: function(response){
+        	console.log(response);
         	var menu = response.aut.module[2].split(";");
         	//var customer = response.aut.module[0];
         	cnocConnector.userName = response.aut.module[0];
@@ -103,8 +104,8 @@ function generateMenu(){
         	$.each(menu, function( index, value ) {
 //        		console.log(index + ": " + value);
         		if(value === "gen=true"){
-        			
-        			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			cnocConnector.mainPage = "general.jsp";
+        			var general = "<li><a href='main_.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
         			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
         			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
         			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
@@ -127,6 +128,15 @@ function generateMenu(){
         			
         			var esclations = "<li><a href='escalation.jsp'><i class='fa fa-fw fa-cloud-upload'></i> Escalaciones </a></li>";
         			$(".menuCnoc").append(esclations);
+        			
+        		}else if(value === "nagios=true"){
+        			var nagios = "<li><a href='http://201.144.8.140/nagios/'><i class='fa fa-fw fa-cloud-upload'></i> Nagios </a></li>";
+        			$(".menuCnoc").append(nagios);
+        			
+        		}else if(value === "sct=false"){
+        			cnocConnector.mainPage = "sct.jsp";
+        			var sct = "<li><a href='main_.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			$(".menuCnoc").append(sct);
         		}
         	});
         	

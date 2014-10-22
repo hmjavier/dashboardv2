@@ -5,6 +5,7 @@
 
 var drawElementsPerformanceGraph = {
 		containerChart:"",
+		containerChartIn:"",
 		dataChartInterface : [],
 		nodePerformance : "",
 		nmis : "",
@@ -23,7 +24,7 @@ var drawElementsPerformanceGraph = {
 				
 				this.builder(codeNet);
 			
-			} else {
+			} else {				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformanceGraph.selectCustom, "SelectCustomer", "opt");
 			}
 
@@ -32,7 +33,11 @@ var drawElementsPerformanceGraph = {
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performanceGraph");
-			drawElementsPerformanceGraph.builder($("#SelectCustomer").val());
+			//drawElementsPerformanceGraph.builder($("#SelectCustomer").val());
+			
+			var codeNet = $("#SelectCustomer").val(); 
+
+			drawElementsPerformanceGraph.builder(codeNet);
 
 		},drawListNodes: function (datos, container, divTable){
 			
@@ -121,6 +126,14 @@ var drawElementsPerformanceGraph = {
 			
 			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qos, drawElementsPerformanceGraph.containerChart, "qos",null, true, name);
+
+			
+		},drawInterfaceQosIn: function(name, idResourceInterfaz){
+			drawElementsPerformanceGraph.chartIdPerformance = "7";
+			drawElementsPerformanceGraph.metricUnit = "";
+
+			var qosIn =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-in","index_graph_type": "cbqos-in","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qosIn, drawElementsPerformanceGraph.containerChartIn, "qos",null, true, name);
 			//var DropByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}'};
 			//var PrePolicyByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformanceGraph.idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}'};
 			//{"model":"nmis_rrd","model_view":"graph","parameters":{"1405040812":"10-Jul-2014","end_date_raw":1405040812,"start_date_raw":1404436012,"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "5","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"PrePolicyByte","item":"class-default--WAN--Precedencia2"}}
@@ -146,6 +159,7 @@ var drawElementsPerformanceGraph = {
 			
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, memoryH, drawElementsPerformanceGraph.containerChart, "memoryH", "#0C66ED", false, name);
 
+			
 		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics, name){
 			
 			var containerT =  container.split("-");
@@ -178,7 +192,7 @@ var drawElementsPerformanceGraph = {
 		   			},
 		   			success: function(response) {	
 		   				var dataChart = "";
-		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos" || labelMetric === "memoryH" ){
+		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos" || labelMetric === "memoryH" ){	   					
 		   					var json = response.replyData.data;
 		   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 		   					for(var idx=0; idx<json.length; idx++){

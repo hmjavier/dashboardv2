@@ -80,7 +80,7 @@ function build_CNOC_NOTI (data, container) {
 					    '<td><input type="text" id="caso_cnoc_ES" class="form-control" maxlength="130" value="' + data.records.record.caso_cnoc + '" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
-					    '<td>&Acute;REA QUE NOTIFICA:</td>' + 
+					    '<td>������REA QUE NOTIFICA:</td>' + 
 					    '<td><input type="text" id="area_ES" class="form-control" maxlength="130" value="CNOC" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 

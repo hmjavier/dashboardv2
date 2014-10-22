@@ -4,12 +4,12 @@
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         	 
         	<div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
+                </button>-->
                 <img alt="" src="css/images/logo.png" height="50px">
             </div>
             
@@ -19,8 +19,33 @@
 					</br>
 					<select id="SelectCustomer" data-placeholder="Select Customer" style="width:80%" tabindex="1"></select>
 				</div>      
-            </div>               
-            <!-- Top Menu Items -->
+            </div>  
+            <ul class="nav navbar-right top-nav">            	
+                <li class="dropdown">
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
+                    <ul class="dropdown-menu menuCnoc">
+                        <!-- 
+	                    <li>
+	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Get Charts </a>
+	                    </li>-->
+                    
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-user nameCustomer"></i><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
+                        </li>
+                        <li>
+                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>                         
+        </nav>
+        <nav class="navbar navbar-inverse">
+        	<!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">  
     			<li class="dropdown">
                     <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa "></i> Theme <b class="caret"></b></a>
@@ -33,17 +58,6 @@
 	                    </li>
                     </ul>
                 </li>
-    			<li class="dropdown">
-                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
-                    <ul class="dropdown-menu menuCnoc">
-                        <!-- 
-	                    <li>
-	                        <a href="performanceGraph.jsp"><i class="fa fa-fw fa-bar-chart-o"></i> Get Charts </a>
-	                    </li>-->
-                    
-                    </ul>
-                </li>
-                
                 <li>
                 	<div id="nmisUrlMain">
 						<div id="mpls_main">
@@ -57,21 +71,9 @@
 							</select>
 						</div>
 					</div>
-                </li>
-    			
-                <li class="dropdown">
-                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-user nameCustomer"></i><b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>
+                </li>                
             </ul>
-            <!-- /.navbar-collapse -->
+            <!-- /.navbar-collapse -->            
         </nav>
 </body>
 </html>

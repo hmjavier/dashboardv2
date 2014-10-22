@@ -24,7 +24,7 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 			
 			
-			if(codenet.indexOf('L')>=0 ){
+			if(codenet.indexOf('L')>=0 || codenet.indexOf('N000269')>=0){
 				this.mapaMundial(codenet);
 			}else{
 				this.mapaGeneral(codenet);
@@ -40,8 +40,9 @@ var drawElementsGral = {
 			
 		},selectCustom : function(datos, selector, opt) {
 
-			var selText = cnocConnector.drawSelect(datos, selector, "general");
-			drawElementsGral.builder($("#SelectCustomer").val());			
+			var selText = cnocConnector.drawSelect(datos, selector, "general");		
+			var codeNet = $("#SelectCustomer").val(); 
+			drawElementsGral.builder(codeNet);
 
 		},countStatus: function(datos, container, divPanel){
 			var rowsData = new Array();
@@ -131,10 +132,11 @@ var drawElementsGral = {
 
 				        for (var a = 0; a< states.length; a++) {				        	
 				        	
-				        	if(states[a][0].indexOf(estado['name'].toUpperCase()) >-1 ){
+				        	//if(states[a][0].indexOf(estado['name'].toUpperCase()) >-1 ){
+				        	if(states[a][0] === estado['name'].toUpperCase() ){
 
 				            var coords = estado['coords'];
-				            for (j = 0; j < coords.length; j++) {
+				            for (var j = 0; j < coords.length; j++) {
 				              var coord = coords[j];
 				              var point = new google.maps.LatLng(coord[1], coord[0]);
 				              polygon.push(point);
@@ -164,11 +166,15 @@ var drawElementsGral = {
 				            });
 				            infoWindow = new google.maps.InfoWindow();
 				            
-				            google.maps.event.addListener(mapaNacional, 'click', function(){
-				              //alert("click");
-				            });
+				            if(codenet === 'N000269'){
+				            	google.maps.event.addListener(map, 'zoom_changed', function() {
+					            	var zoomLevel = map.getZoom();					            	
+					                if (zoomLevel == 3) {
+					                	drawElementsGral.mapaMundial(codenet);
+					                }
+				        		});
+				            }
 
-				            
 				          } //Cierre IF
 				        } // Cierre FOR states
 				      }
@@ -302,13 +308,18 @@ var drawElementsGral = {
 				                infoWindow.open(map);
 				            });
 				            infoWindow = new google.maps.InfoWindow();
-				      }
+				            
+				            if(codenet === 'N000269'){
+				        		google.maps.event.addListener(mapaNacional, 'click', function(){
+					            	drawElementsGral.mapaGeneral(codenet);
+					            });		
+				            }
+				      	}
 				    });
-					
+
 					$( "#mapGral").unmask();
 				}
 			});
-
 			
 		},constructNewCoordinates : function(polygon) {
 
@@ -372,20 +383,20 @@ var drawElementsGral = {
 			if (datos.records.record.length > 1) {
 				for ( var i = 0; i < datos.records.record.length; i++) {
 					if(datos.records.record[i].status_value.toString()==="degraded"){
-						tableT += "<tr class='warning'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+						tableT += "<tr class='warning'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
 					}else if(datos.records.record[i].status_value.toString()==="reachable"){
-						tableT += "<tr class='success'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+						tableT += "<tr class='success'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
 					}else if(datos.records.record[i].status_value.toString()==="unreachable"){
-						tableT += "<tr class='danger'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+						tableT += "<tr class='danger'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
 					};					
 				};
 			} else {
 				if(datos.records.record.status_value.toString()==="degraded"){
-					tableT += "<tr class='warning'><td>"+datos.records.record.name.toString()+"</td></tr>";
+					tableT += "<tr class='warning'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
 				}else if(datos.records.record.status_value.toString()==="reachable"){
-					tableT += "<tr class='success'><td>"+datos.records.record.name.toString()+"</td></tr>";
+					tableT += "<tr class='success'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
 				}else if(datos.records.record.status_value.toString()==="unreachable"){
-					tableT += "<tr class='danger'><td>"+datos.records.record.name.toString()+"</td></tr>";
+					tableT += "<tr class='danger'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
 				}
 			}
 		} catch (err) {	};
@@ -570,14 +581,14 @@ var drawElementsGral = {
 		}
 	},drawGetModel: function(datos, container, divTable){
 		$("#msgPingOnly").empty();
-		if(datos.records.record.model.toString() === "automatic"){			
-			cnocConnector.invokeMashup(cnocConnector.service19, {"node" : datos.records.record.name.toString()},drawElementsGral.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
-			cnocConnector.invokeMashup(cnocConnector.service21, {"node" : datos.records.record.name.toString()},drawElementsGral.drawGridInterface, "listInterfaces", "listInterfacesG");			
-		}else{
-			
+		
+		if(datos.records.record.model.toString() === "PingOnly"){
 			cnocConnector.invokeMashup(cnocConnector.service25, {"hostname" : datos.records.record.name.toString()},drawElementsGral.drawPingOnly, "msgPingOnly", "msgPingOnlyG");
-			
+		}else{
+			cnocConnector.invokeMashup(cnocConnector.service19, {"node" : datos.records.record.name.toString()},drawElementsGral.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
+			cnocConnector.invokeMashup(cnocConnector.service21, {"node" : datos.records.record.name.toString()},drawElementsGral.drawGridInterface, "listInterfaces", "listInterfacesG");
 		}
+		
 	},drawPingOnly:function(datos, container, divTable){
 		
 		var msg = '<div class="alert alert-info" id="'+divTable+'">Note: Ping Only</br><strong>'+datos.records.record.hostname+'</strong>';
@@ -750,10 +761,12 @@ var drawElementsGral = {
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},treeData: function(datos, container, divTable){
-		//console.log(datos);
+
 		var name = datos.records.record.name;
 		var nmis = datos.records.record.nmisserver;
 		var model = datos.records.record.model;
+		drawElementsPerformance.qosIn = false;
+		
 		
 		drawElementsPerformance.dataChartPerformance.length = 0;
 		drawElementsPerformance.nodePerformance = name;
@@ -764,7 +777,8 @@ var drawElementsGral = {
 		drawElementsPerformance.endUnix = endDate;
 		drawElementsPerformance.endDate = "";
 		drawElementsPerformance.startDate = startDate;
-				
+		
+		
 		if(model === 'PingOnly'){
 			drawElementsPerformance.selectPingOnly();
 			drawElementsPerformance.drawChartHealth();
@@ -780,17 +794,26 @@ var drawElementsGral = {
 					var vendor = datos.records.record.nodemodel;
 					drawElementsPerformance.vendor = vendor;
 					
-					//console.log(drawElementsPerformance.vendor);
-					
 					cnocConnector.invokeMashup(cnocConnector.service1, {
 						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
 						"ip":nmis
 					},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
 					
+					cnocConnector.invokeMashup(cnocConnector.service1, {
+						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/",
+						"ip":nmis
+					},function(data){							
+						for(var x=0; x<data.length; x++){
+							if(data[x].name==="cbqos-in"){
+								drawElementsPerformance.qosIn = true;
+							}
+						}
+					}, null, null);
+					
 					drawElementsPerformance.drawChartHealth();
 				},"","");
 				
 			}
-		}
+		}			
 	}
 };

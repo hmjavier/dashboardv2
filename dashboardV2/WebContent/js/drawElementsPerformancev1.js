@@ -19,7 +19,7 @@ var drawElementsPerformanceV1 = {
 				
 				this.builder(codeNet);
 			
-			} else {
+			} else {						
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 

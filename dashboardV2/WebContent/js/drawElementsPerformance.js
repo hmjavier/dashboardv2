@@ -15,6 +15,7 @@ var drawElementsPerformance = {
 		endDate: "",
 		startDate: "",
 		vendor:"",
+		qosIn:"",
 		
 		init : function(codeNet) {
 
@@ -27,14 +28,17 @@ var drawElementsPerformance = {
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){
+		},builder: function(codenet){	
 			
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");
 		
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performance");
-			drawElementsPerformance.builder($("#SelectCustomer").val());
+			
+			var codeNet = $("#SelectCustomer").val(); 
+
+			drawElementsPerformance.builder(codeNet);
 
 		},drawListNodes: function (datos, container, divTable){
 
@@ -51,8 +55,8 @@ var drawElementsPerformance = {
 			
 			var tree = "<ul>";
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
-			tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
-			tree += "<li id='responseP' class='responseP'><span class='treeNode'><i class='icon-minus-sign'>Response</i></span></li>";
+			tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
+			tree += "<li id='responseP' class='responseP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Response</a></i></span></li>";
 			tree += "</ul></li>";
 			tree += "</ul></li></ul>";
 			
@@ -74,13 +78,13 @@ var drawElementsPerformance = {
 			
 			var tree = "<ul>";
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
-			tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
+			tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
 			tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Battery</i></span><ul>";
-			tree += "<li id='UpsBatteryRemaing' class='UpsBatteryRemaing'><span class='treeNode '><i class='icon-minus-sign'>Battery Remaing</i></span></li></ul>";
+			tree += "<li id='UpsBatteryRemaing' class='UpsBatteryRemaing'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Battery Remaing</a></i></span></li></ul>";
 			
 			tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Voltage</i></span><ul>";
-			tree += "<li id='inputVolt' class='inputVolt'><span class='treeNode '><i class='icon-minus-sign'>Input Volt</i></span></li>";
-			tree += "<li id='outputVolt' class='outputVolt'><span class='treeNode '><i class='icon-minus-sign'>Output Volt</i></span></li>";
+			tree += "<li id='inputVolt' class='inputVolt'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Input Volt</a></i></span></li>";
+			tree += "<li id='outputVolt' class='outputVolt'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Output Volt</a></i></span></li>";
 			tree += "</ul></li>";
 			tree += "</ul></li></ul>";
 			
@@ -123,29 +127,31 @@ var drawElementsPerformance = {
 				tree += "<ul>";
 			}else{
 				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
-				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
-				tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'>CPU</i></span></li>";			
+				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
+				tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>CPU</a></i></span></li>";			
 				tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
-				tree += "<li id='memProc' class='memProc'><span class='treeNode '><i class='icon-minus-sign'>Memory Proc</i></span></li>";
-				tree += "<li id='memIo' class='memIo'><span class='treeNode '>Memory I/O</span></li>";
+				tree += "<li id='memProc' class='memProc'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Memory Proc</a></i></span></li>";
+				tree += "<li id='memIo' class='memIo'><span class='treeNode '><a href='#nodeChart'>Memory I/O</a></span></li>";
 				tree += "</ul></li>";
 				tree += "</ul></li></ul>";
 				tree += "<ul>";
 			}
 			
+			
+			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
-						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'>"+datos.results.datum[i].name.toString()+"</i></span>";
+						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+"</a></i></span>";
 						if(datos.results.datum[i].active.toString() === "1"){
 							tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 							if(datos.results.datum[i].classes.length > 1){
-								for(var j=0; j<datos.results.datum[i].classes.length; j ++){
-									tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'>"+datos.results.datum[i].classes[j]+"</i></span></li>";
+								for(var j=1; j<datos.results.datum[i].classes.length; j ++){
+									tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes[j]+"</a></i></span></li>";
 								}
 							}else{
-								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'>"+datos.results.datum[i].classes+"</i></span></li>";
+								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes+"</a></i></span></li>";
 							}
 							
 							tree+= "</ul></li></ul>";
@@ -153,15 +159,15 @@ var drawElementsPerformance = {
 						tree+="</li>";
 					}					
 				}else{
-					tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'>"+datos.results.datum.name.toString()+"</i></span>";
+					tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum.name.toString()+"</a></i></span>";
 					if(datos.results.datum.active.toString() === "1"){
 						tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 						if(datos.results.datum.classes.length > 1){
-							for(var j=0; j<datos.results.datum.classes.length; j ++){
-								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'>"+datos.results.datum.classes[j]+"</i></span></li>";
+							for(var j=1; j<datos.results.datum.classes.length; j ++){
+								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes[j]+"</a></i></span></li>";
 							}
 						}else{
-							tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'>"+datos.results.datum.classes+"</i></span></li>";
+							tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes+"</a></i></span></li>";
 						}
 						
 						tree+= "</ul></li></ul>";
@@ -193,11 +199,11 @@ var drawElementsPerformance = {
 			/* funciones para equipos varios*/
 			$( ".healthP" ).click(function() {
 				drawElementsPerformance.drawChartHealth();
-			});
+			});						
 			
 			$( ".cpuP" ).click(function() {
 				drawElementsPerformance.drawChartCPU();
-			});
+			});			
 			
 			$( ".memIo" ).click(function() {
 				drawElementsPerformance.drawChartMemoryIO();
@@ -217,7 +223,7 @@ var drawElementsPerformance = {
 				var idResource = "";
 				try{
 					var tmp = $(this).text().split("--");
-					idResource = (tmp[2]).trim().substring(0,5);
+					idResource = (tmp[2]).trim().substring(0,20);
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -236,7 +242,7 @@ var drawElementsPerformance = {
 				
 				try{
 					var tmp =  $(this).attr( 'id' ).split("--");
-					idResource = (tmp[2]).trim().substring(0,5);
+					idResource = (tmp[2]).trim().substring(0,20);
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -244,9 +250,10 @@ var drawElementsPerformance = {
 				}
 				
 				drawElementsPerformance.subtitlePerformance = "QOS: "+tmp[0]+ " -- " +tmp[1]+"</br>"+$(this).text();
-				console.log(drawElementsPerformance.subtitlePerformance);
+				//console.log(drawElementsPerformance.subtitlePerformance);
 				drawElementsPerformance.idResourceInterfaz = idResource;				
 				drawElementsPerformance.drawInterfaceQos(classQos);
+				
 			});
 		},drawChartResponse:function(){
 			drawElementsPerformance.chartIdPerformance = "1";
@@ -379,14 +386,20 @@ var drawElementsPerformance = {
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			//drawElementsPerformance.subtitlePerformance = classQos;
 			drawElementsPerformance.metricUnit = "Avg Bits Per Second";
-			var DropByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
+			var DropByteOut = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};			
+			var PrePolicyByteOut = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
 			
-			var PrePolicyByte = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, DropByteOut, "containerChartPerformance", "DropByte-Out","#0C66ED");
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByteOut, "containerChartPerformance", "PrePolicyByte-Out","#2BC70D");
 			
-			//{"model":"nmis_rrd","model_view":"graph","parameters":{"1405040812":"10-Jul-2014","end_date_raw":1405040812,"start_date_raw":1404436012,"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "5","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"PrePolicyByte","item":"class-default--WAN--Precedencia2"}}
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, DropByte, "containerChartPerformance", "DropByte","#0C66ED");
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByte, "containerChartPerformance", "PrePolicyByte","#2BC70D");
-			
+			if(drawElementsPerformance.qosIn){
+				var DropByteIn = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-in","index_graph_type": "cbqos-in","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};			
+				var PrePolicyByteIn = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-in","index_graph_type": "cbqos-in","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
+				
+				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, DropByteIn, "containerChartPerformance", "DropByte-In","#FF0D45");
+				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByteIn, "containerChartPerformance", "PrePolicyByte-In","#33297A");
+			}
+
 		},drawChartCPUHuawei: function(){
 			drawElementsPerformance.chartIdPerformance = "8";
 			drawElementsPerformance.subtitlePerformance = "";
@@ -409,6 +422,7 @@ var drawElementsPerformance = {
 			var memoryH = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"mem-proc-huawei","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, memoryH, "containerChartPerformance", "memoryH", "#0C66ED", false);
+
 			
 		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
 			

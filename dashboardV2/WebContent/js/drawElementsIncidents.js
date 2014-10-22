@@ -10,7 +10,7 @@ var drawElementsIncidents = {
 				
 				this.builder(codeNet);
 			
-			} else {
+			} else {				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsIncidents.selectCustom, "SelectCustomer", "opt");
 				this.builder(codeNet);
 			}
@@ -44,7 +44,9 @@ var drawElementsIncidents = {
 		},selectCustom : function(datos, selector, opt) {
 			
 			var selText = cnocConnector.drawSelect(datos, selector, "incidents");
-			cnocConnector.codeNetGlobal = $("#SelectCustomer").val();			
+			cnocConnector.codeNetGlobal = $("#SelectCustomer").val();
+			
+			var codeNet = $("#SelectCustomer").val(); 
 
 		}, drawChartSector: function(datos, container, divPie){
 			var dataSector = new Array();
