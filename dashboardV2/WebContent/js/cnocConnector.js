@@ -9,7 +9,7 @@ var cnocConnector = {
 	incidents : '',
 	userName :'',
 	mainPage:'',
-	
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -24,7 +24,7 @@ var cnocConnector = {
 					console.log(errorThrown);
 				},
 				success : function(response) {
-					try {						
+					try {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
-	/*
+	},*/
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -366,7 +366,7 @@ var cnocConnector = {
 		}
 		
 		if(container==="tTops"){
-			modelView();	
+			modelView();
 		}
 		
 		return dTable;

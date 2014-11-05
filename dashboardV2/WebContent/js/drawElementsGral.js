@@ -3,6 +3,8 @@
  * Clase para generar arrays que se inyectan a los elementos del DOM
  */
 
+var modalIP;
+
 var drawElementsGral = {
 		dataChartMemory : [],
 		
@@ -760,6 +762,119 @@ var drawElementsGral = {
 		} ];
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
+	},command: function(datos, container, divTable) {
+		$( '#resultCommand' ).text(datos);
+		
+		var modal = bootbox.dialog({
+			message: $("#cmd").html(),
+			title: "Command result for " + cnocConnector.nodeGlobal,
+			buttons: [{
+				label: "Close",
+				className: "btn btn-default",
+				callback: function() { }
+			}],
+			show: false,
+			onEscape: function() {
+				modal.modal("hide");
+			}
+		});
+		
+		$( '#page-wrapper' ).unmask();
+				
+		modal.modal("show");
+		
+	},ipAccounting: function(data) {
+		
+		modalIP = bootbox.dialog({
+			message: $("#ipAcc").html(),
+			title: "IP Accounting Report: " + cnocConnector.nodeGlobal,
+			buttons: [{
+				label: " Send Report",
+				className: "btn btn-primary glyphicon glyphicon-send btnIP",
+				callback: function() {
+					
+					var button = modalIP.find( '.btnIP' );
+					var contactMail = modalIP.find( '#contactEmailIP' );
+					var message = modalIP.find( '#messageIP' );
+					
+					data.contactMail = contactMail.val();					
+					
+					$( message ).attr("disabled", "disabled");
+					
+					$(button).attr("disabled", "disabled");
+					$(button).text("Waiting...");					
+					
+					$( contactMail ).attr("disabled", "disabled");
+					$( message ).val("Waiting...");
+					
+					if (data.contactMail == "" || data.contactMail == null || data.contactMail == undefined) {						
+						
+						$( contactMail ).removeAttr("disabled");
+						
+						$( message ).val("Contact Email is required.");
+						
+						$( button ).text(" Send Report");
+						$( button ).removeAttr("disabled");
+						
+					} else {
+						cnocConnector.invokeMashup(
+								cnocConnector.service32,
+								{
+									"network_code" : data.network_code,
+									"hostname" : data.hostname,
+									"emails" : data.contactMail
+								},
+								drawElementsGral.ipEmail,
+								"commandNS",
+								"ipAccountingContainerNS");
+					}
+					
+					return false;
+				}
+			}, {
+				label: "Close",
+				className: "btn btn-default",
+				callback: function() { }
+			}],
+			show: false,
+			onEscape: function() {
+				modalIP.modal("hide");
+			}
+		});
+
+		modalIP.modal("show");
+		
+	}, ipEmail : function(data) {
+		console.log(data);
+		if (data == '' || data == null) {
+			
+			modalIP.find( '#contactEmailIP' ).removeAttr("disabled");
+			
+			modalIP.find( '#messageIP' ).val("No information Retrived.");			
+			
+			modalIP.find( '.btnIP' ).text(" Send Report");
+			modalIP.find( '.btnIP' ).removeAttr("disabled");
+			
+		} else if (data.indexOf("IP Accounting Report has been sent") > -1 || 
+				data.indexOf("There is another IP Accounting") > -1) {
+			
+			modalIP.find( '#contactEmailIP' ).removeAttr("disabled");
+			
+			modalIP.find( '#messageIP' ).val("IP Accounting Report has been sent and can take some minutes to arrive.");
+			modalIP.find( '#messageIP' ).removeAttr("disabled");
+			
+			modalIP.find( '.btnIP' ).text(" Send Report");
+			modalIP.find( '.btnIP' ).removeAttr("disabled");
+		} else {
+			
+			modalIP.find( '#contactEmailIP' ).removeAttr("disabled");
+			
+			modalIP.find( '#messageIP' ).val(data);
+			modalIP.find( '#messageIP' ).removeAttr("disabled");
+			
+			modalIP.find( '.btnIP' ).text(" Send Report");
+			modalIP.find( '.btnIP' ).removeAttr("disabled");
+		}
 	},treeData: function(datos, container, divTable){
 
 		var name = datos.records.record.name;
