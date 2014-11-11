@@ -3,6 +3,8 @@
  * Clase para generar arrays que se inyectan a los elementos del DOM
  */
 
+var modalIP;
+
 var drawElementsGral = {
 		dataChartMemory : [],
 		
