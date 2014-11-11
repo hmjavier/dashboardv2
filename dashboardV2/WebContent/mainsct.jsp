@@ -78,8 +78,8 @@
 	<!-- jQuery Loadmask -->
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
 	
-		<!-- remove css/js -->
-	<script type="text/javascript" src="js/script.js"></script>	
+	<!-- remove css/js -->
+	<script type="text/javascript" src="js/script.js"></script>
 	
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
@@ -87,7 +87,7 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$( "#containerMain" ).load( cnocConnector.mainPage );
+		$( "#containerMain" ).load( "sct.jsp" );
 	});
 	</script>
 

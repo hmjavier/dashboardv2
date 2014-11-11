@@ -277,6 +277,7 @@
 			    		cnocConnector.service7 = serviceSCT6;
 			    		cnocConnector.service8 = serviceSCT7;
 			    		cnocConnector.service9 = serviceSCT8;
+			    		cnocConnector.service10 = serviceSCT9;
 			    		
 			    }
 			});

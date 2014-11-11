@@ -34,9 +34,9 @@
                 <li class="dropdown">
                     <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-user nameCustomer"></i><b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>
+                        <!-- <li>
                             <a href="#" class="back textColor"><i class="fa fa-fw fa-home"></i> Home</a>
-                        </li>
+                        </li>-->
                         <li>
                             <a href="#" class="logout textColor"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>

@@ -9,7 +9,7 @@ var cnocConnector = {
 	incidents : '',
 	userName :'',
 	mainPage:'',
-	/*
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -52,8 +52,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
-	
+	},
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -99,7 +99,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -676,6 +676,33 @@ var cnocConnector = {
                     width: 0,
                     color: '#808080'
                 }]
+            },exporting: {
+                enabled: true,
+                exportButton: {
+                    enabled: true
+                },
+                buttons: 
+                {
+                    customButton:
+                    {
+                    	enabled: otherMetrics,
+                        symbol: 'url(http://cdn1.iconfinder.com/data/icons/fatcow/16/chart_bar.png)',
+                        text: 'Metrics',
+                        symbolFill: '#B5C9DF',
+                        hoverSymbolFill: '#779ABF',
+                        menuItems: [
+                                    {
+                                        text: 'Errors Discards',
+                                        onclick: function() {
+                                        	drawElementsSct.subtitleChartSct = "";
+                                        	drawElementsSct.dataChartSct.length = 0;
+                                        	drawElementsSct.subtitleChartSct =  "Errors Discards: ";
+                                        	drawElementsSct.drawInterfaceErrors();
+                                        }
+                                    }                            
+                                ]
+                    }
+                }
             },tooltip: {
                 crosshairs: true,
                 shared: true
