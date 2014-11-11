@@ -55,14 +55,15 @@
         }),
 		savedUsername = cp.get("PrestoUsername");
         
-        
+		// Se comentan para tener varios main 
+        /*
         if (!returnUrl || returnUrl === '') {
         	returnUrl = "/dashboard/main.jsp";
     	}
     	
 		if ( window.location.hash.length ) {
     		returnUrl += window.location.hash;
-		}
+		}*/
 		
 		$(document).ready(function(){
 			Presto.REMEMBERMEDAYS = 7;
@@ -81,7 +82,6 @@
 
 			$(".main").find("form").submit(function(e){
 	    		e.preventDefault();
-	    		console.log("Si entre al login");
 	    		var self = $(this),
                 username = self.find("input[name=username]").val(),
                 password = self.find("input[name=password]").val();
@@ -116,7 +116,8 @@
             
             connection.isAuthenticated(function(response){
             	if (response) {
-                	window.location.href = decodeURIComponent(returnUrl);
+            		// Se comenta para tener varios main
+                	//window.location.href = decodeURIComponent(returnUrl);
                 }
                 else {
                 	setLoginBoxFocus();
@@ -193,8 +194,13 @@ connection.login(username, password, {
                         header : {}
 		                }, {
                         onSuccess : function(response) {
-									   console.log(response);
-                                       window.location.href = returnUrl;
+                        	
+							if(codenets === "N000333"){
+                                 returnUrl = "/dashboard/mainsct.jsp";
+                         	}else{
+                                 returnUrl = "/dashboard/main.jsp";
+                         	}
+                         	window.location.href = returnUrl;
 
                         },
                         onFailure : function(response) {

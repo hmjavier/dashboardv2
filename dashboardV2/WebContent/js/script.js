@@ -82,8 +82,6 @@ function themeChanges(filename, flag){
 
 function generateMenu(){
 	$(".menuCnoc").empty();
-	/*$("#mpls_select_main").empty();
-	$("#internet_select_main").empty();*/	
 
 	$.ajax({
         type: 'GET',
@@ -91,21 +89,16 @@ function generateMenu(){
         url: cnocConnector.menu,
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
-            //window.location = "index.html";
         },
         success: function(response){
-        	console.log(response);
         	var menu = response.aut.module[2].split(";");
-        	//var customer = response.aut.module[0];
         	cnocConnector.userName = response.aut.module[0];
         	
         	$(".nameCustomer").text(cnocConnector.userName);
         	
         	$.each(menu, function( index, value ) {
-//        		console.log(index + ": " + value);
         		if(value === "gen=true"){
-        			cnocConnector.mainPage = "general.jsp";
-        			var general = "<li><a href='main_.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
         			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
         			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
         			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
@@ -133,28 +126,47 @@ function generateMenu(){
         			var nagios = "<li><a href='http://201.144.8.140/nagios/'><i class='fa fa-fw fa-cloud-upload'></i> Nagios </a></li>";
         			$(".menuCnoc").append(nagios);
         			
-        		}else if(value === "sct=false"){
-        			cnocConnector.mainPage = "sct.jsp";
-        			var sct = "<li><a href='main_.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
-        			$(".menuCnoc").append(sct);
+        		}else if(value === "sct=true"){
+        			/*var sct = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			$(".menuCnoc").append(sct);*/
+        			var general = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			general +="<li><a href='incidentssct.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
+        			
+        			$(".menuCnoc").append(general);
+        		}else if(value === "perf=false"){
+            			var general = "<li><a href='maintest.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+            			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
+            			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
+            			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
+            			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
+            			
+            			$(".menuCnoc").append(general);
         		}
         	});
         	
         	/** Load NMIS URLs **/
 			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {
+
 				if(datos.records.record.length>1) {
 					$.each(datos.records.record, function(k, v) {
-						if (v.url_nmis != '') {
+						if (v.url_nmis != '') {							
 							if (v.url_nmis.indexOf("\n") > 0) {
 								var nmis = v.url_nmis.split("\n");
 								$.each(nmis, function(m, n){
-									
 									var string = n.split("/");
 									var text = string[2].split(".");
-									var name = text[0].split("-");
+									var tmp = text[0].split("-");
+									
+									var name = "";
+									if(tmp[0] === "opflow"){
+										name =  (tmp[0]+ "-" +tmp[1]+ "-" + tmp[2]).toUpperCase();
+									}else{
+										name =  (tmp[1]+ " " + tmp[2]).toUpperCase();
+									}
+									//var name = (tmp[1] + " " + tmp[2]).toUpperCase();
 									
 									$( '#mpls_select_main' ).append(
-											'<option value="' + n + '">' + name[1].toUpperCase() + " " + name[2].toUpperCase() + '</option>'
+											'<option value="' + n + '">' + name + '</option>'
 										);
 								});
 							} else {
@@ -163,11 +175,37 @@ function generateMenu(){
 									);
 							}							
 						}
-						
-						if (v.url_nmis_internet != '')
-							$( '#internet_select_main' ).append(
+						if (v.url_nmis_internet != ''){
+							/*$( '#internet_select_main' ).append(
 								'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
-							);
+							);*/
+							
+							if (v.url_nmis_internet.indexOf("\n") > 0) {
+								var nmis = v.url_nmis_internet.split("\n");
+								$.each(nmis, function(m, n){
+									
+									var string = n.split("/");
+									var name = "";
+									
+									if(string[2].indexOf("opflow")>-1){
+										var tmp =  string[2].split(".");
+										name = tmp[0].toUpperCase();
+									}else{
+										name = "IDE - " + v.dept_name.toUpperCase();
+									}	
+
+									$( '#internet_select_main' ).append(
+											'<option value="' + n + '">' + name+ '</option>'
+										);
+								});
+							} else {
+								$( '#internet_select_main' ).append(
+										'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
+									);
+							}
+							
+						}
+							
 					});
 					
 					$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
@@ -181,19 +219,24 @@ function generateMenu(){
 							window.open( $(this).val() );
 						}					
 					});
-			
 				} else {
+
 					if (datos.records.record.url_nmis != '') {
 						if (datos.records.record.url_nmis.indexOf("\n") > 0) {
 							var nmis = datos.records.record.url_nmis.split("\n");
 							$.each(nmis, function(m, n){
-								
 								var string = n.split("/");
 								var text = string[2].split(".");
-								var name = text[0].split("-");
-								
+								var tmp = text[0].split("-");
+								var name = "";
+								if(tmp[0] === "opflow"){
+									name =  (tmp[0]+ "-" +tmp[1]+ "-" + tmp[2]).toUpperCase();
+								}else{
+									name =  (tmp[1]+ " " + tmp[2]).toUpperCase();
+								}
+
 								$( '#mpls_select_main' ).append(
-										'<option value="' + n + '">' + name[1].toUpperCase() + " " + name[2].toUpperCase() + '</option>'
+										'<option value="' + n + '">' + name + '</option>'
 									);
 							});
 						} else {
@@ -211,9 +254,41 @@ function generateMenu(){
 					} else {
 						$( '#mpls_main' ).empty();						
 					}
-					
+
 					if (datos.records.record.url_nmis_internet != '') {
-						$( '#internet_select_main' ).append(
+						var url_nmis = datos.records.record;
+						console.log(url_nmis.url_nmis_internet);
+						if (url_nmis.url_nmis_internet.indexOf("\n") > 0) {
+							var nmis = url_nmis.url_nmis_internet.split("\n");
+							$.each(nmis, function(m, n){
+								
+								var string = n.split("/");
+								var name = "";
+								
+								if(string[2].indexOf("opflow")>-1){
+									var tmp =  string[2].split(".");
+									name = tmp[0].toUpperCase();
+								}else{
+									name = "IDE - " + url_nmis.dept_name.toUpperCase();
+								}	
+
+								$( '#internet_select_main' ).append(
+										'<option value="' + n + '">' + name+ '</option>'
+									);
+							});
+						} else {
+							$( '#internet_select_main' ).append(
+									'<option value="' + url_nmis.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
+								);
+						}
+						
+						$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+							if ( $(this).val() != '' ) {
+								window.open( $(this).val() );
+							}					
+						});
+						
+						/*$( '#internet_select_main' ).append(
 							'<option value="' + datos.records.record.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
 						);
 						
@@ -221,7 +296,7 @@ function generateMenu(){
 							if ( $(this).val() != '' ) {
 								window.open( $(this).val() );
 							}					
-						});
+						});*/
 					
 					} else {
 						$( '#internet_main' ).empty();
@@ -248,8 +323,7 @@ $('.leermas.imprimir').click(function(){
 	$(".startDatePdf").empty();
 	$(".endDatePdf").empty();
 	$(".startDatePdf").append("Start Date: "+$("#startDate").val());
-	$(".endDatePdf").append("End Date: "+$("#endDate").val());
-	
+	$(".endDatePdf").append("End Date: "+$("#endDate").val());	
 	$(".dateRange").hide();
 	$(".selectMetric").hide();
 	$(".headerCharts").hide();
@@ -259,5 +333,4 @@ $('.leermas.imprimir').click(function(){
 	$(".dateRange").show();
 	$(".selectMetric").show();
 	$(".headerCharts").show();
-	
 });

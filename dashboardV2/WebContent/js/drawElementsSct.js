@@ -7,6 +7,7 @@ var drawElementsSct = {
 		dataChartSct : [],
 		subtitleChartSct:"",
 		metricUnitChartSct:"",
+		interfazGlobal:"",
 		
 		init : function(codeNet) {
 
@@ -90,8 +91,6 @@ var drawElementsSct = {
 			
 		}, drawInterfazTree: function(datos, container, divPanel){
 			
-			console.log(datos);
-			
 			$("#treeContainerInterfaz").empty();			
 			
 			$("#treeContainerInterfaz").append("<div class='tree' id='treeNodeDetailInterfaz'>");	
@@ -145,8 +144,8 @@ var drawElementsSct = {
 			$( ".interfazNode" ).click(function() {
 				drawElementsSct.dataChartSct.length = 0;
 				
-				var tmp = $(this).text();
-				
+				var tmp = $(this).text();				
+				drawElementsSct.interfazGlobal = tmp;				
 				cnocConnector.invokeMashup(cnocConnector.service8, {"id":cnocConnector.nodeGlobal,"intf":tmp},drawElementsSct.drawCharUtilInt, "containerChartPingSct", "containerChartPingSctG");
 			});
 			
@@ -187,8 +186,7 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharCPU:function(datos, container, divTable){
-			console.log(datos);
-			
+
 			drawElementsSct.metricUnitChartSct = "% CPU Util";
 			
 			var data = [], i;
@@ -210,8 +208,7 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharMem:function(datos, container, divTable){
-			console.log(datos);
-			
+
 			drawElementsSct.metricUnitChartSct = "% MEM Util";
 			
 			var data = [], i;
@@ -233,13 +230,12 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharUtilInt:function(datos, container, divTable){
-			console.log(datos);
 			
 			drawElementsSct.metricUnitChartSct = "Octets Speed";
 			
 			function onDataReceived(series) {
 				drawElementsSct.dataChartSct.push(series);
-				cnocConnector.drawChartPerformanceSct(drawElementsSct.dataChartSct, container, false,"Octets Speed");		
+				cnocConnector.drawChartPerformanceSct(drawElementsSct.dataChartSct, container, true,"Octets Speed");		
 	       	}
 			
 			var data = [], i;
@@ -268,6 +264,74 @@ var drawElementsSct = {
 	        var dataChart = {color:"#2BC70D", name:"In Octets", data: data};
 			onDataReceived(dataChart);
 			
+		},drawInterfaceErrors: function(){
+
+			drawElementsSct.dataChartSct.length = 0;
+			cnocConnector.invokeMashup(cnocConnector.service10, {"id":cnocConnector.nodeGlobal,"intf":drawElementsSct.interfazGlobal},drawElementsSct.drawCharErrDisc, "containerChartPingSct", "containerChartPingSctG");
+		
+		},drawCharErrDisc: function(datos, container, divTable){
+
+			drawElementsSct.metricUnitChartSct = "ifinerrors";
+			
+			function onDataReceived(series) {
+				drawElementsSct.dataChartSct.push(series);
+				cnocConnector.drawChartPerformanceSct(drawElementsSct.dataChartSct, container, true,"ifinerrors");		
+	       	}
+			
+			var data = [], i;
+			
+	        for (i = 0; i < datos.records.record.length; i++) {
+	        	data.push({
+	        		x: datos.records.record[i].timestamp,
+	        		y: parseFloat(datos.records.record[i].ifinerrors)
+	        	});
+	        }
+	        	        
+	        var dataChart = {color:"#0C66ED", name:"ifinerrors", data: data};
+			onDataReceived(dataChart);
+			
+			/********************************************************************************/
+			
+			var data = [], i;	
+			
+			for (i = 0; i < datos.records.record.length; i++) {
+	        	data.push({
+	        		x: datos.records.record[i].timestamp,
+	        		y: parseFloat(datos.records.record[i].ifouterrors)
+	        	});
+	        }
+	        
+	        var dataChart = {color:"#2BC70D", name:"ifouterrors", data: data};
+			onDataReceived(dataChart);
+			
+			/********************************************************************************/
+			
+			var data = [], i;	
+			
+			for (i = 0; i < datos.records.record.length; i++) {
+	        	data.push({
+	        		x: datos.records.record[i].timestamp,
+	        		y: parseFloat(datos.records.record[i].ifindiscards)
+	        	});
+	        }
+	        
+	        var dataChart = {color:"#FF0D45", name:"ifindiscards", data: data};
+			onDataReceived(dataChart);
+			
+			/********************************************************************************/
+			
+			var data = [], i;	
+			
+			for (i = 0; i < datos.records.record.length; i++) {
+	        	data.push({
+	        		x: datos.records.record[i].timestamp,
+	        		y: parseFloat(datos.records.record[i].ifoutdiscards)
+	        	});
+	        }
+	        
+	        var dataChart = {color:"#33297A", name:"ifoutdiscards", data: data};
+			onDataReceived(dataChart);
+			
 		}, setMarkersMap: function(){
 			
 			$( "#containerMapSCT").mask("Waiting...");
@@ -278,9 +342,12 @@ var drawElementsSct = {
 
 			
 			var morelosSCTSites = [
-			               ['44327_USG', 18.68378, -99.11965, 20],
-			               ['44375_USG', 18.908121, -98.9726968, 19],
-			               ['44586_USG', 18.76278, -99.12032, 18],
+			               ['44665_USG', 18.942899,	-98.9033196, 4],       
+			               ['44930_USG', 18.666341,	-99.3774053, 3],
+			               ['46008_USG', 18.61471,	-99.18066, 2],
+			               ['44072_USG', 18.617,	-99.17673, 1]
+			                
+			                /*
 			               ['44600_USG', 18.847953, -98.9488239, 17],
 			               ['44311_USG', 18.7412,	-98.95368, 16],
 			               ['44327_USG', 18.68378,	-99.11965, 15],
@@ -297,7 +364,7 @@ var drawElementsSct = {
 			               ['44979_USG', 18.943607,	-98.9063966, 4],
 			               ['45015_USG', 18.580985,	-98.7483515, 3],
 			               ['45028_USG', 18.526381,	-98.7930463, 2],
-			               ['45150_USG', 18.6168,	-99.17789, 1]
+			               ['45150_USG', 18.6168,	-99.17789, 1]*/
 			             ];
 							
 				  var mapOptions = {
@@ -317,7 +384,6 @@ var drawElementsSct = {
 			        var polygon = [];	
 
 			        	if("MORELOS" === estado['name'].toUpperCase() ){
-			        		console.log("si entro");
 			            var coords = estado['coords'];
 			            for (var j = 0; j < coords.length; j++) {
 			              var coord = coords[j];

@@ -477,7 +477,7 @@
 			    		cnocConnector.service25 = serviceG15;
 			    		cnocConnector.service26 = serviceG16;
 			    		cnocConnector.service27 = serviceC1;
-			    		cnocConnector.service28 = serviceG17;
+			    		//cnocConnector.service28 = serviceG17;
 			    		cnocConnector.service29 = serviceG18;
 			    		
 			    }
