@@ -149,7 +149,7 @@ function generateMenu(){
 
 				if(datos.records.record.length>1) {
 					$.each(datos.records.record, function(k, v) {
-						if (v.url_nmis != '') {
+						if (v.url_nmis != '') {							
 							if (v.url_nmis.indexOf("\n") > 0) {
 								var nmis = v.url_nmis.split("\n");
 								$.each(nmis, function(m, n){
