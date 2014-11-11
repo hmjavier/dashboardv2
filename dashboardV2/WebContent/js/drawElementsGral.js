@@ -3,8 +3,6 @@
  * Clase para generar arrays que se inyectan a los elementos del DOM
  */
 
-var modalIP;
-
 var drawElementsGral = {
 		dataChartMemory : [],
 		
@@ -26,12 +24,14 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 			
 			
-			if(codenet.indexOf('L')>=0 || codenet.indexOf('N000269')>=0){
+			/*if(codenet.indexOf('L')>=0 || codenet.indexOf('N000269')>=0){
 				this.mapaMundial(codenet);
 			}else{
 				this.mapaGeneral(codenet);
-			}
+			}*/
 			
+
+			this.mapaGeneral(codenet, null ,false);
 			
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : ""},drawElementsGral.countStatus, "countAll", "countAllG");
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "reachable"},drawElementsGral.countStatus, "countReachable", "countReachableG");
@@ -56,24 +56,287 @@ var drawElementsGral = {
 			} catch (err) {};
 			
 			var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
-
 			
-		},mapaGeneral:function(codenet){
+		},mapaGeneral:function(codenet, typeData, flgNacional){
 			$( "#mapGral").mask("Waiting...");
 			var states = [];
 
 			$.ajax({
 				type : 'GET',
-				dataType : 'json',
+				dataType : 'jsonp',
 				url: cnocConnector.service20,
-				data: {network_code:codenet},
+				data: {network_code:codenet, type:typeData},
 				error : function(jqXHR, textStatus, errorThrown) {
+					console.log("error");
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
-					drawElementsGral.mapaGeneral(cnocConnector.codeNetGlobal);
+					//drawElementsGral.mapaGeneral(cnocConnector.codeNetGlobal);
 				},
 				success : function(response) {
+					console.log(response);
+					var tmp = "";
+					if(response.results){
+						tmp = response.results.international.toString();
+					}else{
+						tmp = response.international.toString();
+					}
 					
+					try{
+
+						if(tmp === "false" || flgNacional === true){
+							console.log("nacional");
+							$.each( response, function( key, val ) {
+								$.each( val, function( key, val ) {
+									var array = [];
+									var reachableT = 0;
+									var degradedT = 0;
+									var unreachableT = 0;
+									var color ="#22FF00";
+									$.each( val, function( key, val ) {
+
+										if(key.toString() === "reachable"){
+											reachableT = val;
+										}
+										
+										if(key.toString() === "degraded"){
+											degradedT = val;
+										}
+										
+										if(key.toString() === "unreachable"){
+											unreachableT = val;
+										}
+										
+										var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
+										
+										if(parseInt(unreachableT)> (totalN * .02)){
+											color = "#FF1600";
+										}else if(parseInt(degradedT)> (totalN * .05)){
+											color = "#FFE200";
+										}else {
+											color ="#22FF00";
+										}									
+									});
+									
+									array.push(key);
+									array.push("Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT);
+									array.push(color);
+									states.push(array);
+								});								
+							});
+
+				            var mapOptions = {
+									zoom: 5,
+									center: new google.maps.LatLng(21.8833, -102.3),
+									mapTypeId: google.maps.MapTypeId.TERRAIN, 
+									infoWindow: null,
+									styles: stylesMap
+								};
+							var mapaNacional;
+							map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
+							
+							infoWindow = new google.maps.InfoWindow({
+							        content: "Cargando . . ."
+							});
+							
+							 var bounds = new google.maps.LatLngBounds();
+						     var estados = polygons.mexico.records.record;
+
+						      for (var i = 0; i < estados.length; i++) {
+						        var estado = estados[i];
+						        var polygon = [];	
+
+						        for (var a = 0; a< states.length; a++) {				        	
+						        	
+						        	//if(states[a][0].indexOf(estado['name'].toUpperCase()) >-1 ){
+						        	if(states[a][0] === estado['name'].toUpperCase() ){
+
+						            var coords = estado['coords'];
+						            for (var j = 0; j < coords.length; j++) {
+						              var coord = coords[j];
+						              var point = new google.maps.LatLng(coord[1], coord[0]);
+						              polygon.push(point);
+						              bounds.extend(point);
+						            }
+						            // Construct the polygon.
+						            mapaNacional = new google.maps.Polygon({
+						              paths: polygon,
+						              strokeColor: states[a][2],
+						              strokeOpacity: 0.8,
+						              strokeWeight: 3,
+						              fillColor: states[a][2],
+						              fillOpacity: 0.35,
+						              info: states[a][0],
+						              totalIncidents: states[a][1]
+						            });
+						            mapaNacional.setMap(map);
+						            // Add a listener for the click event.
+						            google.maps.event.addListener(mapaNacional, 'mouseover', function(event){
+						            	var info = this.info;
+						                var total = this.totalIncidents;
+						                var contentString = '<div class="tooltipMap"><b>Total Nodes by Status:</b><br>' + 'State: ' + info + ' <br>' + total + '<br></div>';
+						                // Replace the info window's content and position.
+						                infoWindow.setContent(contentString);
+						                infoWindow.setPosition(event.latLng);
+						                infoWindow.open(map);
+						            });
+						            infoWindow = new google.maps.InfoWindow();
+						            
+						            
+						            //if(codenet === 'N000269'){
+						            	google.maps.event.addListener(map, 'zoom_changed', function() {
+							            	var zoomLevel = map.getZoom();					            	
+							                if (zoomLevel == 3) {
+							                	//drawElementsGral.mapaMundial(codenet);
+							                	drawElementsGral.mapaGeneral(codenet, null , false);
+							                }
+						        		});
+						            //}
+
+						          } //Cierre IF
+						        } // Cierre FOR states
+						      }
+						}else if(tmp === "true"){
+							console.log("soy internacional");
+							var records = [];
+							$.each( response, function( key, val ) {																
+								$.each( val, function( key, val ) {
+									
+									var reachableT = 0;
+									var degradedT = 0;
+									var unreachableT = 0;
+									var color ="#22FF00";
+									
+									$.each( val, function( key, val ) {
+
+										if(key.toString() === "reachable"){
+											reachableT = val;
+										}
+										
+										if(key.toString() === "degraded"){
+											degradedT = val;
+										}
+										
+										if(key.toString() === "unreachable"){
+											unreachableT = val;
+										}
+									});
+									
+									var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
+									
+									if(parseInt(unreachableT)> (totalN * .02)){
+										color = "#FF1600";
+									}else if(parseInt(degradedT)> (totalN * .05)){
+										color = "#FFE200";
+									}else {
+										color ="#22FF00";
+									}
+									records.push({country:key, conteo: "Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT, color:color});
+									
+								});	
+	
+							});
+							
+							var mapOptions = {
+									zoom: 2,
+									center: new google.maps.LatLng(21.8833, -102.3),
+									mapTypeId: google.maps.MapTypeId.TERRAIN, 
+									infoWindow: null,
+									styles: stylesMap
+								};
+							var mapaNacional;
+							map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
+							
+							infoWindow = new google.maps.InfoWindow({
+							        content: "Cargando . . ."
+							});
+							
+							
+							var countries = {};
+
+						    var totalServicios = 0;
+
+						    
+						    for (var i = 0; i < records.length; i++) {
+							      var record = records[i];
+
+							      countries[record['country']] = record;
+							      totalServicios += parseFloat(record['conteo']);
+							    }
+						    console.log(countries);
+						    var rows = polygons.mundial.records.record;
+
+						    jQuery.each(rows, function(index, item) {
+						      var poly = [];
+						      //console.log(item[0]);
+						      if (item[0] === "Antarctica")
+						    	  return true;
+				        
+
+						      if (item[1].type == 'GeometryCollection') {
+
+						        var geos = item[1].geometries;
+						        jQuery.each(geos, function(g, k) {
+						          poly.push(drawElementsGral.constructNewCoordinates(k));
+						        });
+
+						      } else {
+
+						        poly = drawElementsGral.constructNewCoordinates(item[1].geometry);
+
+						      }
+						      
+						      var color = countries[item[0].toUpperCase()] == null ? '#7B7B7B' : '#0000FF';
+						      try{
+						    	  color = countries[item[0].toUpperCase()].color;
+						      }catch(e){
+						      }
+						      
+						      mapaNacional = new google.maps.Polygon({
+						        paths : poly,
+						        strokeColor : '#FFFFFF',
+						        strokeOpacity : 1,
+						        strokeWeight : 1,
+						        fillColor : color,
+						        fillOpacity : .5,
+						        info : countries[item[0].toUpperCase()]
+						      });
+						      
+						      mapaNacional.setMap(map);
+
+						      if (countries[item[0].toUpperCase()] != null) {
+						    	  
+						    	// Add a listener for the click event.
+						            google.maps.event.addListener(mapaNacional, 'mouseover', function(event){
+						            	var info = this.info;
+						                var total = this.totalIncidents;
+						                var contentString = '<div class="tooltipMap"><b>Country:' + info['country'] + '</b><br>' + info['conteo'] + '<br></div>';
+						                // Replace the info window's content and position.
+						                infoWindow.setContent(contentString);
+						                infoWindow.setPosition(event.latLng);
+						                infoWindow.open(map);
+						            });
+						            infoWindow = new google.maps.InfoWindow();
+						            
+									if(codenet.indexOf('N')>=0){
+										google.maps.event.addListener(mapaNacional, 'click', function(){
+											console.log("ejecuto nacional");
+							            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true);
+							            });	
+									}
+
+						      	}
+						    });
+							
+						}
+					}catch(e){
+						console.log(e);
+						//response = null;
+						console.log("fallo");
+						//drawElementsGral.mapaGeneral(codenet);
+					}
+					
+
+					/*
 					$.each( response, function( key, val ) {
 						var array = [];
 						var reachableT = 0;
@@ -179,7 +442,7 @@ var drawElementsGral = {
 
 				          } //Cierre IF
 				        } // Cierre FOR states
-				      }
+				      }*/
 				      $( "#mapGral").unmask();
 				}
 			});
@@ -394,14 +657,16 @@ var drawElementsGral = {
 				};
 			} else {
 				if(datos.records.record.status_value.toString()==="degraded"){
-					tableT += "<tr class='warning'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
+					tableT += "<tr class='warning'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
 				}else if(datos.records.record.status_value.toString()==="reachable"){
-					tableT += "<tr class='success'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
+					tableT += "<tr class='success'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
 				}else if(datos.records.record.status_value.toString()==="unreachable"){
-					tableT += "<tr class='danger'><td><a href='#nodeResource'"+datos.records.record.name.toString()+"</a></td></tr>";
+					tableT += "<tr class='danger'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
 				}
 			}
-		} catch (err) {	};
+		} catch (err) {
+			console.log(err);
+		};
 		/*GENERA ARRAY DE ENCABEZADOS DE GRAFICA*/
 		try {
 			var rowsHeaders = [{
@@ -435,7 +700,6 @@ var drawElementsGral = {
 
 			} catch (err) {};
 		}
-				
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	},topGrid: function(datos, container, divTable){
