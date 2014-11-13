@@ -486,6 +486,41 @@ var drawElementsSct = {
 			} ];
 			cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 			
+		},gridInterfacesFlow:function(datos, container, divTable){
+			var rowsData = new Array();
+			try {
+				if (datos.records.record.length > 1) {
+					for ( var i = 0; i < datos.records.record.length; i++) {
+						var fields = new Array();						
+						fields.push(datos.records.record[i].displayvalue.toString());
+						fields.push(datos.records.record[i].in_bps.toString());
+						fields.push(datos.records.record[i].in_per.toString());
+						fields.push(datos.records.record[i].out_bps.toString());
+						fields.push(datos.records.record[i].out_per.toString());
+						rowsData.push(fields);
+					}
+				} else {
+					var fields = new Array();
+					fields.push(datos.records.record.displayvalue.toString());
+					fields.push(datos.records.record.in_bps.toString());
+					fields.push(datos.records.record.in_per.toString());
+					fields.push(datos.records.record.out_bps.toString());
+					fields.push(datos.records.record.out_per.toString());
+					rowsData.push(fields);
+				}
+			} catch (err) {	};
+			var rowsHeaders = [ {
+				"sTitle" : "Interface Name"
+			}, {
+				"sTitle" : "Receiving Rate(bps)"
+			}, {
+				"sTitle" : "Inbound Bandwidth Usage"
+			}, {
+				"sTitle" : "Sending Rate(bps)"
+			}, {
+				"sTitle" : "Outbound Bandwidth Usage"
+			} ];
+			cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		}, chartFilter_1: function(datos, container, divTable){
 			
 			var categorias = new Array();

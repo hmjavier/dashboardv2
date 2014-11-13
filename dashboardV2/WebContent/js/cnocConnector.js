@@ -112,7 +112,7 @@ var cnocConnector = {
 			}else if(divTable === "listLogI"){
 				scrollY = "500";
 			}else if(divTable === "listNodesSctG"){
-				scrollY = "500";
+				scrollY = "300";
 			}
 			
 			jQuery("#" + container).append('<table class="table table-striped table-hover" id="'+ divTable + '">'+rowsData+'</table>');
@@ -246,6 +246,7 @@ var cnocConnector = {
 				cnocConnector.invokeMashup(cnocConnector.service3, {"id":id,"status":""},drawElementsSct.drawListNodeDetail, "listNodeDetail", "listNodeDetail");
 				cnocConnector.invokeMashup(cnocConnector.service5, {"id":id},drawElementsSct.drawChartPingSct, "containerChartPingSct", "containerChartPingSctG");
 				cnocConnector.invokeMashup(cnocConnector.service9, {"id":idAp[0]},drawElementsSct.gridAp, "containerAp", "containerApG");
+				cnocConnector.invokeMashup(cnocConnector.service15, {"id":id},drawElementsSct.gridInterfacesFlow, "containerInterfacesFlow", "containerInterfacesFlowG");
 				cnocConnector.invokeMashup(cnocConnector.service13, {"id":node},drawElementsSct.bw, "", "");
 				
 				/*FILTRADO DE CONTENIDO SCT*/

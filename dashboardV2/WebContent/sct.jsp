@@ -132,10 +132,10 @@
 				    			<a name="nodeList"></a>
 						    	<h3 class="panel-title">Node List</h3>
 						  	</div>
-							<div id="listNodesSct" class="listNodes" style="height: 550px;"></div>
+							<div id="listNodesSct" class="listNodes" style="height: 350px;"></div>
 							<br>
 							<br>
-						</div>   
+						</div>						    
 				    </div>
 				    <div class="col-lg-4">
 						<div class="panel panel-primary">
@@ -147,7 +147,26 @@
 						  	<div id="treeContainerInterfaz"></div>
 						  	<div id="treeContainerDetail"></div>  		  
 						  </div>
-						</div>		
+						</div>																		
+				    </div>
+				    
+				    <div class="col-lg-5">
+				    	
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Chart Ping</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="nodeChart"></a>
+						  		<div id="containerChartPingSct"></div>
+						  	</div>
+				    	</div>
+				    	
+					</div>						
+				  </div>
+				<!-- /.row -->
+				<div class="row">
+					<div class="col-lg-3">
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <h3 class="panel-title">Node Detail</h3>
@@ -225,21 +244,21 @@
 						  </div>
 						  <br>
 						  </div>
-						</div> 				
-				    </div>
-				    
-				    <div class="col-lg-5">
-				    	
+						</div>
+					</div>
+					<div class="col-lg-5">
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Chart Ping</h3>
+						    	<h3 class="panel-title">Interfaces Flow</h3>
 						  	</div>
 						  	<div class="panel-body">
-						  		<a name="nodeChart"></a>
-						  		<div id="containerChartPingSct"></div>
+						  		<a name="nodeAP"></a>
+						  		<div id="containerInterfacesFlow"></div>
 						  	</div>
 				    	</div>
-				    	<div class="panel panel-primary">
+					</div>
+					<div class="col-lg-4">
+						<div class="panel panel-primary">
 				    		<div class="panel-heading">
 						    	<h3 class="panel-title">AP</h3>
 						  	</div>
@@ -248,8 +267,8 @@
 						  		<div id="containerAp"></div>
 						  	</div>
 				    	</div>
-					</div>						
-				  </div>
+					</div>
+				</div>
 				<!-- /.row -->
 				<div class="row">
 					<div class="col-lg-6">				    	
@@ -330,6 +349,7 @@
 			    		cnocConnector.service12 = serviceSCT11;
 			    		cnocConnector.service13 = serviceSCT12;
 			    		cnocConnector.service14 = serviceSCT13;
+			    		cnocConnector.service15 = serviceSCT14;
 			    }
 			});
 			
