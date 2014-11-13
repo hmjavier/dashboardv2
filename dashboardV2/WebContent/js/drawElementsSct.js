@@ -8,6 +8,8 @@ var drawElementsSct = {
 		subtitleChartSct:"",
 		metricUnitChartSct:"",
 		interfazGlobal:"",
+		filterContentLabel:"",
+		nodeSctGlobal:"",
 		
 		init : function(codeNet) {
 
@@ -161,10 +163,20 @@ var drawElementsSct = {
 				$('#nename').val(datos.records.record.nename.toString());
 				$('#nemac').val(datos.records.record.nemac.toString());
 				$('#version').val(datos.records.record.version.toString());
+				$('#neruntime').val(datos.records.record.neruntime.toString());
+				
+			}catch(e){
+				console.log(e);
+			}
+		},bw: function(datos, container, divTable){
+			try {
+				$('#bw').val(datos.records.record.bandwidth.toString());				
 			}catch(e){
 				console.log(e);
 			}
 		},drawChartPingSct:function (datos, container, divTable){
+
+			drawElementsSct.dataChartSct.length = 0;
 			drawElementsSct.metricUnitChartSct = "ms";
 			
 			var data = [], i;
@@ -186,7 +198,7 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharCPU:function(datos, container, divTable){
-
+			drawElementsSct.dataChartSct.length = 0;
 			drawElementsSct.metricUnitChartSct = "% CPU Util";
 			
 			var data = [], i;
@@ -208,7 +220,7 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharMem:function(datos, container, divTable){
-
+			drawElementsSct.dataChartSct.length = 0;
 			drawElementsSct.metricUnitChartSct = "% MEM Util";
 			
 			var data = [], i;
@@ -230,7 +242,7 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		},drawCharUtilInt:function(datos, container, divTable){
-			
+			drawElementsSct.dataChartSct.length = 0;
 			drawElementsSct.metricUnitChartSct = "Octets Speed";
 			
 			function onDataReceived(series) {
@@ -270,7 +282,9 @@ var drawElementsSct = {
 			cnocConnector.invokeMashup(cnocConnector.service10, {"id":cnocConnector.nodeGlobal,"intf":drawElementsSct.interfazGlobal},drawElementsSct.drawCharErrDisc, "containerChartPingSct", "containerChartPingSctG");
 		
 		},drawCharErrDisc: function(datos, container, divTable){
-
+			
+			drawElementsSct.dataChartSct.length = 0;
+			
 			drawElementsSct.metricUnitChartSct = "ifinerrors";
 			
 			function onDataReceived(series) {
@@ -471,6 +485,121 @@ var drawElementsSct = {
 				"sTitle" : "Location"
 			} ];
 			cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+			
+		}, chartFilter_1: function(datos, container, divTable){
+			
+			var categorias = new Array();
+			var up = new Array();
+			var down = new Array();
+			var i = 0;
+			
+			try {
+				if (datos.records.record.length > 1) {
+					for (i = 0; i < datos.records.record.length; i++) {
+						categorias.push(datos.records.record[i].app_subtype_name.toString());
+						up.push(parseInt(datos.records.record[i].up_bytes.toString()));
+						down.push(parseInt(datos.records.record[i].down_bytes.toString()));						
+					}
+				} else {
+					categorias.push(datos.records.record.app_subtype_name.toString());
+					up.push(parseInt(datos.records.record.up_bytes.toString()));
+					down.push(parseInt(datos.records.record.down_bytes.toString()));
+				}
+			} catch (err) {
+				categorias = new Array();
+				up = new Array();
+				down = new Array();
+			}
+			
+			var totalBytes = [{
+				"name" : "UP Bytes",
+				"data" : up,
+				"color": "#0C66ED"
+			},{
+				"name" : "Down Bytes",
+				"data" : down,
+				"color": "#2BC70D"
+			}];
+
+			var optChart = cnocConnector.drawChartFilterSct("column", container, totalBytes, categorias, "Content Filtering Last Update", "");			
+			chart = new Highcharts.Chart(optChart);			
+			
+		}, chartFilter_2: function(datos, container, divTable){
+			drawElementsSct.dataChartSct.length = 0;
+			
+			drawElementsSct.metricUnitChartSct = "Bytes";
+			
+			function onDataReceived(series) {
+				drawElementsSct.dataChartSct.push(series);
+				cnocConnector.drawChartPerformanceSct(drawElementsSct.dataChartSct, container, false, drawElementsSct.filterContentLabel);		
+	       	}
+			
+			var data = [], i;
+			
+	        for (i = 0; i < datos.records.record.length; i++) {
+	        	var timestamp = (parseInt(datos.records.record[i].statistictime) * 1000); 
+	        	data.push({
+	        		x: timestamp,
+	        		y: parseFloat(datos.records.record[i].up_bytes)
+	        	});
+	        }
+	        	        
+	        var dataChart = {color:"#0C66ED", name:"up_bytes", data: data};
+			onDataReceived(dataChart);
+			
+			/*********************************************************************/
+			
+			var data = [], i;
+			
+			for (i = 0; i < datos.records.record.length; i++) {
+				var timestamp = (parseInt(datos.records.record[i].statistictime) * 1000);
+	        	data.push({
+	        		x: timestamp,
+	        		y: parseFloat(datos.records.record[i].down_bytes)
+	        	});
+	        }
+	        
+	        var dataChart = {color:"#2BC70D", name:"down_bytes", data: data};
+			onDataReceived(dataChart);
+			
+		}, chartFilter_3: function(datos, container, divTable){
+			console.log("filtro 3");
+			console.log(datos);
+			var categorias = new Array();
+			var up = new Array();
+			var down = new Array();
+			var i = 0;
+			
+			try {
+				if (datos.records.record.length > 1) {
+					for (i = 0; i < datos.records.record.length; i++) {
+						categorias.push(datos.records.record[i].app_name.toString());
+						up.push(parseInt(datos.records.record[i].up_bytes.toString()));
+						down.push(parseInt(datos.records.record[i].down_bytes.toString()));						
+					}
+				} else {
+					categorias.push(datos.records.record.app_name.toString());
+					up.push(parseInt(datos.records.record.up_bytes.toString()));
+					down.push(parseInt(datos.records.record.down_bytes.toString()));
+				}
+			} catch (err) {
+				categorias = new Array();
+				up = new Array();
+				down = new Array();
+			}
+			
+			var totalBytes = [{
+				"name" : "UP Bytes",
+				"data" : up,
+				"color": "#0C66ED"
+			},{
+				"name" : "Down Bytes",
+				"data" : down,
+				"color": "#2BC70D"
+			}];
+
+			var optChart = cnocConnector.drawChartFilterSct("column", container, totalBytes, categorias, "Content Filtering by APP", "");			
+			chart = new Highcharts.Chart(optChart);			
 			
 		}
 };

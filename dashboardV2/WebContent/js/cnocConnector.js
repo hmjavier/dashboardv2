@@ -24,7 +24,7 @@ var cnocConnector = {
 					console.log(errorThrown);
 				},
 				success : function(response) {
-					try {						
+					try {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
@@ -236,6 +236,7 @@ var cnocConnector = {
 				console.log(node);
 				
 				cnocConnector.nodeGlobal = id;
+				drawElementsSct.nodeSctGlobal = node;
 				var idAp = node.split("_");
 				console.log("idAp");
 				console.log(idAp);
@@ -245,7 +246,14 @@ var cnocConnector = {
 				cnocConnector.invokeMashup(cnocConnector.service3, {"id":id,"status":""},drawElementsSct.drawListNodeDetail, "listNodeDetail", "listNodeDetail");
 				cnocConnector.invokeMashup(cnocConnector.service5, {"id":id},drawElementsSct.drawChartPingSct, "containerChartPingSct", "containerChartPingSctG");
 				cnocConnector.invokeMashup(cnocConnector.service9, {"id":idAp[0]},drawElementsSct.gridAp, "containerAp", "containerApG");
-					
+				cnocConnector.invokeMashup(cnocConnector.service13, {"id":node},drawElementsSct.bw, "", "");
+				
+				/*FILTRADO DE CONTENIDO SCT*/
+				cnocConnector.invokeMashup(cnocConnector.service11, {"id":node},drawElementsSct.chartFilter_1, "containerChartFilter_1", "containerChartFilter_1G");
+				drawElementsSct.filterContentLabel = "Infrastructure History";
+				cnocConnector.invokeMashup(cnocConnector.service12, {"id":node, "subtype":"Infrastructure"},drawElementsSct.chartFilter_2, "containerChartFilter_2", "containerChartFilter_2G");
+				//drawElementsSct.filterContentLabel = "Content Filtering by APP";
+				cnocConnector.invokeMashup(cnocConnector.service14, {"id":node, "type":"Infrastructure"},drawElementsSct.chartFilter_3, "containerChartFilter_3", "containerChartFilter_3G");
 			});
 			
 		}
@@ -366,7 +374,7 @@ var cnocConnector = {
 		}
 		
 		if(container==="tTops"){
-			modelView();	
+			modelView();
 		}
 		
 		return dTable;
@@ -652,6 +660,10 @@ var cnocConnector = {
             series: series
         });
 	},drawChartPerformanceSct:function(series, container, otherMetrics, name){
+		var unidad = "";
+		if(container==="containerChartFilter_2"){
+			unidad=" Bytes";
+		}
 		$('#'+container).highcharts({
             chart: {
                 type: 'spline',
@@ -703,11 +715,19 @@ var cnocConnector = {
                                 ]
                     }
                 }
-            },tooltip: {
+            },/*tooltip: {
                 crosshairs: true,
                 shared: true
-            },
-            legend: {
+            },*/
+	        tooltip: {
+	            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+	            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+	                //'<td style="padding:0"><b>{point.y:.1f} Bytes</b></td></tr>',
+	            	'<td style="padding:0"><b>{point.y} '+unidad+'</b></td></tr>',
+	            footerFormat: '</table>',
+	            shared: true,
+	            useHTML: true
+	        },legend: {
                 borderWidth: 0
             },plotOptions: {
                 spline: {
@@ -716,7 +736,9 @@ var cnocConnector = {
                         lineColor: '#666666',
                         lineWidth: 5
                     }
-                }
+                },series : {
+					cursor : 'pointer'					
+				}
             },
             series: series
         });
@@ -760,6 +782,63 @@ var cnocConnector = {
 				series : dataChart
 			};
 
+			return optChart;
+	},drawChartFilterSct: function(type, container, dataChart, categorias, title, subtitle){
+		var optChart = {
+				chart: {
+		            //type: 'column'
+					type: type,
+					renderTo : container,
+					plotBackgroundColor : null,
+					plotBorderWidth : null,
+					plotShadow : false
+		        },credits: {
+	                enabled: false
+	            },
+		        title: {
+		            text:title 
+		        },
+		        subtitle: {
+		            text: "Node Name: "+drawElementsSct.nodeSctGlobal
+		        },
+		        xAxis: {
+		            categories: categorias
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: 'Bytes'
+		            }
+		        },
+		        tooltip: {
+		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+		            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+		                //'<td style="padding:0"><b>{point.y:.1f} Bytes</b></td></tr>',
+		            	'<td style="padding:0"><b>{point.y} Bytes</b></td></tr>',
+		            footerFormat: '</table>',
+		            shared: true,
+		            useHTML: true
+		        },plotOptions: {
+		            series: {
+		                cursor: 'pointer',
+		                point: {
+		                    events: {
+		                        click: function () {		                        	
+		                        	if(container === "containerChartFilter_1"){
+		                        		drawElementsSct.subtitleChartSct = "Node Name: "+drawElementsSct.nodeSctGlobal;
+			                            drawElementsSct.filterContentLabel = this.category +" History";
+			                			cnocConnector.invokeMashup(cnocConnector.service12, {"id":drawElementsSct.nodeSctGlobal, "subtype":this.category},drawElementsSct.chartFilter_2, "containerChartFilter_2", "containerChartFilter_2G");
+			                			cnocConnector.invokeMashup(cnocConnector.service14, {"id":drawElementsSct.nodeSctGlobal, "type":this.category},drawElementsSct.chartFilter_3, "containerChartFilter_3", "containerChartFilter_3G");
+		                        	}
+		                        }
+		                    }
+		                }
+		            }
+		        },
+		        series: dataChart
+		};
+
+		console.log(optChart);
 			return optChart;
 	},drawSelect : function(datos, container, module) {
 

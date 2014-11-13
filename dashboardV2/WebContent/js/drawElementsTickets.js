@@ -295,7 +295,7 @@ var drawElementsTickets = {
 			}
 		});
 
-		  modal.modal("show");		
+		modal.modal("show");
 	},updateTicket: function(data){
 		
 		var modal = bootbox.dialog({

@@ -56,6 +56,26 @@
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
 	</div>
+	<div id="cmd" style="visibility: hidden; height:0px; width: 1000px;">		
+		<div>
+			<pre id="resultCommand"></pre>
+		</div>
+	</div>
+	
+	<div id="ipAcc" style="visibility: hidden; height: 0px;">
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+				<input type="text" id="contactEmailIP" class="form-control" style="height: 30px;" placeholder="email@dominio.com;email2@dominio2.com;email3@dominio3.com;" required >
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
+				<input type="text" id="messageIP" class="form-control" style="height: 30px;" placeholder="Message" disabled="disabled">
+			</div>
+		</div>
+	</div>	
     <div id="wrapper">
 		<%@ include file="menu.jsp" %> 
         <div id="page-wrapper">
@@ -224,14 +244,35 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-								  <li class="tops list-group-item contadores" id="relatedIncidents">				  	
-								    <span class="badge" id="relatedIncidentsC"></span>		    
-								    <a href="#">Related Incidents</a>
-								  </li>
-								  <li class="tops list-group-item contadores" id="relatedChanges">
-								    <span class="badge" id="relatedChangesC"></span>
-								    <a href="#">Related Changes</a>
-								  </li>
+							  <li class="tops list-group-item contadores" id="relatedIncidents">
+							    <span class="badge" id="relatedIncidentsC"></span>
+							    <a href="#">Related Incidents</a>
+							  </li>
+							  <li class="tops list-group-item contadores" id="relatedChanges">
+							    <span class="badge" id="relatedChangesC"></span>
+							    <a href="#">Related Changes</a>
+							  </li>
+					      </ul>
+						  </div>
+						</div>
+						<div class="panel panel-primary">
+						  <div class="panel-heading">
+						    <h3 class="panel-title">Node Tools</h3>
+						  </div>
+						  <div class="panel-body">
+						  	<ul class="nav nav-pills">
+							  <li class="commands list-group-item contadores" id="pingNS">
+							    <span class="badge" id="pingNodeStatus"></span>
+							    <a href="#">Ping command</a>
+							  </li>
+							  <li class="commands list-group-item contadores" id="tracepathNS">
+							    <span class="badge" id="tracepathNodeStatus"></span>
+							    <a href="#">Tracepath command</a>
+							  </li>
+							  <li class="commands list-group-item contadores" id="ipAccountingNS">
+							    <span class="badge" id="ipAccountingNodeStatus"></span>
+							    <a href="#">IP Accounting Report</a>
+							  </li>
 					      </ul>
 						  </div>
 						</div>
@@ -479,6 +520,9 @@
 			    		cnocConnector.service27 = serviceC1;
 			    		//cnocConnector.service28 = serviceG17;
 			    		cnocConnector.service29 = serviceG18;
+			    		cnocConnector.service30 = serviceG19;
+			    		cnocConnector.service31 = serviceG20;
+			    		cnocConnector.service32 = serviceG21;
 			    		
 			    }
 			});
@@ -548,6 +592,53 @@
 				$("#headerGridsDetailG").text("Incident Detail");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
 				cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.detailChangesNode, "tTops", "listChangeGNode");
+			});
+			
+			$('#pingNS').click(function(e) {
+				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
+					bootbox.alert("Please select node in Node List");
+				} else {
+					$( '#page-wrapper' ).mask("Waiting...");				
+					cnocConnector.invokeMashup(
+							cnocConnector.service30,
+							{
+								"network_code" : cnocConnector.codeNetGlobal,
+								"hostname" : cnocConnector.nodeGlobal
+							},
+							drawElementsGral.command,
+							"commandNS",
+							"pingContainerNS");
+				}
+			});
+			
+			$('#tracepathNS').click(function(e) {
+				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
+					bootbox.alert("Please select node in Node List");
+				} else {
+					$( '#page-wrapper' ).mask("Waiting...");				
+					cnocConnector.invokeMashup(
+							cnocConnector.service31,
+							{
+								"network_code" : cnocConnector.codeNetGlobal,
+								"hostname" : cnocConnector.nodeGlobal
+							},
+							drawElementsGral.command,
+							"commandNS",
+							"tracepathContainerNS");
+				}
+			});
+			
+			$('#ipAccountingNS').click(function(e) {				
+				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
+					bootbox.alert("Please select node in Node List");
+				} else {
+					var data = {
+							network_code : cnocConnector.codeNetGlobal,
+							hostname : cnocConnector.nodeGlobal,
+							contactMail : null
+						};
+					drawElementsGral.ipAccounting(data);
+				}				
 			});
 			
 			$( ".nodeDetailView").click(function(event){	

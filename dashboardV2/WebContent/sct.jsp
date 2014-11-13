@@ -210,6 +210,16 @@
 									  <label class="control-label" for="inputSuccess">Version:</label>
 									  <input class="form-control" type="text" id="version">
 									</div>
+									
+									<div class="col-lg-3 form-group has-success">
+									  <label class="control-label" for="inputSuccess">Neruntime:</label>
+									  <input class="form-control" type="text" id="neruntime">
+									</div>
+									
+									<div class="col-lg-3 form-group has-success">
+									  <label class="control-label" for="inputSuccess">Bw:</label>
+									  <input class="form-control" type="text" id="bw">
+									</div>
 
 								</div>						
 						  </div>
@@ -238,9 +248,47 @@
 						  		<div id="containerAp"></div>
 						  	</div>
 				    	</div>
-					</div>					
+					</div>						
 				  </div>
-				<!-- /.row -->	
+				<!-- /.row -->
+				<div class="row">
+					<div class="col-lg-6">				    	
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Chart Content Filtering</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="nodeChartFilter"></a>
+						  		<div id="containerChartFilter_1"></div>
+						  	</div>
+				    	</div>
+					</div>
+					<div class="col-lg-6">				    	
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Chart Content Filtering</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="nodeChartFilter"></a>
+						  		<div id="containerChartFilter_2"></div>
+						  	</div>
+				    	</div>
+					</div>
+				</div>
+				<!-- /.row -->
+				<div class="row">
+					<div class="col-lg-12">				    	
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Chart Content Filtering by App</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="nodeChartFilter"></a>
+						  		<div id="containerChartFilter_3"></div>
+						  	</div>
+				    	</div>
+					</div>
+				</div>					
             </div>
             <!-- /.container-fluid -->
 
@@ -278,7 +326,10 @@
 			    		cnocConnector.service8 = serviceSCT7;
 			    		cnocConnector.service9 = serviceSCT8;
 			    		cnocConnector.service10 = serviceSCT9;
-			    		
+			    		cnocConnector.service11 = serviceSCT10;
+			    		cnocConnector.service12 = serviceSCT11;
+			    		cnocConnector.service13 = serviceSCT12;
+			    		cnocConnector.service14 = serviceSCT13;
 			    }
 			});
 			

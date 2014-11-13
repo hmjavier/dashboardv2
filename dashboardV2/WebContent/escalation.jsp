@@ -1,327 +1,260 @@
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+    pageEncoding="US-ASCII"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<meta charset="UTF-8" />
-	<title>:::Customer Network Operation Center (CNOC):::</title>	
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="shortcut icon" href="./images/favicon.ico"/>
-	<link rel="icon" type="image/png" href="./images/favicon.ico"/>
-	
-	<script type="text/javascript" src="../presto/hub/jsapi/loader.js"></script>
-	
-	<link rel="stylesheet" type="text/css" href="../presto/hub/css/prestoweb.css"/>
-      <script>
-        Presto.loadLib("presto-core", null, true);			
-        Presto.loadLib("presto-util", null, true);		
-      </script>
-	
-	
-	<style>
-		body {
-			/*background: #000000 url(css/images/fondo1.jpg);*/
-		}
-		
-		.logoCnoc{
-			/*background: url(css/images/logo.png);
-			background-size:150px 75px;
-			background-repeat:no-repeat;*/
-			width: 30%;
-			height: 100px;
-			position: relative;
-		    margin: 10% auto auto;
-		    text-align: center;
-		    
-    /*border-radius: 0.4em;
-    border: 1px solid #191919;
-    box-shadow: 
-        inset 0 0 2px 1px rgba(255,255,255,0.08), 
-        0 16px 10px -8px rgba(0, 0, 0, 0.6);
-		    
-		}*/
-	</style>
-	<script>
-	(function($){ 
-		
-		 // Set config variables
-        var loc = window.location.search.toString(),
-        returnUrl = loc.slice(loc.indexOf("return_url=") + 11),
-        appName = "Presto",
-        connection = new Presto.Connection({
-        	prestoUrl: '/presto'
-        }),
-		cp = new Presto.Util.CookieProvider({
-            expiry: Presto.REMEMBERMEDAYS * 24 * 60 * 60 * 1000
-        }),
-		savedUsername = cp.get("PrestoUsername");
-        
-		// Se comentan para tener varios main 
-        /*
-        if (!returnUrl || returnUrl === '') {
-        	returnUrl = "/dashboard/main.jsp";
-    	}
-    	
-		if ( window.location.hash.length ) {
-    		returnUrl += window.location.hash;
-		}*/
-		
-		$(document).ready(function(){
-			Presto.REMEMBERMEDAYS = 7;
-            Presto.Gfx.PNGfixImg();
-            
-            
-            // check if user is authenticated		            
-            checkIfAuthenticated();
-            
-            setLoginBoxFocus();
-	    	
 
-            /**
-             * Login form handler
-             */
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="OGE">
 
-			$(".main").find("form").submit(function(e){
-	    		e.preventDefault();
-	    		var self = $(this),
-                username = self.find("input[name=username]").val(),
-                password = self.find("input[name=password]").val();
+    <title>:::Customer Network Operation Center (CNOC):::</title>
+	<link rel="icon" type="image/x-icon" href="cnoc.ico" />
+	
+	<!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrapW.css">		
+	
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="css/general.css">
+    <link href="css/sb-admin.css" rel="stylesheet">
 
-	    		login(username, password);
-	    		/*if( $.trim(username).length == 0 ){
-		    		alert("Debe ingresar el usuario.");
-		    	}
-		    	else if( $.trim(password).length == 0 ){
-		    		alert("Debe ingresar la clave.");
-		    	}else{
-		    		login(username, password);
-		    	}*/
-	    		
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+	<!-- Chosen -->
+	<link rel="stylesheet" type="text/css" href="js/chosen/chosen.min.css">
+	
+	<!-- jQuery Loadmask -->
+	<link rel="stylesheet" type="text/css" href="js/jquery-loadmask-0.4/jquery.loadmask.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<div class="overlay" id="overlay" style="display:none;"></div>
+	<div class="box panel panel-primary" id="box" >
+		<div class="panel-heading">
+			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>
+		</div>
+		<a class="boxclose" id="boxclose"></a>  
+	  <div id="tTops"></div>
+	</div>
+    <div id="wrapper">
+		
+        <!-- MENU  -->		
+		<%@ include file="menu.jsp" %>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+                <!-- /.row -->
+
+
+                <div class="row">
+                	<div class="col-md-5 col-md-offset-3">
+                		<div class="btn-group">    
+					    	<button type="button" class="btn btn-info">CSC</button>
+							<button type="button" class="btn btn-info">GFC</button>
+							<button type="button" class="btn btn-info">CNOC NOTI</button>
+							<button type="button" class="btn btn-info">ESCALACION CASE</button>
+							<button type="button" class="btn btn-info">SMS-INT</button>
+							<button type="button" class="btn btn-info">SMS-CLIE</button>
+							<!-- <button id="getButton" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>-->
+						</div>						
+                	</div>
+                </div>
+                <br>
+                <div class="row">
+					<form class="form-horizontal">
+						<fieldset>
+						
+						<!-- Form Name -->
+						<legend>Incident escalation</legend>
+						
+						<!-- Text input-->
+						<div class="control-group">
+						  <label class="control-label" for="textinput">IM</label>
+						  <div class="controls">
+						    <input id="im" name="im" type="text" placeholder="IMCCC000000" maxlength="11" size="11" class="input-xlarge">
+						    <button class="btn btn-success glyphicon glyphicon-save" type="button" id="getButton"> Get</button>						    
+						  </div>						  
+						</div>
+						
+						</fieldset>
+						</form>
+                </div><br>
+                 <div class="row">
+					<div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Incident escalation report</h3>
+						  	</div>
+				    		<div id="chartEscalation"></div>
+				    	</div>		
+				    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+	<!-- jQuery Version 1.11.0 -->	
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.i18n.properties-min-1.0.9.js"></script>	
+	<script type="text/javascript" src="js/chosen/chosen.jquery.min.js"></script>
+
+	<!-- Bootstrap Core CSS -->
+	<script src="js/bootstrap.js"></script>
+	
+	<!-- Modal dialog -->
+	<script type="text/javascript" src="js/bootbox.min.js"></script>
+
+	<!-- LIBRERIAS CNOC -->
+	<script src="js/cnocConnector.js"></script>
+	<script src="js/drawElementsEscalation.js"></script>
+	<script src="js/jsEscalaciones/getEmails.js"></script>
+	<script src="js/jsEscalaciones/functionCSC.js"></script>	
+	<script src="js/jsEscalaciones/functionGFC.js"></script>
+	<script src="js/jsEscalaciones/function_CNOC_NOTI.js"></script>
+	<script src="js/jsEscalaciones/function_ESCALACION_CASE.js"></script>
+	<script src="js/jsEscalaciones/function_SMS_INT.js"></script>
+	<script src="js/jsEscalaciones/function_SMS_CLIE.js"></script>	
+	
+	<!-- jQuery Loadmask -->
+	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
+	
+	<!-- remove css/js -->
+	<script type="text/javascript" src="js/script.js"></script>	
+
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+			jQuery.i18n.properties({
+			    name:'config', 
+			    path:'prop/', 
+			    mode:'both',
+			    callback: function() {
+			    		cnocConnector.logout = serviceLogout;
+			    		cnocConnector.service1 = serviceESC1;
+			    		cnocConnector.service2 = serviceESC2;
+			    		cnocConnector.menu = serviceMenu;
+			    		cnocConnector.nmis_urls = nmis_urls;
+			    }
 			});
 			
-		});// termina on ready
-		
-		// Set Focus on Username / Password field in LoginBox
-        var setLoginBoxFocus = function(){
-            if (savedUsername) {
-            	$('#login-box').find("input[name=username]").val(savedUsername).removeAttr("autofocus");
-                $('#login-box').find("input[name=password]").focus();
-            }
-        };
-        
-        
-        
-        // Check if User is already authenticated or not
-        // If not, show login box. Else redirect to Home Page.
-        var checkIfAuthenticated = function(){
-            
-            connection.isAuthenticated(function(response){
-            	if (response) {
-            		// Se comenta para tener varios main
-                	//window.location.href = decodeURIComponent(returnUrl);
-                }
-                else {
-                	setLoginBoxFocus();
-                }
-            });
-             
-        };
-        
-        
-        
-        // Authenticate the User.
-        // After successful auth, redirect to respective page (ie. Hub / Appstore)
-	var module="";
-	var codenets="";
-	var ou="";
-	var name="";
-	var usernameA ='ogescami';
-	var passwordA ='oscarGtz86';
-        var login = function(username, password){
+			/*Genera Menu*/
+			generateMenu();
+		 	
+			drawElementsEscalation.init();
+		 	
+		 	$("#getButton").click(function() {
+		 		
+		 		var report = $('.btn-group > .btn.active').text();
+		 		var im = $('#im').val();		 		
+		 		
+		 		$('#chartEscalation').empty();
+		 		
+		 		if (im == '') {
+		 			bootbox.alert("Please insert IM");
+		 			//alert("Please insert IM");
+		 		
+		 		} else if (report == '') {
+		 			bootbox.alert("Please select escalation type");
+		 			//alert("Please select escalation type");
+		 		
+		 		} else if (report == 'CSC') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.getCSC, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else if (report == 'GFC') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.getGFC, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else if (report == 'CNOC NOTI') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_CNOC_NOTI, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else if (report == 'ESCALACION CASE') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_ESCALACION_CASE, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else if (report == 'SMS-INT') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_SMS_INT, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else if (report == 'SMS-CLIE') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_SMS_CLIE, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
+		 		} else 
+		 			console.log("no report known");
+			});
 
-			connection.login(usernameA, passwordA, {
-            	onSuccess: function(){
-            	    cp.set("PrestoUsername", usernameA);
-            	    connection.request({
-						url: "/presto/edge/api/rest/cnoc_user_ldap/Invoke?x-presto-resultFormat=json&user="+username,
-                        type: "get",
-                        contentType: "application/x-www-form-urlencoded"
-                    }, {
-                        onSuccess: function(response, responseHeaders) {
-                            var result = response;
-							module = response.aut.module;
-							codenets=response.aut.codenet;
-							ou = response.aut.typeuser;
-							name = response.aut.name;
-                            /*if(typeof response !== "string") {
-				alert("entro");
-                                result = Object.toJSON(response);
-                            }*/
-				//console.log(response);
-				//console.log(responseHeaders);
-				//alert(response.aut.module);
-				//alert("despues");
-/*****************************************************************************************************/
-/* logout */
-					$.ajax({
-					        type: 'GET',
-					        //dataType: 'jsonp',
-					        url: "/presto/edge/api/rest/UserManagerService/logout",
-					        error: function (jqXHR, textStatus, errorThrown) {
-					            console.log(jqXHR);
-					            window.location = "index.html";
-					        },
-					        success: function(response){
-							//alert("Cerre session");
-					        	//console.log(response);
-					        	//window.location = "2.html";	
-/*****************************************************************************************************/
-/* SE INICIA SESSION CON USUARIO MORTAL */
-ou = ou.substring(0, 11);
-connection.login(username, password, {
-            	onSuccess: function(){
-            	    cp.set("PrestoUsername", username);
-            	    connection.request({
-                        sid : 'ms_set_NetCodes',
-                        oid : 'Invoke',
-                        params : {
-                        	"username" : username,
-                            "module": module,
-                            "net_code":codenets,
-                            "ou":ou,
-                            "name":name
-
-                        },
-                        header : {}
-		                }, {
-                        onSuccess : function(response) {
-                        	
-							if(codenets === "N000333"){
-                                 returnUrl = "/dashboard/mainsct.jsp";
-                         	}else{
-                                 returnUrl = "/dashboard/main.jsp";
-                         	}
-                         	window.location.href = returnUrl;
-
-                        },
-                        onFailure : function(response) {
-
-                                       console.log(response);
-                        },
-                        scope : this
-        				});
-
-                },
-                onFailure: function(e){
-                	alert("Incorrect username and/or password");
-                	/*var msg = (e && e.message);
-					if (!msg) {
-                        msg = "Incorrect username and/or password";
-                    }
-					*/
-                    //$.growl.show({msg: msg});
-                },
-                scope: this
-            });//end connection.login
-/*****************************************************************************************************/
-					        } 
-					    });
-/*****************************************************************************************************/
-				
-                        },
-                        onFailure: function(e) {
-                            jQuery("#result").val(e.message);
-				alert(e.message);
-                        }
-        		});
-
-                },
-                onFailure: function(e){
-                	alert("Incorrect username and/or password: "+e.message);
-                },
-                scope: this
-            });//end connection.login
-                
-        }; // end login
-		
-	})(jQuery);
-
-	</script>
-</head>
-<body>
-
-	<div class="logoCnoc" id="logoCnoc"><img alt="logo" src="css/images/logo.png" width="150" height="75"></div>
-	<!-- <div class="container">		
-		<section class="main">				
-				<form class="form-3">
-				    <p class="clearfix">
-				        <label for="login">Username</label>
-				        <input type="text" name="username" id="username" placeholder="">
-				    </p>
-				    <p class="clearfix">
-				        <label for="password">Password</label>
-				        <input type="password" name="password" id="password" placeholder=""> 
-				    </p>
-				    <p class="clearfix">
-				        <input type="checkbox" name="remember" id="remember">
-				        <label for="remember">Remember me</label>
-				    </p>
-				    <p class="clearfix">
-				        <input type="submit" name="send" value="Sign in" id="send" class="send">
-				    </p>       
-				</form>​
-			</section>			
-	</div>-->
+			$( ".logout").click(function(event){	
+				logout();
+			});
 			
-	<div class="container">
-    <div class="row">
-    	<section class="main">
-    		<div class="col-md-4 col-md-offset-4">
-	            <div class="panel panel-default panel-default-login">
-	                <div class="panel-heading">
-	                    <span class="glyphicon glyphicon-lock"></span> Login</div>
-	                <div class="panel-body">
-	                    <form class="form-horizontal" role="form">
-	                    <div class="form-group">
-	                        <div class="col-sm-8 input-group">
-	                        	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-	                            <input type="text" name="username" id="username" class="form-control" style="height: 30px;" placeholder="Username" required >
-	                        </div>
-	                    </div>
-	                    <div class="form-group">
-	                        <div class="col-sm-8 input-group">
-	                        	<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-	                            <input type="password" name="password" id="password" class="form-control" style="height: 30px;" placeholder="Password" required>
-	                        </div>
-	                    </div>
-	                    <div class="form-group last">
-	                        <div class="col-sm-offset-3 col-sm-9">
-	                            <button type="submit" name="send" value="Sign in" id="send" class="btn btn-success btn-sm">Sign in</button>
-	                            <button type="reset" class="btn btn-default btn-sm">Reset</button>
-	                        </div>
-	                    </div>
-	                    </form>
-	                </div>
-	                <div class="panel-footer">
-	                    <div class="copyright-info" style="color: #7D7F80; text-align: center; font-size: 9px;">
-	                       Customer Network Operation Center (CNOC)<br> &copy; 2014 CNOC
-	                       Tools .Todos los derechos reservados.                        
-	               		</div>
-	                </div>
-	            </div>
-	        </div>
-    	</section>        
-    </div>
-</div>
-	
-	<div id="copyright" class="copyright">
-               <table title="Click to Verify - This site chose Symantec SSL for secure e-commerce and confidential communications.">
-                       <tr>
-                               <td width="135" align="center" valign="top"><script  type="text/javascript" src="https://seal.verisign.com/getseal?host_name=dashboard-i2.cnoc.telmexit.com&amp;size=S&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script><br />
-                                       <a href="http://www.symantec.com/verisign/ssl-certificates" target="_blank" style="text-decoration: none; font: bold 7px verdana, sans-serif; letter-spacing: .5px; text-align: center; margin: 0px; padding: 0px;">ABOUT SSL CERTIFICATES</a>
-                               </td>
-                       </tr>
-               </table>
-       </div>
-       <!-- end Copyright -->
+			$( ".back").click(function(event){
+				home();
+			});
+			
+			$(".themeW").click(function(event){
+				var filename = $(this).attr('rel');				
+				themeChanges(filename, false);			
+				//Highcharts.setOptions(Highcharts.themeW);
+				//stylesMap = null;
+				//drawElementsGral.builder(cnocConnector.codeNetGlobal);
+			});
+			
+			$(".themeB").click(function(event){
+				var filename = $(this).attr('rel');				
+				themeChanges(filename,true);				
+				//Highcharts.setOptions(Highcharts.themeB);
+				//drawElementsGral.builder(cnocConnector.codeNetGlobal);
+			});
+	});
+	</script>
+
 </body>
+
 </html>
