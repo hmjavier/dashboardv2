@@ -824,6 +824,12 @@ var drawElementsGral = {
 
 	},drawListNodeDetail: function(datos, container, divTable){
 		try {
+			
+			if(datos.records.record.name.toString().indexOf('_RT')>-1 && datos.records.record.nodevendor.toString().indexOf('Cisco')>-1)
+				$("#ipAccountingNS").show();
+			else
+				$("#ipAccountingNS").hide();
+			
 			$('#name').val(datos.records.record.name.toString());
 			$('#nodevendor').val(datos.records.record.nodevendor.toString());
 			$('#sysdescr').val(datos.records.record.sysdescr.toString());

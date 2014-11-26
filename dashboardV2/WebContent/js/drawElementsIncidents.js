@@ -422,6 +422,7 @@ var drawElementsIncidents = {
 							fields.push(datos.records.record[i].open_time.toString());
 							fields.push(datos.records.record[i].last_update.toString());							
 							fields.push(datos.records.record[i].close_time.toString());
+							fields.push(datos.records.record[i].service_type.toString());
 							rowsData.push(fields);
 						}
 					} else {
@@ -437,7 +438,8 @@ var drawElementsIncidents = {
 						fields.push(datos.records.record.problem_status.toString());
 						fields.push(datos.records.record.open_time.toString());
 						fields.push(datos.records.record.last_update.toString());
-						fields.push(datos.records.record.close_time.toString());						
+						fields.push(datos.records.record.close_time.toString());	
+						fields.push(datos.records.record.service_type.toString());
 						rowsData.push(fields);
 					}
 				} catch (err) {	
@@ -467,6 +469,8 @@ var drawElementsIncidents = {
 					"sTitle" : "Last Update"
 				}, {
 					"sTitle" : "Close Time"
+				}, {
+					"sTitle" : "Service Type"
 				} ];
 				cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 			},drawCountAll: function(datos, container, divTable){

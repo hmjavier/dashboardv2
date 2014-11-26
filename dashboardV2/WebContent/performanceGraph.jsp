@@ -177,7 +177,13 @@
 									<div class="radio ">
 									  <label >
 									    <input type="radio" name="opciones" id="metrics" value="utilisation">
-									    Utilisation
+									    Utilisation %AVG
+									  </label>
+									</div>
+									<div class="radio ">
+									  <label >
+									    <input type="radio" name="opciones" id="metrics" value="utilisationavgbps">
+									    Utilisation AVG bps
 									  </label>
 									</div>
 									<div class="radio ">
@@ -329,7 +335,7 @@
 			
 		 	$("input[name=opciones]:radio").change(function () {
 		 		drawElementsPerformanceGraph.dataChartInterface.length = 0;
-		 		if( $(this).val() === "utilisation" || $(this).val() === "qos" || $(this).val() === "errorsdiscards" || $(this).val() === "pktshc"){
+		 		if( $(this).val() === "utilisation" || $(this).val() === "qos" || $(this).val() === "errorsdiscards" || $(this).val() === "pktshc" || $(this).val() === "utilisationavgbps"){
 					$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
 		 			cnocConnector.drawInterfaceGraph($(this).val());
 		 		}else{
@@ -346,18 +352,18 @@
 				var startDate = $("#startDate").val();
 				var endDate = $("#endDate").val();
 				var metrics = $('input:radio[name=opciones]:checked').val();
-				
+								
 				if(startDate === "" || endDate === "" ){
 					alert("Elige un rango de fecha");
 				}else{
 					var nodes = [];
 		            
-					if(metrics === "utilisation" || metrics === "errorsdiscards" || metrics === "qos" || metrics === "pktshc"){
+					if(metrics === "utilisation" || metrics === "errorsdiscards" || metrics === "qos" || metrics === "pktshc" || metrics === "utilisationavgbps"){
 						$('option:selected', $('#cmbInterfazGraph')).each(function() {
 			            	nodes.push($(this).val());
 			         	});
 						
-					}else if(metrics != "utilisation"){
+					}else if(metrics != "utilisation" && metrics != "utilisationavgbps"){
 						 $('option:selected', $('#SelectNode')).each(function() {
 				            	nodes.push($(this).val());
 				         });
@@ -375,14 +381,13 @@
 
 						var idNum = 0;
 						for(var idx=0; idx<nodes.length; idx++){
-							console.log(nodes[idx]);
 							var tmp = "";
 							var name = "";
 							var nmis = "";
 							var idResource ="";
 							var vendor = "";
 							
-							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc"){
+							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc" || metrics === "utilisationavgbps"){
 								tmp = nodes[idx].split("|");
 								name = tmp[0];
 								idResource = tmp[1];
@@ -407,7 +412,7 @@
 							drawElementsPerformanceGraph.startDate = startDate;
 
 							if(vendor === "HuaweiRouter"){
-								//console.log("entro "+idx +" name: "+name);
+
 								if(metrics === "health"){
 									drawElementsPerformanceGraph.drawChartHealth(name);
 								}else if(metrics === "cpu"){
@@ -418,7 +423,9 @@
 								}else if(metrics === "memoryProc"){
 									drawElementsPerformanceGraph.drawChartMemHuawei(name);								
 								}else if(metrics === "utilisation"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil");								
+								}else if(metrics === "utilisationavgbps"){
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits");								
 								}else if(metrics === "errorsdiscards"){
 									$("#msgNoDisponible").empty();
 									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");								
@@ -439,7 +446,9 @@
 								}else if(metrics === "memoryProc"){
 									drawElementsPerformanceGraph.drawChartMemoryProc(name);								
 								}else if(metrics === "utilisation"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource);								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil");								
+								}else if(metrics === "utilisationavgbps"){
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits");								
 								}else if(metrics === "errorsdiscards"){
 									drawElementsPerformanceGraph.drawInterfaceErrors(name, idResource);								
 								}else if(metrics === "pktshc"){
