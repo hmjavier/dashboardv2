@@ -586,8 +586,8 @@ var cnocConnector = {
                                         onclick: function() { 
                                         	drawElementsPerformance.subtitlePerformance = "";
                                         	drawElementsPerformance.dataChartPerformance.length = 0;
-                                        	drawElementsPerformance.subtitlePerformance = "Interfaz Average: ";
-                                        	drawElementsPerformance.drawInterfaceUtil(); 
+                                        	drawElementsPerformance.subtitlePerformance = "Interface Average: ";
+                                        	drawElementsPerformance.drawInterfaceUtil("autil"); 
                                         }
                                     },{
                                         text: 'PKTS_HC',
@@ -596,6 +596,14 @@ var cnocConnector = {
                                         	drawElementsPerformance.dataChartPerformance.length = 0;
                                         	drawElementsPerformance.subtitlePerformance = "Pkts HC: ";
                                         	drawElementsPerformance.drawInterfacePkts(); 
+                                        }
+                                    },{
+                                        text: 'abits Util',
+                                        onclick: function() { 
+                                        	drawElementsPerformance.subtitlePerformance = "";
+                                        	drawElementsPerformance.dataChartPerformance.length = 0;
+                                        	drawElementsPerformance.subtitlePerformance = "Interface bits: ";
+                                        	drawElementsPerformance.drawInterfaceUtil("abits"); 
                                         }
                                     }                            
                                 ]

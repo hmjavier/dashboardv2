@@ -125,6 +125,7 @@ var drawElementsPerformance = {
 				tree += "</ul></li>";
 				tree += "</ul></li></ul>";
 				tree += "<ul>";
+				
 			}else{
 				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
 				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
@@ -231,7 +232,7 @@ var drawElementsPerformance = {
 				}				
 				drawElementsPerformance.idResourceInterfaz = idResource;
 
-				drawElementsPerformance.drawInterfaceUtil();
+				drawElementsPerformance.drawInterfaceUtil("autil");
 			});
 			
 			$( ".intfChartQos" ).click(function() {
@@ -250,7 +251,6 @@ var drawElementsPerformance = {
 				}
 				
 				drawElementsPerformance.subtitlePerformance = "QOS: "+tmp[0]+ " -- " +tmp[1]+"</br>"+$(this).text();
-				//console.log(drawElementsPerformance.subtitlePerformance);
 				drawElementsPerformance.idResourceInterfaz = idResource;				
 				drawElementsPerformance.drawInterfaceQos(classQos);
 				
@@ -348,14 +348,20 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
 			
-		},drawInterfaceUtil: function(){		
+		},drawInterfaceUtil: function(unidad){		
 			drawElementsPerformance.chartIdPerformance = "4";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.subtitlePerformance += drawElementsPerformance.intfNodePerformance;
-			drawElementsPerformance.metricUnit = "% Avg Util ";
-			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type": "autil","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformance.nmis};
+			
+			if(unidad==="autil"){
+				drawElementsPerformance.metricUnit = "% Avg Util ";
+			}else if(unidad==="abits"){
+				drawElementsPerformance.metricUnit = "Avg bps ";
+			}
+			
+			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type":"'+unidad+'","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformance.nmis};
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, autil, "containerChartPerformance", "autil", null, true);
 
 		},drawInterfaceErrors: function(){
@@ -481,7 +487,7 @@ var drawElementsPerformance = {
 			}else if(drawElementsPerformance.chartIdPerformance === "3"){
 				drawElementsPerformance.drawChartMemoryProc();
 			}else if(drawElementsPerformance.chartIdPerformance === "4"){
-				drawElementsPerformance.drawInterfaceUtil();
+				drawElementsPerformance.drawInterfaceUtil("autil");
 			}else if(drawElementsPerformance.chartIdPerformance === "5"){
 				drawElementsPerformance.drawInterfaceErrors();
 			}else if(drawElementsPerformance.chartIdPerformance === "6"){

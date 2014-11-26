@@ -84,13 +84,17 @@ var drawElementsPerformanceGraph = {
 
 			var MemoryProc = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"mem-proc","node":"'+name+'","translation":"","resource":"nodehealth","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, MemoryProc, drawElementsPerformanceGraph.containerChart, "MemoryProc", "#0C66ED", false, name);
-		},drawInterfaceUtil: function(name, idResourceInterfaz){		
+		},drawInterfaceUtil: function(name, idResourceInterfaz, unidad){		
 			
 			drawElementsPerformanceGraph.chartIdPerformance = "4";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.metricUnit = "";
-			drawElementsPerformanceGraph.metricUnit = "% Avg Util ";
-			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type": "autil","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformanceGraph.nmis};
+			if(unidad==="autil"){
+				drawElementsPerformanceGraph.metricUnit = "% Avg Util ";
+			}else if(unidad==="abits"){
+				drawElementsPerformanceGraph.metricUnit = "Avg bps ";
+			}
+			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type": "'+unidad+'","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformanceGraph.nmis};
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, autil, drawElementsPerformanceGraph.containerChart, "autil", null, false, name);
 			
 		},drawInterfaceErrors: function(name, idResourceInterfaz){
@@ -124,7 +128,8 @@ var drawElementsPerformanceGraph = {
 			drawElementsPerformanceGraph.chartIdPerformance = "7";
 			drawElementsPerformanceGraph.metricUnit = "";
 			
-			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			//var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"QualityOfServiceStat","index_graph_type": "QualityOfServiceStat","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qos, drawElementsPerformanceGraph.containerChart, "qos",null, true, name);
 
 			
@@ -220,7 +225,7 @@ var drawElementsPerformanceGraph = {
 			
 			
 		},drawInterfacesNodes:function(datos){
-			//console.log(datos);
+			
 			$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
 			try{
 				if (datos.results.datum.length > 1) {
@@ -272,6 +277,8 @@ var drawElementsPerformanceGraph = {
 	        });
 
  			$( "#cmbNodesPerformanceInterfazC" ).unmask();
+ 			
+ 			
 		},refreshChart:function(){
 			
 			var startDate = ((new Date().getTime()).toString()).substring(0,10)-86400;
