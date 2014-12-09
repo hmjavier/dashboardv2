@@ -381,22 +381,27 @@
 
 						var idNum = 0;
 						for(var idx=0; idx<nodes.length; idx++){
+
 							var tmp = "";
 							var name = "";
 							var nmis = "";
 							var idResource ="";
 							var vendor = "";
+							var referencia = "";
 							
 							if(metrics === "utilisation" || metrics === "qos" || metrics === "errorsdiscards" || metrics === "pktshc" || metrics === "utilisationavgbps"){
 								tmp = nodes[idx].split("|");
 								name = tmp[0];
 								idResource = tmp[1];
-								nmis = tmp[2];								
+								nmis = tmp[2];		
+								referencia = tmp[3];
+								vendor = tmp[4];
 							}else{
 								tmp = nodes[idx].split("|");
 								name = tmp[0];
 								nmis = tmp[1];
 								vendor = tmp[2];
+								referencia = tmp[3];
 							}
 							
 							if(metrics === "cpu" && (name.indexOf("_UPS") > 0)){
@@ -412,7 +417,6 @@
 							drawElementsPerformanceGraph.startDate = startDate;
 
 							if(vendor === "HuaweiRouter"){
-
 								if(metrics === "health"){
 									drawElementsPerformanceGraph.drawChartHealth(name);
 								}else if(metrics === "cpu"){
@@ -423,9 +427,9 @@
 								}else if(metrics === "memoryProc"){
 									drawElementsPerformanceGraph.drawChartMemHuawei(name);								
 								}else if(metrics === "utilisation"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil");								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil", referencia);								
 								}else if(metrics === "utilisationavgbps"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits");								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits", referencia);								
 								}else if(metrics === "errorsdiscards"){
 									$("#msgNoDisponible").empty();
 									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");								
@@ -433,8 +437,8 @@
 									$("#msgNoDisponible").empty();
 									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");			
 								}else if(metrics === "qos"){
-									$("#msgNoDisponible").empty();
-									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");			
+
+									drawElementsPerformanceGraph.drawInterfaceQosHuawei(name, idResource, referencia);			
 								}
 							}else{
 								if(metrics === "health"){
@@ -446,41 +450,15 @@
 								}else if(metrics === "memoryProc"){
 									drawElementsPerformanceGraph.drawChartMemoryProc(name);								
 								}else if(metrics === "utilisation"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil");								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "autil", referencia);								
 								}else if(metrics === "utilisationavgbps"){
-									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits");								
+									drawElementsPerformanceGraph.drawInterfaceUtil(name, idResource, "abits", referencia);								
 								}else if(metrics === "errorsdiscards"){
 									drawElementsPerformanceGraph.drawInterfaceErrors(name, idResource);								
 								}else if(metrics === "pktshc"){
 									drawElementsPerformanceGraph.drawInterfacePkts(name, idResource);								
 								}else if(metrics === "qos"){
-									
-									drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
-									/*var flag = false;
-									cnocConnector.invokeMashup(cnocConnector.service1, {
-										"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/",
-										"ip":nmis
-									},function(data){							
-										for(var x=0; x<data.length; x++){
-											flag = false;
-											if(data[x].name==="cbqos-in"){
-												console.log(name+"Con entrada");
-												flag = true;												
-											}
-										}
-									}, null, null);
-									
-									if(flag){
-										
-										drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
-										
-										drawElementsPerformanceGraph.containerChartIn = "containerChartPerformance-"+idNum+"1";
-										drawElementsPerformanceGraph.drawInterfaceQosIn(name, idResource);
-
-									}else{
-										drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);
-									}*/
-																	
+									drawElementsPerformanceGraph.drawInterfaceQos(name, idResource);																	
 								}
 							}
 							
@@ -511,8 +489,6 @@
 				themeChanges(filename, false);			
 				Highcharts.setOptions(Highcharts.themeW);
 				drawElementsPerformance.refreshChart();
-				//stylesMap = null;
-				//drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
 			
 			$(".themeB").click(function(event){
@@ -520,12 +496,7 @@
 				themeChanges(filename,true);				
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElementsPerformance.refreshChart();
-				//drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
-
-			/*var refresh = setInterval(function(){
-				drawElementsPerformance.refreshChart();
-			},cnocConnector.refresh);*/
 	});
 	</script>
 

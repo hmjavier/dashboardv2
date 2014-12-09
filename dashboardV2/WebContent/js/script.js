@@ -134,7 +134,7 @@ function generateMenu(){
         			
         			$(".menuCnoc").append(general);
         		}else if(value === "perf=false"){
-            			var general = "<li><a href='maintest.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+            			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
             			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
             			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
             			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";

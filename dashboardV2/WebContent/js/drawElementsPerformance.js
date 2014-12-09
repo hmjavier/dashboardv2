@@ -109,7 +109,7 @@ var drawElementsPerformance = {
 			});
 			
 		},selectInterfaz : function(datos, selector, opt) {
-						
+									
 			$("#treeContainerInterfaz").empty();			
 			
 			$("#treeContainerInterfaz").append("<div class='tree' id='treeNodeDetailInterfaz'>");
@@ -125,7 +125,60 @@ var drawElementsPerformance = {
 				tree += "</ul></li>";
 				tree += "</ul></li></ul>";
 				tree += "<ul>";
+
+				endpoint = "http://"+drawElementsPerformance.nmis+"/omk/opCharts/nodes/"+drawElementsPerformance.nodePerformance+"/resources/QualityOfServiceStat/indicies.json";
 				
+				cnocConnector.invokeMashup(cnocConnector.service1, {
+					"endpoint" : endpoint,
+					"ip":drawElementsPerformance.nmis
+				},function(datos){					
+
+					tree = "<ul>";
+					
+					tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i>QOS</span><ul>";
+					
+					for(var i=0; i<datos.results.datum.length; i++){
+						var name = datos.results.datum[i].tokens[0].toString();
+						
+						if(name.indexOf("mark") < 0){
+							var tmpId = (datos.results.datum[i].value).split(".");
+							if(tmpId[2] === "1"){
+								name = name +" - inbound";
+							}else if(tmpId[2] === "2"){
+								name = name +" - outbound";
+							}
+
+							tree+= "<li class='qosHuawei' id="+datos.results.datum[i].value.toString()+"><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>"+name+"</a></i></span>";
+						}						
+					}
+					tree += "</ul></li>";
+					
+					tree += "</ul>";
+					
+					
+					$("#treeNodeDetailInterfaz").append(tree);
+					
+					cnocConnector.drawTree();
+					
+					
+					$( ".qosHuawei" ).click(function() {
+
+						drawElementsPerformance.subtitlePerformance = "";								
+						drawElementsPerformance.idResourceInterfaz = "";
+						var idResourceInterfaz = "";		
+						
+						try{
+							idResourceInterfaz =  $(this).attr( 'id' );
+							drawElementsPerformance.subtitlePerformance = $(this).text(); 
+						}catch(e){
+							console.log(e);
+							drawElementsPerformance.intfNodePerformance = $(this).text();
+						}				
+						drawElementsPerformance.drawInterfaceQosHuawei(idResourceInterfaz);
+					});
+					
+					
+				}, "", "");
 			}else{
 				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
 				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
@@ -183,7 +236,7 @@ var drawElementsPerformance = {
 			
 			$("#treeNodeDetailInterfaz").append(tree);
 			
-			cnocConnector.drawTree();
+			//cnocConnector.drawTree();
 			
 			/************************************************************************/
 			/* funciones para equipos tipo Huawei*/
@@ -388,9 +441,7 @@ var drawElementsPerformance = {
 		
 		},drawInterfaceQos: function(classQos){
 			drawElementsPerformance.chartIdPerformance = "7";
-			//drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
-			//drawElementsPerformance.subtitlePerformance = classQos;
 			drawElementsPerformance.metricUnit = "Avg Bits Per Second";
 			var DropByteOut = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};			
 			var PrePolicyByteOut = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"PrePolicyByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};
@@ -406,6 +457,13 @@ var drawElementsPerformance = {
 				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByteIn, "containerChartPerformance", "PrePolicyByte-In","#33297A");
 			}
 
+		},drawInterfaceQosHuawei: function(idResourceInterfaz){
+			drawElementsPerformance.chartIdPerformance = "";
+			drawElementsPerformance.metricUnit = "AVG Bytes.";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"QualityOfServiceStat","index_graph_type": "QualityOfServiceStat","resource_index": "'+idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformance.nmis};
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, qos, "containerChartPerformance", "QosHuawei",null, true);
+			
 		},drawChartCPUHuawei: function(){
 			drawElementsPerformance.chartIdPerformance = "8";
 			drawElementsPerformance.subtitlePerformance = "";
@@ -451,7 +509,7 @@ var drawElementsPerformance = {
 	   			success: function(response) {	   				
 
 	   				var dataChart = "";
-	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH"){	   					
+	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"){	   					
 	   					var json = response.replyData.data;
 	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 	   					for(var idx=0; idx<json.length; idx++){
@@ -499,182 +557,4 @@ var drawElementsPerformance = {
 			}
 			
 		}		
-		/*,drawChartPerformanceMemory: function(container, divTable){
-		console.log("uno");
-		$("#"+container).append("<div id='"+divTable+"' class='placeholder' style='height: 200px;'></div>");
-		
-		var MemoryFreeIO = {"jsonRequest":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"nodehealth","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"MemoryFreeIO"}}}'};
-		var MemoryFreePROC = {"jsonRequest":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"nodehealth","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"MemoryFreePROC"}}}'};
-		var MemoryUsedIO = {"jsonRequest":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"nodehealth","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"MemoryUsedIO"}}}'};
-		var MemoryUsedPROC = {"jsonRequest":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"nodehealth","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"MemoryUsedPROC"}}}'};
-		
-		//this.drawChartsP(cnocConnector.service1, MemoryFreeIO, divTable, "MemoryFreeIO");
-		this.drawChartsP(cnocConnector.service1, MemoryFreePROC, divTable, "MemoryFreePROC");
-		//this.drawChartsP(cnocConnector.service1, MemoryUsedIO, divTable, "MemoryUsedIO");
-		this.drawChartsP(cnocConnector.service1, MemoryUsedPROC, divTable, "MemoryUsedPROC");
-		
-	},drawChartsP: function(url, params, divTable, labelMetric){
-		console.log("dos");
-
-		$(".placeholder").bind("plothover", function (event, pos, item) {
-			$("#x").text(pos.x);
-			$("#y").text(pos.y.toFixed(2));
-			
-			if (item) {
-				if (previousPoint != item.dataIndex) {
-					previousPoint = item.dataIndex;
-
-					$("#tooltip").remove();
-					var x = item.datapoint[0],
-					y = item.datapoint[1].toFixed(2);
-					showTooltip(item.pageX, item.pageY, new Date((x/1000) * 1000) + " = " + y);	
-				}			
-			} else {
-				$("#tooltip").remove();
-				previousPoint = null;
-			}
-		});
-		
-		function onDataReceived(series) {
-			console.log("tres");
-			drawElementsPerformance.dataChartMemory.push(series);
-           	$.plot("#"+divTable, drawElementsPerformance.dataChartMemory,options_plot);
-       	}
-		
-		$.ajax({
-	   			type : 'GET',
-	   			dataType : 'jsonp',
-	   			url : url,
-	   			data : params,
-	   			error : function(jqXHR, textStatus, errorThrown) {
-	   				console.log("cuatro");
-	   				console.log(jqXHR);
-	   			},
-	   			//success : onDataReceived
-	   			success: function(response) {
-	   				console.log(response);
-	   				var dataChart = {label:labelMetric, data: response.replyData.data[0].data};
-	   				onDataReceived(dataChart);
-	   			}
-	   		});
-	},drawPerformancexxxxx: function(datos, container, divTable){
-		
-		console.log(datos);
-		
-		$("#"+container).append("<div id='"+divTable+"' class='placeholder' style='height: 200px;'></div>");
-		
-		/*
-
-		$("#"+container).append("<p id='choices' style='float:right; width:135px;'></p>");
-		
-		
-		
-		var datasets = {
-				"usa": {
-					label: "USA",
-					data: [[1988, 483994], [1989, 479060], [1990, 457648], [1991, 401949], [1992, 424705], [1993, 402375], [1994, 377867], [1995, 357382], [1996, 337946], [1997, 336185], [1998, 328611], [1999, 329421], [2000, 342172], [2001, 344932], [2002, 387303], [2003, 440813], [2004, 480451], [2005, 504638], [2006, 528692]]
-				},        
-				"russia": {
-					label: "Russia",
-					data: [[1988, 218000], [1989, 203000], [1990, 171000], [1992, 42500], [1993, 37600], [1994, 36600], [1995, 21700], [1996, 19200], [1997, 21300], [1998, 13600], [1999, 14000], [2000, 19100], [2001, 21300], [2002, 23600], [2003, 25100], [2004, 26100], [2005, 31100], [2006, 34700]]
-				},
-				"uk": {
-					label: "UK",
-					data: [[1988, 62982], [1989, 62027], [1990, 60696], [1991, 62348], [1992, 58560], [1993, 56393], [1994, 54579], [1995, 50818], [1996, 50554], [1997, 48276], [1998, 47691], [1999, 47529], [2000, 47778], [2001, 48760], [2002, 50949], [2003, 57452], [2004, 60234], [2005, 60076], [2006, 59213]]
-				},
-				"germany": {
-					label: "Germany",
-					data: [[1988, 55627], [1989, 55475], [1990, 58464], [1991, 55134], [1992, 52436], [1993, 47139], [1994, 43962], [1995, 43238], [1996, 42395], [1997, 40854], [1998, 40993], [1999, 41822], [2000, 41147], [2001, 40474], [2002, 40604], [2003, 40044], [2004, 38816], [2005, 38060], [2006, 36984]]
-				},
-				"denmark": {
-					label: "Denmark",
-					data: [[1988, 3813], [1989, 3719], [1990, 3722], [1991, 3789], [1992, 3720], [1993, 3730], [1994, 3636], [1995, 3598], [1996, 3610], [1997, 3655], [1998, 3695], [1999, 3673], [2000, 3553], [2001, 3774], [2002, 3728], [2003, 3618], [2004, 3638], [2005, 3467], [2006, 3770]]
-				},
-				"sweden": {
-					label: "Sweden",
-					data: [[1988, 6402], [1989, 6474], [1990, 6605], [1991, 6209], [1992, 6035], [1993, 6020], [1994, 6000], [1995, 6018], [1996, 3958], [1997, 5780], [1998, 5954], [1999, 6178], [2000, 6411], [2001, 5993], [2002, 5833], [2003, 5791], [2004, 5450], [2005, 5521], [2006, 5271]]
-				},
-				"norway": {
-					label: "Norway",
-					data: [[1988, 4382], [1989, 4498], [1990, 4535], [1991, 4398], [1992, 4766], [1993, 4441], [1994, 4670], [1995, 4217], [1996, 4275], [1997, 4203], [1998, 4482], [1999, 4506], [2000, 4358], [2001, 4385], [2002, 5269], [2003, 5066], [2004, 5194], [2005, 4887], [2006, 4891]]
-				}
-			};
-
-			// hard-code color indices to prevent them from shifting as
-			// countries are turned on/off
-
-			var i = 0;
-			$.each(datasets, function(key, val) {	
-				val.color = i;
-				++i;
-			});
-
-			// insert checkboxes 
-			var choiceContainer = $("#choices");
-			$.each(datasets, function(key, val) {
-				choiceContainer.append("<br/><input type='checkbox' name='" + key +
-					"' checked='checked' id='id" + key + "'></input>" +
-					"<label for='id" + key + "'>"
-					+ val.label + "</label>");
-			});
-
-			choiceContainer.find("input").click(plotAccordingToChoices);
-
-			function plotAccordingToChoices() {
-
-				var data = [];
-
-				choiceContainer.find("input:checked").each(function () {
-					var key = $(this).attr("name");
-					if (key && datasets[key]) {
-						data.push(datasets[key]);
-					}
-				});
-
-				if (data.length > 0) {
-					$.plot("#"+divTable, data,options_plot);
-				}
-			}
-
-			plotAccordingToChoices();*/
-		
-		/*
-		var d1 = [];
-		for (var i = 0; i < 14; i += 0.5) {
-			d1.push([i, Math.sin(i)]);
-		}
-
-		var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-
-		// A null signifies separate line segments
-
-		var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
-
-		*/
-		/*
-		$(".placeholder").bind("plothover", function (event, pos, item) {
-			$("#x").text(pos.x);
-			$("#y").text(pos.y.toFixed(2));
-			
-			if (item) {
-				if (previousPoint != item.dataIndex) {
-					previousPoint = item.dataIndex;
-
-					$("#tooltip").remove();
-					var x = item.datapoint[0],
-					y = item.datapoint[1].toFixed(2);
-					showTooltip(item.pageX, item.pageY, new Date((x/1000) * 1000) + " = " + y);	
-				}
-			
-			} else {
-				$("#tooltip").remove();
-				previousPoint = null;
-			}
-		});
-		
-		$.plot("#"+divTable, [{
-			label:"MemoryFreePROC",
-			data: datos.replyData.data[0].data
-		}],options_plot);
-	}*/
 };

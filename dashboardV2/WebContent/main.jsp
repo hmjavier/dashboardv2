@@ -628,6 +628,8 @@
 				}
 			});
 			
+			$( '#ipAccountingNS' ).hide();
+			
 			$('#ipAccountingNS').click(function(e) {				
 				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
 					bootbox.alert("Please select node in Node List");
