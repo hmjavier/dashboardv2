@@ -231,15 +231,11 @@ var cnocConnector = {
 				var nTds = $('td', dTable.$('tr.row_selected'));
 				var node = $(nTds[0]).text();
 				var id = $(nTds[0]).attr('rel');	
-				console.log(nTds);
-				console.log(id);
-				console.log(node);
 				
 				cnocConnector.nodeGlobal = id;
 				drawElementsSct.nodeSctGlobal = node;
 				var idAp = node.split("_");
-				console.log("idAp");
-				console.log(idAp);
+				
 				drawElementsSct.dataChartSct.length = 0;
 				drawElementsSct.subtitleChartSct = "Node Name: "+node;
 				cnocConnector.invokeMashup(cnocConnector.service4, {"id":id},drawElementsSct.drawInterfazTree, "", "");					
@@ -468,12 +464,8 @@ var cnocConnector = {
 				enabled : false
 			},
 
-			title : null,/*{
-				style : {
-					fontWeight : 'bold',
-					fontSize : '10px'
-				}
-			},*/
+			title : null,
+			
 			tooltip : {
 				formatter : function() {
 					var s;
@@ -502,17 +494,7 @@ var cnocConnector = {
 						}
 					}
 				}
-			},/*legend: {
-				layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: 0,
-                y: 50,
-                //floating: true,
-                borderWidth: 1,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
-                shadow: true
-			 },*/
+			},
 			series : [ {
 				type : type,
 				name : nameChart,
@@ -565,11 +547,9 @@ var cnocConnector = {
                 {
                     customButton:
                     {
-                        //x: -600,
                     	enabled: otherMetrics,
                         symbol: 'url(http://cdn1.iconfinder.com/data/icons/fatcow/16/chart_bar.png)',
                         text: 'Metrics',
-                        //x: -100,
                         symbolFill: '#B5C9DF',
                         hoverSymbolFill: '#779ABF',
                         menuItems: [
@@ -724,14 +704,10 @@ var cnocConnector = {
                                 ]
                     }
                 }
-            },/*tooltip: {
-                crosshairs: true,
-                shared: true
-            },*/
+            },
 	        tooltip: {
 	            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 	            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-	                //'<td style="padding:0"><b>{point.y:.1f} Bytes</b></td></tr>',
 	            	'<td style="padding:0"><b>{point.y} '+unidad+'</b></td></tr>',
 	            footerFormat: '</table>',
 	            shared: true,
@@ -795,7 +771,6 @@ var cnocConnector = {
 	},drawChartFilterSct: function(type, container, dataChart, categorias, title, subtitle){
 		var optChart = {
 				chart: {
-		            //type: 'column'
 					type: type,
 					renderTo : container,
 					plotBackgroundColor : null,
@@ -822,7 +797,6 @@ var cnocConnector = {
 		        tooltip: {
 		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 		            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-		                //'<td style="padding:0"><b>{point.y:.1f} Bytes</b></td></tr>',
 		            	'<td style="padding:0"><b>{point.y} Bytes</b></td></tr>',
 		            footerFormat: '</table>',
 		            shared: true,
@@ -847,7 +821,7 @@ var cnocConnector = {
 		        series: dataChart
 		};
 
-		console.log(optChart);
+
 			return optChart;
 	},drawSelect : function(datos, container, module) {
 
@@ -966,11 +940,14 @@ var cnocConnector = {
             					cnocConnector.invokeMashup(cnocConnector.service3, {
             						"name" : name
             					},function(datos){
+            						
             						var vendor = datos.records.record.nodemodel;
             						drawElementsPerformance.vendor = vendor;
+            						
+            						var endpoint = "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json";
 
             						cnocConnector.invokeMashup(cnocConnector.service1, {
-            							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+            							"endpoint" : endpoint,
             							"ip":nmis
             						},drawElementsPerformance.selectInterfaz, "SelectInterfaz", "cmbInterfazP");
             						
@@ -997,11 +974,11 @@ var cnocConnector = {
         });
 		$( "#nodeResources").unmask();
 		
-	},drawTree: function(idTree){
+	},drawTree: function(){
 		drawElementsPerformance.idResourceInterfaz = "";
 		$('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
 		$('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Collapse this branch').on('click', function (e) {
-			//alert($(this).text());
+
 			var parentLi = ($(this).text()).trim();
 			
 			if(parentLi === "Performance" || parentLi === "Interface" || parentLi === "QOS" || parentLi === "Memory" || parentLi === "Battery" || parentLi === "Voltage" || (parentLi.indexOf("_RT") > 0) || (parentLi.indexOf("_UPS") > 0)){
@@ -1015,13 +992,7 @@ var cnocConnector = {
 		    		$(this).attr('title', 'Collapse this branch').find(' > i').addClass('glyphicon glyphicon-minus').removeClass('glyphicon glyphicon-plus');
 		        }
 		        e.stopPropagation();
-			}else{				
-				/*drawElementsPerformance.dataChartPerformance.length = 0;
-				var tmp = $(this).text().split("--");
-				alert("arbol: "+tmp[2]);
-				drawElementsPerformance.idResourceInterfaz = (tmp[2]).trim();
-				drawElementsPerformance.drawInterfaceUtil();*/
-			}
+			}else{}
 
 	    });
 	},drawSelectNodePerformanceGraph:function(datos, container, module){
@@ -1068,15 +1039,24 @@ var cnocConnector = {
 		drawElementsPerformanceGraph.dataChartInterface.length = 0;
 		
 			$('option:selected', $('#SelectNode')).each(function() {
+
 	        	var data = $(this).val().split("|");
 				var name = data[0].toUpperCase();
 				var nmis = data[1];
+				var vendor = data[2];
 				drawElementsPerformanceGraph.nmis = nmis;
 				
+				if(vendor === "HuaweiRouter" && metric === "qos"){
 					cnocConnector.invokeMashup(cnocConnector.service1, {
-					"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
-					"ip":nmis
-				},drawElementsPerformanceGraph.drawInterfacesNodes, "SelectInterfaz", "cmbInterfazP");
+						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/QualityOfServiceStat/indicies.json",
+						"ip":nmis
+					},drawElementsPerformanceGraph.drawInterfacesQosHuawei, "SelectInterfaz", "cmbInterfazP");
+				}else{
+					cnocConnector.invokeMashup(cnocConnector.service1, {
+						"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/cbqos-out/indicies.json",
+						"ip":nmis
+					},drawElementsPerformanceGraph.drawInterfacesNodes, "SelectInterfaz", "cmbInterfazP");
+				}
 
 	        });
 	},drawTreeSct: function(idTree){
