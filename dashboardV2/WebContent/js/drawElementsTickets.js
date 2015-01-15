@@ -237,49 +237,47 @@ var drawElementsTickets = {
 						$( button ).removeAttr("disabled");
 						
 					} else {
-						$.ajax({
-							url: cnocConnector.service2,
-							type: 'POST',
-							dataType: 'json',
-							chache: false,
-							data: data,
-							success: function(data) {
-								if (data == '' || data == null) { 
+						
+						cnocConnector.invokeMashup(
+								cnocConnector.service2,
+								data,
+								function (result) {
+									if (result == '' || result == null) { 
+										
+										$( title ).removeAttr("disabled");
+										$( description ).removeAttr("disabled");
+										$( contactPerson ).removeAttr("disabled");
+										$( contactMail ).removeAttr("disabled");
 									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-								
-									$( sd ).val("ERROR");
-									$( im ).val("ERROR");
-									$( message ).val("No information Retrived.");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-									
-								} else {
-									
-									$( title ).removeAttr("disabled");
-									$( description ).removeAttr("disabled");
-									$( contactPerson ).removeAttr("disabled");
-									$( contactMail ).removeAttr("disabled");
-									
-									$( sd ).val(data.incidentId);
-									$( sd ).removeAttr("disabled");
-									
-									$( im ).val(data.number);
-									$( im ).removeAttr("disabled");
-									
-									$( message ).val(data.message);
-									$( message ).removeAttr("disabled");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-								}
-							},
-							error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
-						});
+										$( sd ).val("ERROR");
+										$( im ).val("ERROR");
+										$( message ).val("No information Retrived.");
+										
+										$( button ).text("Open Ticket");
+										$( button ).removeAttr("disabled");
+										
+									} else {
+										
+										$( title ).removeAttr("disabled");
+										$( description ).removeAttr("disabled");
+										$( contactPerson ).removeAttr("disabled");
+										$( contactMail ).removeAttr("disabled");
+										
+										$( sd ).val(result.incidentId);
+										$( sd ).removeAttr("disabled");
+										
+										$( im ).val(result.number);
+										$( im ).removeAttr("disabled");
+										
+										$( message ).val(result.message);
+										$( message ).removeAttr("disabled");
+										
+										$( button ).text("Open Ticket");
+										$( button ).removeAttr("disabled");
+									}
+								},
+								"",
+								"");
 					}
 					
 					return false;
@@ -328,35 +326,32 @@ var drawElementsTickets = {
 						$( button ).removeAttr("disabled");
 					
 					} else {
-						$.ajax({
-							url: cnocConnector.service4,
-							type: 'POST',
-							dataType: 'json',
-							chache: false,
-							data: data,
-							success: function(data) {
-								if (data == '' || data == null) {
-									$( updateAction).removeAttr("disabled");
+						cnocConnector.invokeMashup(
+								cnocConnector.service4,
+								data,
+								function (result) {
+									if (result == '' || result == null) {
+										$( updateAction).removeAttr("disabled");
+										
+										$( message ).val("ERROR: No information Retrived.");
+										$( message ).removeAttr("disabled");
+										
+										$( button ).text("Open Ticket");
+										$( button ).removeAttr("disabled");
 									
-									$( message ).val("ERROR: No information Retrived.");
-									$( message ).removeAttr("disabled");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
-								
-								} else {
-									$( updateAction).removeAttr("disabled");
-									
-									$( message ).val(data.message);
-									$( message ).removeAttr("disabled");
-									
-									$( button ).text("Open Ticket");
-									$( button ).removeAttr("disabled");
+									} else {
+										$( updateAction).removeAttr("disabled");
+										
+										$( message ).val(result.message);
+										$( message ).removeAttr("disabled");
+										
+										$( button ).text("Open Ticket");
+										$( button ).removeAttr("disabled");
 
-								}
-							},
-							error: function(data, status, er) { bootbox.alert("ERROR: " + er); }
-						});
+									}
+								},
+								"",
+								"");
 					}
 					
 					return false;

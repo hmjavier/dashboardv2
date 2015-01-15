@@ -129,53 +129,49 @@ function buildGFC (data, container) {
 		
 		cc = $( "#cc_ES" ).val() + operationEmail;
 		
-		$.ajax({
-			url: cnocConnector.service2,
-			type: 'POST',
-			dataType: 'json',
-			chache: false,
-			data: {
-				report_type: reportType,
-				to: $( "#to_ES" ).val(),
-				cc: cc,
-				asunto: $( "#asunto_ES" ).val(),
-				comentarios: $( "#comentarios_ES" ).val(),
-				cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
-				sitio: $( "#sitio_ES" ).val(),
-				caso_cnoc: $( "#caso_cnoc_ES" ).val(),
-				atiende: $( "#atiende_ES" ).val(),
-				telefono: $( "#telefono_ES" ).val(),
-				falla_reportada: $( "#falla_reportada_ES" ).val(),
-				prioridad: $( "#prioridad_ES" ).val(),
-				referencia: $( "#referencia_ES" ).val(),
-				ancho_banda: $( "#ancho_banda_ES" ).val(),
-				tecnologia: $( "#tecnologia_ES" ).val(),
-				pe: $( "#pe_ES" ).val(),
-				time_velocidad: $( "#time_velocidad_ES" ).val(),
-				vrf: $( "#vrf_ES" ).val(),
-				ip_wan: $( "#ip_wan_ES" ).val(),
-				tipo_ruteo: $( "#tipo_ruteo_ES" ).val(),
-				encapsulamiento: $( "#encapsulamiento_ES" ).val(),
-				calidad_servicio: $( "#calidad_servicio_ES" ).val(),
-				perfil: $( "#perfil_ES" ).val(),
-				troubleshooting: $( "#troubleshooting_ES" ).val()
-			},
-			success: function(data) {
-				if (data == '' || data == null) { 
-					bootbox.alert("No information Retrived");
-					//alert("No information Retrived");
-				} 
-				else {
-					if (data == true) {
-						bootbox.alert("Report sent");
-						//alert("Report sent");
-					} else {
-						bootbox.alert("Can't send report");
-						//alert("Can't send report");
+		cnocConnector.invokeMashup(
+				cnocConnector.service2,
+				{
+					report_type: reportType,
+					to: $( "#to_ES" ).val(),
+					cc: cc,
+					asunto: $( "#asunto_ES" ).val(),
+					comentarios: $( "#comentarios_ES" ).val(),
+					cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
+					sitio: $( "#sitio_ES" ).val(),
+					caso_cnoc: $( "#caso_cnoc_ES" ).val(),
+					atiende: $( "#atiende_ES" ).val(),
+					telefono: $( "#telefono_ES" ).val(),
+					falla_reportada: $( "#falla_reportada_ES" ).val(),
+					prioridad: $( "#prioridad_ES" ).val(),
+					referencia: $( "#referencia_ES" ).val(),
+					ancho_banda: $( "#ancho_banda_ES" ).val(),
+					tecnologia: $( "#tecnologia_ES" ).val(),
+					pe: $( "#pe_ES" ).val(),
+					time_velocidad: $( "#time_velocidad_ES" ).val(),
+					vrf: $( "#vrf_ES" ).val(),
+					ip_wan: $( "#ip_wan_ES" ).val(),
+					tipo_ruteo: $( "#tipo_ruteo_ES" ).val(),
+					encapsulamiento: $( "#encapsulamiento_ES" ).val(),
+					calidad_servicio: $( "#calidad_servicio_ES" ).val(),
+					perfil: $( "#perfil_ES" ).val(),
+					troubleshooting: $( "#troubleshooting_ES" ).val()
+				},
+				function (result) {
+					if (result == '' || result == null) { 
+						bootbox.alert("No information Retrived");
+						//alert("No information Retrived");
+					}else {
+						if (result == true) {
+							bootbox.alert("Report sent");
+							//alert("Report sent");
+						} else {
+							bootbox.alert("Can't send report");
+							//alert("Can't send report");
+						}
 					}
-				}
-			},
-			error: function(data, status, er) { bootbox.alert(er); }
-		});
+				},
+				"",
+				"");
 	});
 }

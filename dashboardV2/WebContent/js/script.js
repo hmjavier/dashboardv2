@@ -129,10 +129,11 @@ function generateMenu(){
         		}else if(value === "sct=true"){
         			/*var sct = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
         			$(".menuCnoc").append(sct);*/
-        			var general = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			var general = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> SCT MORELOS </a></li>";
         			general +="<li><a href='incidentssct.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
         			
         			$(".menuCnoc").append(general);
+        			
         		}else if(value === "perf=false"){
             			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
             			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
@@ -141,47 +142,131 @@ function generateMenu(){
             			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
             			
             			$(".menuCnoc").append(general);
+        		}else if(value === "pwd=true"){
+        			
+        			var esclations = "<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>";
+        			$(".menuCnoc").append(esclations);
+        			
         		}
         	});
         	
         	/** Load NMIS URLs **/
 			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {
+				
+				try {
+					if(datos.records.record.length>1) {
+						$.each(datos.records.record, function(k, v) {
+							if (v.url_nmis != '') {
+								if (v.url_nmis.indexOf("\n") > 0) {
+									var nmis = v.url_nmis.split("\n");
+									$.each(nmis, function(m, n){
+										var string = n.split("/");
+										var text = string[2].split(".");
+										var tmp = text[0].split("-");
+										
+										var name = "";
+										if(tmp[0] === "opflow"){
+											name =  (tmp[0]+ "-" +tmp[1]+ "-" + tmp[2]).toUpperCase();
+										}else{
+											name =  (tmp[1]+ " " + tmp[2]).toUpperCase();
+										}
+										//var name = (tmp[1] + " " + tmp[2]).toUpperCase();
+										
+										$( '#mpls_select_main' ).append(
+												'<option value="' + n + '">' + name + '</option>'
+											);
+									});
+								} else {
+									$( '#mpls_select_main' ).append(
+											'<option value="' + v.url_nmis + '">' + v.dept_name + '</option>'
+										);
+								}							
+							}
+							if (v.url_nmis_internet != ''){
+								/*$( '#internet_select_main' ).append(
+									'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
+								);*/
+								
+								if (v.url_nmis_internet.indexOf("\n") > 0) {
+									var nmis = v.url_nmis_internet.split("\n");
+									$.each(nmis, function(m, n){
+										
+										var string = n.split("/");
+										var name = "";
+										
+										if(string[2].indexOf("opflow")>-1){
+											var tmp =  string[2].split(".");
+											name = tmp[0].toUpperCase();
+										}else{
+											name = "IDE - " + v.dept_name.toUpperCase();
+										}	
 
-				if(datos.records.record.length>1) {
-					$.each(datos.records.record, function(k, v) {
-						if (v.url_nmis != '') {
-							if (v.url_nmis.indexOf("\n") > 0) {
-								var nmis = v.url_nmis.split("\n");
+										$( '#internet_select_main' ).append(
+												'<option value="' + n + '">' + name+ '</option>'
+											);
+									});
+								} else {
+									$( '#internet_select_main' ).append(
+											'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
+										);
+								}
+								
+							}
+								
+						});
+						
+						$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
+							if ( $(this).val() != '' ) {
+								window.open( $(this).val() );
+							}
+						});
+						
+						$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+							if ( $(this).val() != '' ) {
+								window.open( $(this).val() );
+							}					
+						});
+					} else {					
+
+						if (datos.records.record.url_nmis != '') {
+							if (datos.records.record.url_nmis.indexOf("\n") > 0) {
+								var nmis = datos.records.record.url_nmis.split("\n");
 								$.each(nmis, function(m, n){
 									var string = n.split("/");
 									var text = string[2].split(".");
 									var tmp = text[0].split("-");
-									
 									var name = "";
 									if(tmp[0] === "opflow"){
 										name =  (tmp[0]+ "-" +tmp[1]+ "-" + tmp[2]).toUpperCase();
 									}else{
 										name =  (tmp[1]+ " " + tmp[2]).toUpperCase();
 									}
-									//var name = (tmp[1] + " " + tmp[2]).toUpperCase();
-									
+
 									$( '#mpls_select_main' ).append(
 											'<option value="' + n + '">' + name + '</option>'
 										);
 								});
 							} else {
 								$( '#mpls_select_main' ).append(
-										'<option value="' + v.url_nmis + '">' + v.dept_name + '</option>'
+										'<option value="' + datos.records.record.url_nmis + '">' + datos.records.record.dept_name + '</option>'
 									);
-							}							
-						}
-						if (v.url_nmis_internet != ''){
-							/*$( '#internet_select_main' ).append(
-								'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
-							);*/
+							}
 							
-							if (v.url_nmis_internet.indexOf("\n") > 0) {
-								var nmis = v.url_nmis_internet.split("\n");
+							$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
+								if ( $(this).val() != '' ) {
+									window.open( $(this).val() );
+								}
+							});
+						
+						} else {
+							$( '#mpls_main' ).empty();						
+						}
+
+						if (datos.records.record.url_nmis_internet != '') {
+							var url_nmis = datos.records.record;
+							console.log(url_nmis.url_nmis_internet);
+							if (url_nmis.url_nmis_internet.indexOf("\n") > 0) {
+								var nmis = url_nmis.url_nmis_internet.split("\n");
 								$.each(nmis, function(m, n){
 									
 									var string = n.split("/");
@@ -191,7 +276,7 @@ function generateMenu(){
 										var tmp =  string[2].split(".");
 										name = tmp[0].toUpperCase();
 									}else{
-										name = "IDE - " + v.dept_name.toUpperCase();
+										name = "IDE - " + url_nmis.dept_name.toUpperCase();
 									}	
 
 									$( '#internet_select_main' ).append(
@@ -200,108 +285,35 @@ function generateMenu(){
 								});
 							} else {
 								$( '#internet_select_main' ).append(
-										'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
+										'<option value="' + url_nmis.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
 									);
 							}
 							
-						}
+							$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+								if ( $(this).val() != '' ) {
+									window.open( $(this).val() );
+								}					
+							});
 							
-					});
-					
-					$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
-						if ( $(this).val() != '' ) {
-							window.open( $(this).val() );
-						}
-					});
-					
-					$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
-						if ( $(this).val() != '' ) {
-							window.open( $(this).val() );
-						}					
-					});
-				} else {
-
-					if (datos.records.record.url_nmis != '') {
-						if (datos.records.record.url_nmis.indexOf("\n") > 0) {
-							var nmis = datos.records.record.url_nmis.split("\n");
-							$.each(nmis, function(m, n){
-								var string = n.split("/");
-								var text = string[2].split(".");
-								var tmp = text[0].split("-");
-								var name = "";
-								if(tmp[0] === "opflow"){
-									name =  (tmp[0]+ "-" +tmp[1]+ "-" + tmp[2]).toUpperCase();
-								}else{
-									name =  (tmp[1]+ " " + tmp[2]).toUpperCase();
-								}
-
-								$( '#mpls_select_main' ).append(
-										'<option value="' + n + '">' + name + '</option>'
-									);
-							});
+							/*$( '#internet_select_main' ).append(
+								'<option value="' + datos.records.record.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
+							);
+							
+							$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+								if ( $(this).val() != '' ) {
+									window.open( $(this).val() );
+								}					
+							});*/
+						
 						} else {
-							$( '#mpls_select_main' ).append(
-									'<option value="' + datos.records.record.url_nmis + '">' + datos.records.record.dept_name + '</option>'
-								);
+							$( '#internet_main' ).empty();
 						}
-						
-						$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
-							if ( $(this).val() != '' ) {
-								window.open( $(this).val() );
-							}
-						});
-					
-					} else {
-						$( '#mpls_main' ).empty();						
 					}
-
-					if (datos.records.record.url_nmis_internet != '') {
-						var url_nmis = datos.records.record;
-						console.log(url_nmis.url_nmis_internet);
-						if (url_nmis.url_nmis_internet.indexOf("\n") > 0) {
-							var nmis = url_nmis.url_nmis_internet.split("\n");
-							$.each(nmis, function(m, n){
-								
-								var string = n.split("/");
-								var name = "";
-								
-								if(string[2].indexOf("opflow")>-1){
-									var tmp =  string[2].split(".");
-									name = tmp[0].toUpperCase();
-								}else{
-									name = "IDE - " + url_nmis.dept_name.toUpperCase();
-								}	
-
-								$( '#internet_select_main' ).append(
-										'<option value="' + n + '">' + name+ '</option>'
-									);
-							});
-						} else {
-							$( '#internet_select_main' ).append(
-									'<option value="' + url_nmis.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
-								);
-						}
-						
-						$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
-							if ( $(this).val() != '' ) {
-								window.open( $(this).val() );
-							}					
-						});
-						
-						/*$( '#internet_select_main' ).append(
-							'<option value="' + datos.records.record.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
-						);
-						
-						$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
-							if ( $(this).val() != '' ) {
-								window.open( $(this).val() );
-							}					
-						});*/
-					
-					} else {
-						$( '#internet_main' ).empty();
-					}
-				}				
+				} catch(err) {
+					$( '#mpls_select_main' ).hide();
+					$( '#internet_main' ).hide();
+					console.log(err);
+				}
 
 			},"","");
         }

@@ -50,37 +50,30 @@ function build_SMS_CLIE(data, container) {
 		
 		cc = $( "#cc_ES" ).val() + operationEmail;
 		
-		$.ajax({
-			url: cnocConnector.service2,
-			type: 'POST',
-			dataType: 'json',
-			chache: false,
-			data: {
-				report_type: reportType,
-				to: $( "#to_ES" ).val(),
-				cc: cc,
-				asunto: $( "#asunto_ES" ).val(),
-				sms: $( "#troubleshooting_ES" ).val()
-			},
-			success: function(data) {
-				if (data == '' || data == null) { 
-					bootbox.alert("No information Retrived");
-					//alert("No information Retrived");
-				} 
-				else {
-					if (data == true) {
-						bootbox.alert("Report sent");
-						//alert("Report sent");
-					} else {
-						bootbox.alert("Can't send report");
-						//alert("Can't send report");
+		cnocConnector.invokeMashup(
+				cnocConnector.service2,
+				{
+					report_type: reportType,
+					to: $( "#to_ES" ).val(),
+					cc: cc,
+					asunto: $( "#asunto_ES" ).val(),
+					sms: $( "#troubleshooting_ES" ).val()
+				},
+				function (result) {
+					if (result == '' || result == null) { 
+						bootbox.alert("No information Retrived");
+						//alert("No information Retrived");
+					}else {
+						if (result == true) {
+							bootbox.alert("Report sent");
+							//alert("Report sent");
+						} else {
+							bootbox.alert("Can't send report");
+							//alert("Can't send report");
+						}
 					}
-				}
-			},
-			error: function(data, status, er) { 
-				bootbox.alert(er);
-				//alert(er);
-			}
-		});
+				},
+				"",
+				"");
 	});
 }

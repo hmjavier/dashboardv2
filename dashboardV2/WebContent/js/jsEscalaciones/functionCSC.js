@@ -167,66 +167,57 @@ function buildCSC (data, container) {
 		
 		cc = $( "#cc_ES" ).val() + operationEmail;
 		
-//		console.log(cnocConnector.service2);
-		
-		$.ajax({
-			url: cnocConnector.service2,
-			type: 'POST',
-			dataType: 'json',
-			chache: false,
-			data: {
-				report_type: reportType,
-				to: $( "#to_ES" ).val(),
-				cc: cc,
-				asunto: $( "#asunto_ES" ).val(),
-				cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
-				sitio: $( "#sitio_ES" ).val(),
-				caso_cnoc: $( "#caso_cnoc_ES" ).val(),
-				site_id: $( "#site_id_ES" ).val(),
-				chasis_serial_no: $( "#chasis_serial_no_ES" ).val(),
-				chasis_part_no: $( "#chasis_part_no_ES" ).val(),
-				atiende: $( "#atiende_ES" ).val(),
-				telefono: $( "#telefono_ES" ).val(),
-				troubleshooting: $( "#troubleshooting_ES" ).val(),
-				severidad: $( "#severidad_ES" ).val(),
-				prioridad: $( "#prioridad_ES" ).val(),
-				falla_reportada: $( "#falla_reportada_ES" ).val(),
-				diagnostico: $( "#diagnostico_ES" ).val(),
-				equipo: $( "#equipo_ES" ).val(),
-				contacto: $( "#contacto_ES" ).val(),
-				telefono_contacto: $( "#telefono_contacto_ES" ).val(),
-				calle: $( "#calle_ES" ).val(),
-				num_exterior: $( "#num_exterior_ES" ).val(),
-				num_interior: $( "#num_interior_ES" ).val(),
-				colonia: $( "#colonia_ES" ).val(),
-				estado: $( "#estado_ES" ).val(),
-				ciudad: $( "#ciudad_ES" ).val(),
-				delegacion_municipio: $( "#del_mun_ES" ).val(),
-				codigo_postal: $( "#codigo_ES" ).val(),
-				pais: $( "#pais_ES" ).val(),
-				horario_sitio: $( "#horario_ES" ).val(),
-				recomendaciones: $( "#recomendaciones_ES" ).val(),
-				observaciones: $( "#observaciones_ES" ).val()
-			},
-			success: function(data) {
-				if (data == '' || data == null) { 
-					bootbox.alert("No information Retrived");
-					//alert("No information Retrived");
-				} 
-				else {
-					if (data == true) {
-						bootbox.alert("Report sent");
-						//alert("Report sent");
-					} else {
-						bootbox.alert("Can't send report");
-						//alert("Can't send report");
+		cnocConnector.invokeMashup(
+				cnocConnector.service2,
+				{
+					report_type: reportType,
+					to: $( "#to_ES" ).val(),
+					cc: cc,
+					asunto: $( "#asunto_ES" ).val(),
+					cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
+					sitio: $( "#sitio_ES" ).val(),
+					caso_cnoc: $( "#caso_cnoc_ES" ).val(),
+					site_id: $( "#site_id_ES" ).val(),
+					chasis_serial_no: $( "#chasis_serial_no_ES" ).val(),
+					chasis_part_no: $( "#chasis_part_no_ES" ).val(),
+					atiende: $( "#atiende_ES" ).val(),
+					telefono: $( "#telefono_ES" ).val(),
+					troubleshooting: $( "#troubleshooting_ES" ).val(),
+					severidad: $( "#severidad_ES" ).val(),
+					prioridad: $( "#prioridad_ES" ).val(),
+					falla_reportada: $( "#falla_reportada_ES" ).val(),
+					diagnostico: $( "#diagnostico_ES" ).val(),
+					equipo: $( "#equipo_ES" ).val(),
+					contacto: $( "#contacto_ES" ).val(),
+					telefono_contacto: $( "#telefono_contacto_ES" ).val(),
+					calle: $( "#calle_ES" ).val(),
+					num_exterior: $( "#num_exterior_ES" ).val(),
+					num_interior: $( "#num_interior_ES" ).val(),
+					colonia: $( "#colonia_ES" ).val(),
+					estado: $( "#estado_ES" ).val(),
+					ciudad: $( "#ciudad_ES" ).val(),
+					delegacion_municipio: $( "#del_mun_ES" ).val(),
+					codigo_postal: $( "#codigo_ES" ).val(),
+					pais: $( "#pais_ES" ).val(),
+					horario_sitio: $( "#horario_ES" ).val(),
+					recomendaciones: $( "#recomendaciones_ES" ).val(),
+					observaciones: $( "#observaciones_ES" ).val()
+				},
+				function (result) {
+					if (result == '' || result == null) { 
+						bootbox.alert("No information Retrived");
+						//alert("No information Retrived");
+					}else {
+						if (result == true) {
+							bootbox.alert("Report sent");
+							//alert("Report sent");
+						} else {
+							bootbox.alert("Can't send report");
+							//alert("Can't send report");
+						}
 					}
-				}
-			},
-			error: function(data, status, er) { 
-				bootbox.alert(er);
-				//alert(er);
-			}
-		});
+				},
+				"",
+				"");
 	});
 }

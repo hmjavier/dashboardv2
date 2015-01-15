@@ -72,6 +72,11 @@
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tDetailI"></div>
 	</div>
+	<div id="journal" style="visibility: hidden; height:0px; width: 1000px;">
+		<div>
+			<pre id="updates"></pre>
+		</div>
+	</div>
     <div id="wrapper">
 		
 		<!-- MENU  -->		
@@ -203,7 +208,7 @@
 				    <div class="col-lg-6">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents Activities</h3>
+						    	<h3 class="panel-title">Incident Activities</h3>
 						  	</div>
 				    		<div id="activitiesIncidents" class="listIncidents"></div>		    		
 				    	</div>		
@@ -214,7 +219,7 @@
 				    <div class="col-lg-5">
 				      	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Detail Node</h3>
+						    <h3 class="panel-title">Node Details</h3>
 						  </div>
 						  <div class="panel-body">		  	
 							<!-- <div id="listNodeDetail"></div>-->

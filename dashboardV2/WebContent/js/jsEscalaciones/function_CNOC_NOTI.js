@@ -80,7 +80,7 @@ function build_CNOC_NOTI (data, container) {
 					    '<td><input type="text" id="caso_cnoc_ES" class="form-control" maxlength="130" value="' + data.records.record.caso_cnoc + '" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
-					    '<td>������REA QUE NOTIFICA:</td>' + 
+					    '<td>&Aacute;REA QUE NOTIFICA:</td>' + 
 					    '<td><input type="text" id="area_ES" class="form-control" maxlength="130" value="CNOC" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
@@ -114,49 +114,43 @@ function build_CNOC_NOTI (data, container) {
 		
 		cc = $( "#cc_ES" ).val() + operationEmail;
 		
-		$.ajax({
-			url: cnocConnector.service2,
-			type: 'POST',
-			dataType: 'json',
-			chache: false,
-			data: {
-				report_type: reportType,
-				to: $( "#to_ES" ).val(),
-				cc: cc,
-				asunto: $( "#asunto_ES" ).val(),
-				impacto_falla: ($( "#impacto_falla_ES" ).val() == null || $( "#impacto_falla_ES" ).val() === '') ? 
-						'' : $( "#impacto_falla_ES" ).val().join( ", " ),
-				cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
-				sitio: $( "#sitio_ES" ).val(),
-				prioridad: $( "#prioridad_ES" ).val(),
-				referencia: $( "#referencia_ES" ).val(),
-				afectacion: $('input:radio[name=afectacion_ES]:checked').val(),
-				falla_reportada: $( "#falla_reportada_ES" ).val(),
-				numero_reporte: $( "#numero_reporte_ES" ).val(),
-				caso_cnoc: $( "#caso_cnoc_ES" ).val(),
-				area: $( "#area_ES" ).val(),				
-				atiende: $( "#atiende_ES" ).val(),
-				telefono: $( "#telefono_ES" ).val(),
-				troubleshooting: $( "#troubleshooting_ES" ).val()
-			},
-			success: function(data) {
-				if (data == '' || data == null) { 
-					bootbox.alert("No information Retrived");
-					//alert("No information Retrived");
-				}else {
-					if (data == true) {
-						bootbox.alert("Report sent");
-						//alert("Report sent");
-					} else {
-						bootbox.alert("Can't send report");
-						//alert("Can't send report");
+		cnocConnector.invokeMashup(
+				cnocConnector.service2,
+				{
+					report_type: reportType,
+					to: $( "#to_ES" ).val(),
+					cc: cc,
+					asunto: $( "#asunto_ES" ).val(),
+					impacto_falla: ($( "#impacto_falla_ES" ).val() == null || $( "#impacto_falla_ES" ).val() === '') ? 
+							'' : $( "#impacto_falla_ES" ).val().join( ", " ),
+					cliente_cnoc: $( "#cliente_cnoc_ES" ).val(),
+					sitio: $( "#sitio_ES" ).val(),
+					prioridad: $( "#prioridad_ES" ).val(),
+					referencia: $( "#referencia_ES" ).val(),
+					afectacion: $('input:radio[name=afectacion_ES]:checked').val(),
+					falla_reportada: $( "#falla_reportada_ES" ).val(),
+					numero_reporte: $( "#numero_reporte_ES" ).val(),
+					caso_cnoc: $( "#caso_cnoc_ES" ).val(),
+					area: $( "#area_ES" ).val(),				
+					atiende: $( "#atiende_ES" ).val(),
+					telefono: $( "#telefono_ES" ).val(),
+					troubleshooting: $( "#troubleshooting_ES" ).val()
+				},
+				function (result) {
+					if (result == '' || result == null) { 
+						bootbox.alert("No information Retrived");
+						//alert("No information Retrived");
+					}else {
+						if (result == true) {
+							bootbox.alert("Report sent");
+							//alert("Report sent");
+						} else {
+							bootbox.alert("Can't send report");
+							//alert("Can't send report");
+						}
 					}
-				}
-			},
-			error: function(data, status, er) { 
-				bootbox.alert(er);
-				//alert(er);
-			}
-		});
+				},
+				"",
+				"");
 	});
 }

@@ -178,56 +178,49 @@ function build_ESCALACION_CASE (data, container) {
 			
 			cc = $( "#cc_ES" ).val() + operationEmail;
 			
-			$.ajax({
-				url: cnocConnector.service2,
-				type: 'POST',
-				dataType: 'json',
-				chache: false,
-				data: {
-					report_type: reportType,
-					to: $( "#to_ES" ).val(),
-					cc: cc,
-					asunto: data.records.record.cliente_cnoc + ' | ESCALACION A NIVEL ' + $( '#asunto_area_ES' ).val() + 
-					' | SISA ' + $( '#asunto_incidente_sisa_ES' ).val(),
-					incidente_sisa: $( '#incidente_sisa_ES' ).val(),
-					caso_cnoc: $( '#caso_cnoc_ES' ).val(),
-					sla: $('input:radio[name=radio_sla_ES]:checked').val() == 'SI' ?
-							$('input:radio[name=radio_sla_ES]:checked').val() + ', ' + $( '#sla_ES' ).val() : 'NO',
-					impacto_falla: $( '#impacto_falla_ES' ).val(),
-					falla_reportada: $( '#falla_reportada_ES' ).val(),
-					ciudad: $( '#ciudad_ES' ).val(),
-					hora_inicio: $( '#hora_inicio_ES' ).val(),
-					tiempo_afectacion: $( '#tiempo_afectacion_ES' ).val(),
-					case_reportado: $( '#case_reportado_ES' ).val(),
-					status: $( '#status_ES' ).val(),
-					cliente_cnoc: $( '#cliente_cnoc_ES' ).val(),
-					referencia: $( '#referencia_ES' ).val(),
-					troubleshooting: $( '#troubleshooting_ES' ).val(),
-					sitio: $('input:radio[name=radio_sitio_ES]:checked').val() == 'SI' ?
-						$('input:radio[name=radio_sitio_ES]:checked').val() + ', ' + $( '#sitio_ES' ).val() : 'NO',
-					area: $( '#area_ES' ).val(),
-					atiende: $( "#atiende_ES" ).val()
-				},
-				success: function(data) {
-					if (data == '' || data == null) { 
-						bootbox.alert("No information Retrived");
-						//alert("No information Retrived");
-					} 
-					else {
-						if (data == true) {
-							bootbox.alert("Report sent");
-							//alert("Report sent");
-						} else {
-							bootbox.alert("Can't send report");
-							//alert("Can't send report");
+			cnocConnector.invokeMashup(
+					cnocConnector.service2,
+					{
+						report_type: reportType,
+						to: $( "#to_ES" ).val(),
+						cc: cc,
+						asunto: data.records.record.cliente_cnoc + ' | ESCALACION A NIVEL ' + $( '#asunto_area_ES' ).val() + 
+						' | SISA ' + $( '#asunto_incidente_sisa_ES' ).val(),
+						incidente_sisa: $( '#incidente_sisa_ES' ).val(),
+						caso_cnoc: $( '#caso_cnoc_ES' ).val(),
+						sla: $('input:radio[name=radio_sla_ES]:checked').val() == 'SI' ?
+								$('input:radio[name=radio_sla_ES]:checked').val() + ', ' + $( '#sla_ES' ).val() : 'NO',
+						impacto_falla: $( '#impacto_falla_ES' ).val(),
+						falla_reportada: $( '#falla_reportada_ES' ).val(),
+						ciudad: $( '#ciudad_ES' ).val(),
+						hora_inicio: $( '#hora_inicio_ES' ).val(),
+						tiempo_afectacion: $( '#tiempo_afectacion_ES' ).val(),
+						case_reportado: $( '#case_reportado_ES' ).val(),
+						status: $( '#status_ES' ).val(),
+						cliente_cnoc: $( '#cliente_cnoc_ES' ).val(),
+						referencia: $( '#referencia_ES' ).val(),
+						troubleshooting: $( '#troubleshooting_ES' ).val(),
+						sitio: $('input:radio[name=radio_sitio_ES]:checked').val() == 'SI' ?
+							$('input:radio[name=radio_sitio_ES]:checked').val() + ', ' + $( '#sitio_ES' ).val() : 'NO',
+						area: $( '#area_ES' ).val(),
+						atiende: $( "#atiende_ES" ).val()
+					},
+					function (result) {
+						if (result == '' || result == null) { 
+							bootbox.alert("No information Retrived");
+							//alert("No information Retrived");
+						}else {
+							if (result == true) {
+								bootbox.alert("Report sent");
+								//alert("Report sent");
+							} else {
+								bootbox.alert("Can't send report");
+								//alert("Can't send report");
+							}
 						}
-					}
-				},
-				error: function(data, status, er) { 
-					bootbox.alert(er);
-					//alert(er);
-				}
-			});
+					},
+					"",
+					"");
 		}
 	});
 }

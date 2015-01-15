@@ -203,7 +203,7 @@
 				    <div class="col-lg-6">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents Activities</h3>
+						    	<h3 class="panel-title">Incident Activities</h3>
 						  	</div>
 				    		<div id="activitiesIncidents" class="listIncidents"></div>		    		
 				    	</div>		

@@ -278,7 +278,7 @@
 						</div>
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Resource</h3>
+						    <h3 class="panel-title">Node Resources</h3>
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
 						  	<a name="nodeResource"></a>
@@ -291,7 +291,7 @@
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Detail</h3>
+						    <h3 class="panel-title">Node Details</h3>
 						  </div>
 						  <div class="panel-body" style="font-size: 9px;">		  	
 							<!-- <div id="listNodeDetail"></div>-->

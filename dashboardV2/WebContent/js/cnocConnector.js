@@ -10,7 +10,7 @@ var cnocConnector = {
 	userName :'',
 	mainPage:'',
 	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {	
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -31,20 +31,8 @@ var cnocConnector = {
 							window.location = "/dashboard/index.html";
 						}
 					} catch (err) {
-						//console.log(invokeUrl);
-						$.ajax({
-							type : 'GET',
-							dataType : 'jsonp',
-							url : invokeUrl,
-							data : params,
-							error : function(jqXHR, textStatus, errorThrown) {
-								console.log(jqXHR);
-							},
-							success : function(response) {
-								callback(response, divcontainer, divelements);
-								$( "#" + divcontainer ).unmask();
-							}
-						});
+						callback(response, divcontainer, divelements);
+						$( "#" + divcontainer ).unmask();						
 					}
 				}
 			});
@@ -81,17 +69,8 @@ var cnocConnector = {
 							window.location = "/dashboard/index.html";
 						}
 					} catch (err) {
-						$.ajax({
-							type : 'GET',
-							dataType : 'jsonp',
-							url : invokeUrl,
-							data : params,
-							error : function(jqXHR, textStatus, errorThrown) { console.log(jqXHR); },
-							success: function(response){
-								callback(response, divcontainer,divelements);
-								$( "#" + divcontainer ).unmask();
-							}
-						});
+						callback(response, divcontainer,divelements);
+						$( "#" + divcontainer ).unmask();
 					}
 				}
 			});
@@ -366,6 +345,63 @@ var cnocConnector = {
 					
 					cnocConnector.invokeMashup(cnocConnector.service10, {"change_id" : id}, 
 							drawElements.gridChangeTasks, "tabsChangesTasks", "changesListTasks");
+				}
+			});
+		}
+		
+		if (divTable === "activitiesIncidentsI") {
+			
+			/* Add a click handler to the rows - this could be used as a callback */
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+				if ( $(this).hasClass('row_selected') ) {
+					$(this).removeClass('row_selected');		        
+				} 
+				else {
+					dTable.$('tr.row_selected').removeClass('row_selected');
+					$(this).addClass('row_selected');
+					
+//					var nTds = $('td', dTable.$('tr.row_selected'));
+//					var id = $(nTds[0]).text();					
+					
+					var descriptionArray = [];
+					var dateArray = [];
+					var journal = "";
+					
+					$.each( dTable.fnGetData(), function(i, row){
+						descriptionArray.push(row[1]);
+						dateArray.push(row[2]);
+					});
+					
+					descriptionArray.reverse();
+					dateArray.reverse();
+					
+					$.each(descriptionArray, function(k,v) {
+						if (descriptionArray[k] != '')
+							journal += dateArray[k] + '\r' + descriptionArray[k] + '\r' + '-----------------------------\r\r';
+					});					
+					
+					$( '#page-wrapper' ).mask("Waiting...");
+					
+					$( '#updates' ).text(journal);
+					
+					var modal = bootbox.dialog({
+						message: $("#journal").html(),
+						title: "Journal Updates ",
+						buttons: [{
+							label: "Close",
+							className: "btn btn-default",
+							callback: function() { }
+						}],
+						show: false,
+						onEscape: function() {
+							modal.modal("hide");
+						}
+					});
+					
+					$( '#page-wrapper' ).unmask();
+							
+					modal.modal("show");
+					
 				}
 			});
 		}

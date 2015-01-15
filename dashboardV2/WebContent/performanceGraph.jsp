@@ -138,7 +138,7 @@
 			        <div class="col-lg-12">   	
 				      	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Resource</h3>
+						    <h3 class="panel-title">Node Resources</h3>
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
 							<div class="row" style="padding-left: 15px;">
