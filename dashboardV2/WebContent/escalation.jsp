@@ -227,7 +227,7 @@
 				    		"formEscalation" // Div
 				    	);
 		 		} else 
-		 			console.log("no report known");
+		 			console.log("unknown report");
 			});
 
 			$( ".logout").click(function(event){	

@@ -9,8 +9,8 @@ var cnocConnector = {
 	incidents : '',
 	userName :'',
 	mainPage:'',
-	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
+	/*
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -32,7 +32,7 @@ var cnocConnector = {
 						}
 					} catch (err) {
 						callback(response, divcontainer, divelements);
-						$( "#" + divcontainer ).unmask();						
+						$( "#" + divcontainer ).unmask();
 					}
 				}
 			});
@@ -41,8 +41,8 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	/*
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) {
+	*/
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****/
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -78,12 +78,12 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
 		var dTable;
-		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG"){
+		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG" || divTable==="listTunelStateG"){
 			
 			var scrollY = "330";
 			if(divTable === "listNodesP"){
@@ -245,7 +245,7 @@ var cnocConnector = {
 
 				$(".form-control").val("");
 				cnocConnector.nodeGlobal = id;
-				cnocConnector.invokeMashup(cnocConnector.serviceI18, {"node" : id},drawElementsIncidents.drawGetModel, "listNodeDetail", "listNodeDetailI");
+				cnocConnector.invokeMashup(cnocConnector.serviceI18, {"node" : id, "codenet" : cnocConnector.codeNetGlobal},drawElementsIncidents.drawGetModel, "listNodeDetail", "listNodeDetailI");
 				cnocConnector.invokeMashup(cnocConnector.serviceI15, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsIncidents.detailIncidentsNode, "listIncidentsRelated", "listIncidentsRelatedI");
 				cnocConnector.invokeMashup(cnocConnector.serviceI16, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsIncidents.detailChangesNode, "listChangesRelated", "listChangesRelatedI");
 				cnocConnector.invokeMashup(cnocConnector.serviceI17, {"incident_id" : idIncident},drawElementsIncidents.activitiesIncidents, "activitiesIncidents", "activitiesIncidentsI");
@@ -312,10 +312,25 @@ var cnocConnector = {
 					$(".form-control").val("");
 					cnocConnector.nodeGlobal = id;
 					
-					/* GET DATA FOR TREE NODE RESOURCE */										
-					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : id},drawElementsGral.treeData, "", "");
+					/*** Office Depot Firewall ***
+					if (cnocConnector.nodeGlobal == 'OFFICE_DEPOT_MEX_DIVEO_FW01') {
+						$( '.chartFirewall' ).show();
+						cnocConnector.invokeMashup(
+							cnocConnector.service33,
+							{
+								"node" : cnocConnector.nodeGlobal
+							},
+							drawElementsGral.drawListTunnelStateVPN,
+							"listTunelStateVPN",
+							"listTunelStateG"
+						);
+					} else 
+						$( '.chartFirewall' ).hide();
+					*/
 					
-					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : id},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
+					/* GET DATA FOR TREE NODE RESOURCE */
+					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : id, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.treeData, "", "");
+					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : id, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
 
@@ -349,6 +364,7 @@ var cnocConnector = {
 			});
 		}
 		
+		/***** Journal Updates *****/
 		if (divTable === "activitiesIncidentsI") {
 			
 			/* Add a click handler to the rows - this could be used as a callback */
@@ -974,7 +990,8 @@ var cnocConnector = {
             				}else{
             					
             					cnocConnector.invokeMashup(cnocConnector.service3, {
-            						"name" : name
+            						"name" : name,
+            						"codenet" : cnocConnector.codeNetGlobal
             					},function(datos){
             						
             						var vendor = datos.records.record.nodemodel;

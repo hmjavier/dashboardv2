@@ -191,8 +191,6 @@ var drawElementsPerformance = {
 				tree += "<ul>";
 			}
 			
-			
-			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
 				if (datos.results.datum.length > 1) {

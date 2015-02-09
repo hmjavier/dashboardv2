@@ -75,7 +75,7 @@
 				<input type="text" id="messageIP" class="form-control" style="height: 30px;" placeholder="Message" disabled="disabled">
 			</div>
 		</div>
-	</div>	
+	</div>
     <div id="wrapper">
 		<%@ include file="menu.jsp" %> 
         <div id="page-wrapper">
@@ -431,6 +431,15 @@
 						  		<div id="containerChartPerformance"></div>
 						  	</div>
 				    	</div>
+				    	<div class="panel panel-primary chartFirewall">
+				    		<div class="panel-heading">
+						    	<h3 class="panel-title">Firewall</h3>
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="listTunelStateVPN"></a>
+						  		<div id="listTunelStateVPN"></div>
+						  	</div>
+				    	</div>
 					</div>
 				  </div>
 
@@ -523,6 +532,7 @@
 			    		cnocConnector.service30 = serviceG19;
 			    		cnocConnector.service31 = serviceG20;
 			    		cnocConnector.service32 = serviceG21;
+			    		cnocConnector.service33 = serviceG22;
 			    		
 			    }
 			});
@@ -596,7 +606,7 @@
 			
 			$('#pingNS').click(function(e) {
 				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
-					bootbox.alert("Please select node in Node List");
+					bootbox.alert("Please select node from Node List");
 				} else {
 					$( '#page-wrapper' ).mask("Waiting...");				
 					cnocConnector.invokeMashup(
@@ -613,7 +623,7 @@
 			
 			$('#tracepathNS').click(function(e) {
 				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
-					bootbox.alert("Please select node in Node List");
+					bootbox.alert("Please select node from Node List");
 				} else {
 					$( '#page-wrapper' ).mask("Waiting...");				
 					cnocConnector.invokeMashup(
@@ -632,7 +642,7 @@
 			
 			$('#ipAccountingNS').click(function(e) {				
 				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
-					bootbox.alert("Please select node in Node List");
+					bootbox.alert("Please select node from Node List");
 				} else {
 					var data = {
 							network_code : cnocConnector.codeNetGlobal,
@@ -683,6 +693,8 @@
 			var refresh = setInterval(function(){
 				drawElementsGral.init();
 			},300000);
+			
+			$( '.chartFirewall' ).hide();
 	});
 	</script>
 

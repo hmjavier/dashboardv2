@@ -504,8 +504,8 @@ var drawElementsIncidents = {
 			},drawGetModel: function(datos, container, divTable){
 				if(datos.records.record.model.toString() === "automatic"){
 					$("#msgPingOnly").hide();
-					cnocConnector.invokeMashup(cnocConnector.serviceI13, {"node" : datos.records.record.name.toString()},drawElementsIncidents.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
-					cnocConnector.invokeMashup(cnocConnector.serviceI14, {"node" : datos.records.record.name.toString()},drawElementsIncidents.drawGridInterface, "listInterfaces", "listInterfacesG");
+					cnocConnector.invokeMashup(cnocConnector.serviceI13, {"node" : datos.records.record.name.toString(), "codenet" : cnocConnector.codeNetGlobal},drawElementsIncidents.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
+					cnocConnector.invokeMashup(cnocConnector.serviceI14, {"node" : datos.records.record.name.toString(), "codenet" : cnocConnector.codeNetGlobal},drawElementsIncidents.drawGridInterface, "listInterfaces", "listInterfacesG");
 					
 				}else{
 					$("#msgPingOnly").show();

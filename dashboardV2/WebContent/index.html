@@ -123,6 +123,7 @@
 								contentType: "application/x-www-form-urlencoded"
 							}, {
 								onSuccess: function(response, responseHeaders) {
+									
 									var result = response;
 									module = response.aut.module;
 									codenets=response.aut.codenet;
@@ -148,6 +149,8 @@
 										onSuccess : function(response) {
 											if(codenets === "N000333") {
 												returnUrl = "/dashboard/mainsct.jsp";
+											} else if (ou === "PEXA-CUSTOM") {
+												returnUrl = "/dashboardPEX/main.jsp";
 											} else {
 												returnUrl = "/dashboard/main.jsp";
 											}

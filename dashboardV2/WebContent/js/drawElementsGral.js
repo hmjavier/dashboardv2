@@ -75,7 +75,6 @@ var drawElementsGral = {
 					//drawElementsGral.mapaGeneral(cnocConnector.codeNetGlobal);
 				},
 				success : function(response) {
-					console.log(response);
 					var tmp = "";
 					if(response.results){
 						tmp = response.results.international.toString();
@@ -86,7 +85,6 @@ var drawElementsGral = {
 					try{
 
 						if(tmp === "false" || flgNacional === true){
-							console.log("nacional");
 							$.each( response, function( key, val ) {
 								$.each( val, function( key, val ) {
 									var array = [];
@@ -198,7 +196,6 @@ var drawElementsGral = {
 						        } // Cierre FOR states
 						      }
 						}else if(tmp === "true"){
-							console.log("soy internacional");
 							var records = [];
 							$.each( response, function( key, val ) {																
 								$.each( val, function( key, val ) {
@@ -321,7 +318,6 @@ var drawElementsGral = {
 						            
 									if(codenet.indexOf('N')>=0){
 										google.maps.event.addListener(mapaNacional, 'click', function(){
-											console.log("ejecuto nacional");
 							            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true);
 							            });	
 									}
@@ -643,7 +639,7 @@ var drawElementsGral = {
 			chart = new Highcharts.Chart(optChart);
 			
 			
-	},drawListNodes: function (datos, container, divTable){
+	},drawListNodes: function (datos, container, divTable) {
 		jQuery("#" + container).empty();	
 		var tableT = "";
 		try {
@@ -859,8 +855,8 @@ var drawElementsGral = {
 		if(datos.records.record.model.toString() === "PingOnly"){
 			cnocConnector.invokeMashup(cnocConnector.service25, {"hostname" : datos.records.record.name.toString()},drawElementsGral.drawPingOnly, "msgPingOnly", "msgPingOnlyG");
 		}else{
-			cnocConnector.invokeMashup(cnocConnector.service19, {"node" : datos.records.record.name.toString()},drawElementsGral.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
-			cnocConnector.invokeMashup(cnocConnector.service21, {"node" : datos.records.record.name.toString()},drawElementsGral.drawGridInterface, "listInterfaces", "listInterfacesG");
+			cnocConnector.invokeMashup(cnocConnector.service19, {"node" : datos.records.record.name.toString(), "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawListNodeDetail, "listNodeDetail", "listNodeDetailG");
+			cnocConnector.invokeMashup(cnocConnector.service21, {"node" : datos.records.record.name.toString(), "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGridInterface, "listInterfaces", "listInterfacesG");
 		}
 		
 	},drawPingOnly:function(datos, container, divTable){
@@ -1176,7 +1172,8 @@ var drawElementsGral = {
 			}else{
 				
 				cnocConnector.invokeMashup(cnocConnector.service29, {
-					"name" : name
+					"name" : name,
+					"codenet" : cnocConnector.codeNetGlobal
 				},function(datos){
 					var vendor = datos.records.record.nodemodel;
 					drawElementsPerformance.vendor = vendor;
@@ -1202,5 +1199,53 @@ var drawElementsGral = {
 				
 			}
 		}			
+	}, drawListTunnelStateVPN: function (datos, container, divTable) {
+		jQuery("#" + container).empty();	
+		var tableT = "";
+		try {
+			if (datos.records.record.length > 1) {
+				for ( var i = 0; i < datos.records.record.length; i++) {
+					if(datos.records.record[i].opersense.toString() === "up") {
+						tableT += "<tr class='success'>" +
+									"<td>"+datos.records.record[i].id.toString()+"</td>" +
+									"<td>"+datos.records.record[i].vpnmonvpnname.toString()+"</td>" +
+									"<td>"+datos.records.record[i].opersense.toString()+"</td>" +
+								  "</tr>";
+					} else if(datos.records.record[i].opersense.toString() === "down") {
+						tableT += "<tr class='danger'>" +
+									"<td>"+datos.records.record[i].id.toString()+"</td>" +
+									"<td>"+datos.records.record[i].vpnmonvpnname.toString()+"</td>" +
+									"<td>"+datos.records.record[i].opersense.toString()+"</td>" +
+								  "</tr>";
+					}
+				}
+			} else {
+				if(datos.records.record.opersense.toString() === "up") {
+					tableT += "<tr class='success'>" +
+								"<td>"+datos.records.record.id.toString()+"</td>" +
+								"<td>"+datos.records.record.vpnmonvpnname.toString()+"</td>" +
+								"<td>"+datos.records.record.opersense.toString()+"</td>" +
+							  "</tr>";
+				} else if(datos.records.record.opersense.toString() === "down") {
+					tableT += "<tr class='danger'>" +
+								"<td>"+datos.records.record.id.toString()+"</td>" +
+								"<td>"+datos.records.record.vpnmonvpnname.toString()+"</td>" +
+								"<td>"+datos.records.record.opersense.toString()+"</td>" +
+							  "</tr>";
+				}
+			}
+		} catch (err) {
+			console.log(err);
+		};		
+		
+		var rowsHeaders = [ {
+			"sTitle" : "ID"
+		}, {
+			"sTitle" : "Name"
+		},{
+			"sTitle" : "Status"
+		} ];
+		
+		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 	}
 };

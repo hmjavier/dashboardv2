@@ -370,7 +370,6 @@
 				$("#changesGroups").show();
 				$("#changesListT").removeClass("col-lg-12");
 				$("#changesListT").addClass("col-lg-9");
-				console.log("entro a los grupos");
 				cnocConnector.invokeMashup(cnocConnector.service11,{"code_net":cnocConnector.codeNetGlobal},drawElements.chartGroups, "changesGroupsChart", "changesGroupsChartC");
 				
 			}

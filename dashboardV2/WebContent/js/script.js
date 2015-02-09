@@ -142,13 +142,13 @@ function generateMenu(){
             			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
             			
             			$(".menuCnoc").append(general);
-        		}else if(value === "pwd=true"){
+        		}/*else if(value === "pwd=true"){
         			
-        			var esclations = "<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>";
-        			$(".menuCnoc").append(esclations);
-        			
-        		}
+        			var esclations = ;
+        		}*/        		
         	});
+        	
+        	$(".menuCnoc").append("<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>");
         	
         	/** Load NMIS URLs **/
 			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {
