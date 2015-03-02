@@ -9,6 +9,9 @@ var cnocConnector = {
 	incidents : '',
 	userName :'',
 	mainPage:'',
+	nmisServer:'',
+	community1:'',
+	community2:'',
 	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV *****
 		$( "#" + divcontainer ).mask("Waiting...");
@@ -333,7 +336,62 @@ var cnocConnector = {
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : id, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
-
+					
+					/*** Validate if IP Accounting should be enabled ***/
+					cnocConnector.invokeMashup(
+							cnocConnector.service34,
+							{ "code_net" : cnocConnector.codeNetGlobal },
+							function (response) {
+								if (response.records.record == undefined)
+									$("#ipAccountingNS").hide();
+								else if (response.records.record.comunidad_1 != "" && response.records.record.comunidad_2 != "") { // If R/W Community 
+									
+									cnocConnector.community1 = response.records.record.comunidad_1;
+									cnocConnector.community2 = response.records.record.comunidad_2;
+									
+									cnocConnector.invokeMashup( // Validate if 'Cisco Router'
+											cnocConnector.service19,
+											{
+												"node" : id,
+												"codenet" : cnocConnector.codeNetGlobal
+											},
+											function (response) {
+												if (response.records.record.nodetype.toString() === 'router' && 
+														response.records.record.nodevendor.toString() === 'Cisco Systems')
+													$("#ipAccountingNS").show();
+												else
+													$("#ipAccountingNS").hide();
+											},
+											"ipAccountingNS",
+											""
+										);
+								} else if (response.records.record.comunidad_1 != "") { // Else Read Only
+									cnocConnector.community1 = response.records.record.comunidad_1;
+									cnocConnector.community2 = response.records.record.comunidad_2;
+									
+									cnocConnector.invokeMashup( // Validate if 'Cisco Router'
+											cnocConnector.service19,
+											{
+												"node" : id,
+												"codenet" : cnocConnector.codeNetGlobal
+											},
+											function (response) {
+												if (response.records.record.nodetype.toString() === 'router' && 
+														response.records.record.nodevendor.toString() === 'Cisco Systems')
+													$("#ipAccountingNS").show();
+												else
+													$("#ipAccountingNS").hide();
+											},
+											"ipAccountingNS",
+											""
+										);
+								} else {
+									$("#ipAccountingNS").hide();
+								}
+							},
+							"ipAccountingNS",
+							""
+						);
 			});
 		}
 		
@@ -456,6 +514,9 @@ var cnocConnector = {
 		            title: {
 		                text: null
 		            },
+		            credits : {
+						enabled : false
+					},
 		            xAxis: {
 		                categories: categorias,
 		                labels : {
@@ -515,9 +576,7 @@ var cnocConnector = {
 			credits : {
 				enabled : false
 			},
-
 			title : null,
-			
 			tooltip : {
 				formatter : function() {
 					var s;

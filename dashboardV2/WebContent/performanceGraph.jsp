@@ -157,6 +157,12 @@
 									</div>
 									<div class="radio">
 									  <label>
+									    <input type="radio" name="opciones" id="metrics" value="responsetime">
+									    Response Time
+									  </label>
+									</div>
+									<div class="radio">
+									  <label>
 									    <input type="radio" name="opciones" id="metrics" value="memoryIO">
 									    Memory IO
 									  </label>
@@ -421,6 +427,8 @@
 									drawElementsPerformanceGraph.drawChartHealth(name);
 								}else if(metrics === "cpu"){
 									drawElementsPerformanceGraph.drawChartCPUHuawei(name);	
+								}else if(metrics === "responsetime"){
+									drawElementsPerformanceGraph.drawChartResponseTime(name);
 								}else if(metrics === "memoryIO"){
 									$("#msgNoDisponible").empty();
 									$("#msgNoDisponible").append("<h1>Node Type: Huawei</h1>");	
@@ -445,6 +453,8 @@
 									drawElementsPerformanceGraph.drawChartHealth(name);
 								}else if(metrics === "cpu"){
 									drawElementsPerformanceGraph.drawChartCPU(name);	
+								}else if(metrics === "responsetime"){
+									drawElementsPerformanceGraph.drawChartResponseTime(name);
 								}else if(metrics === "memoryIO"){
 									drawElementsPerformanceGraph.drawChartMemoryIO(name);	
 								}else if(metrics === "memoryProc"){

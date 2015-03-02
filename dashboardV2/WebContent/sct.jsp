@@ -350,6 +350,7 @@
 			    		cnocConnector.service13 = serviceSCT12;
 			    		cnocConnector.service14 = serviceSCT13;
 			    		cnocConnector.service15 = serviceSCT14;
+			    		cnocConnector.service16 = serviceSCT15;			    		
 			    }
 			});
 			

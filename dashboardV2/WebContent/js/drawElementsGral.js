@@ -821,11 +821,6 @@ var drawElementsGral = {
 	},drawListNodeDetail: function(datos, container, divTable){
 		try {
 			
-			if(datos.records.record.name.toString().indexOf('_RT')>-1 && datos.records.record.nodevendor.toString().indexOf('Cisco')>-1)
-				$("#ipAccountingNS").show();
-			else
-				$("#ipAccountingNS").hide();
-			
 			$('#name').val(datos.records.record.name.toString());
 			$('#nodevendor').val(datos.records.record.nodevendor.toString());
 			$('#sysdescr').val(datos.records.record.sysdescr.toString());
@@ -1051,7 +1046,7 @@ var drawElementsGral = {
 				
 		modal.modal("show");
 		
-	},ipAccounting: function(data) {
+	},ipAccounting: function(data) {		
 		
 		modalIP = bootbox.dialog({
 			message: $("#ipAcc").html(),
@@ -1064,8 +1059,10 @@ var drawElementsGral = {
 					var button = modalIP.find( '.btnIP' );
 					var contactMail = modalIP.find( '#contactEmailIP' );
 					var message = modalIP.find( '#messageIP' );
+					var time = modalIP.find( '#timeIP' );
 					
-					data.contactMail = contactMail.val();					
+					data.contactMail = contactMail.val();
+					data.time = time.val();
 					
 					$( message ).attr("disabled", "disabled");
 					
@@ -1090,7 +1087,11 @@ var drawElementsGral = {
 								{
 									"network_code" : data.network_code,
 									"hostname" : data.hostname,
-									"emails" : data.contactMail
+									"nmisServer" : cnocConnector.nmisServer,
+									"community1" : cnocConnector.community1,
+									"community2" : cnocConnector.community2,
+									"emails" : data.contactMail,
+									"time" : data.time
 								},
 								drawElementsGral.ipEmail,
 								"commandNS",
@@ -1111,9 +1112,27 @@ var drawElementsGral = {
 		});
 
 		modalIP.modal("show");
+		var time = modalIP.find( '#timeIP' );
 		
-	}, ipEmail : function(data) {
-		console.log(data);
+		/*** Enable or disable clear IP Accounting table ***/
+		if(data.community2 === "" || data.community2== null) {
+			time.empty();
+			time.attr("disabled", "disabled");
+			time.append(
+					'<option value="0">No write community found</option>'					
+			);
+		} else {
+			time.removeAttr("disabled");
+			time.empty();
+			time.append(
+					'<option value="0">Do not clear IP Accounting</option>' +
+					'<option value="600000">Clear and wait 10 minutes</option>' +
+					'<option value="900000">Clear and wait 15 minutes</option>' +
+					'<option value="1200000">Clear and wait 20 minutes</option>'	
+			);
+		}
+		
+	}, ipEmail : function(data) {		
 		if (data == '' || data == null) {
 			
 			modalIP.find( '#contactEmailIP' ).removeAttr("disabled");
@@ -1147,6 +1166,7 @@ var drawElementsGral = {
 
 		var name = datos.records.record.name;
 		var nmis = datos.records.record.nmisserver;
+		cnocConnector.nmisServer = nmis; 
 		var model = datos.records.record.model;
 		drawElementsPerformance.qosIn = false;
 		

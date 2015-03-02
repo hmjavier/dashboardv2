@@ -14,7 +14,7 @@
     <title>:::Customer Network Operation Center (CNOC):::</title>
 	<link rel="icon" type="image/x-icon" href="cnoc.ico" />
 	<!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrapW.css">		
+	<link rel="stylesheet" type="text/css" href="css/bootstrapW.css">
 
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
@@ -68,11 +68,13 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
 				<input type="text" id="contactEmailIP" class="form-control" style="height: 30px;" placeholder="email@dominio.com;email2@dominio2.com;email3@dominio3.com;" required >
 			</div>
-		</div>
-		<div class="form-group">
+			<div class="input-group">
+				<select id="timeIP">
+				</select>
+			</div><br>
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
-				<input type="text" id="messageIP" class="form-control" style="height: 30px;" placeholder="Message" disabled="disabled">
+				<input type="text" id="messageIP" class="form-control" style="height: 30px;" placeholder="Message result" disabled="disabled">
 			</div>
 		</div>
 	</div>
@@ -265,10 +267,10 @@
 							    <span class="badge" id="pingNodeStatus"></span>
 							    <a href="#">Ping command</a>
 							  </li>
-							  <li class="commands list-group-item contadores" id="tracepathNS">
+							  <!-- <li class="commands list-group-item contadores" id="tracepathNS">
 							    <span class="badge" id="tracepathNodeStatus"></span>
 							    <a href="#">Tracepath command</a>
-							  </li>
+							  </li> -->
 							  <li class="commands list-group-item contadores" id="ipAccountingNS">
 							    <span class="badge" id="ipAccountingNodeStatus"></span>
 							    <a href="#">IP Accounting Report</a>
@@ -533,6 +535,7 @@
 			    		cnocConnector.service31 = serviceG20;
 			    		cnocConnector.service32 = serviceG21;
 			    		cnocConnector.service33 = serviceG22;
+			    		cnocConnector.service34 = serviceG23;			    		
 			    		
 			    }
 			});
@@ -613,7 +616,8 @@
 							cnocConnector.service30,
 							{
 								"network_code" : cnocConnector.codeNetGlobal,
-								"hostname" : cnocConnector.nodeGlobal
+								"hostname" : cnocConnector.nodeGlobal,
+								"nmisServer" : cnocConnector.nmisServer
 							},
 							drawElementsGral.command,
 							"commandNS",
@@ -630,7 +634,8 @@
 							cnocConnector.service31,
 							{
 								"network_code" : cnocConnector.codeNetGlobal,
-								"hostname" : cnocConnector.nodeGlobal
+								"hostname" : cnocConnector.nodeGlobal,
+								"nmisServer" : cnocConnector.nmisServer
 							},
 							drawElementsGral.command,
 							"commandNS",
@@ -640,17 +645,20 @@
 			
 			$( '#ipAccountingNS' ).hide();
 			
-			$('#ipAccountingNS').click(function(e) {				
+			$('#ipAccountingNS').click(function(e) {
 				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {
 					bootbox.alert("Please select node from Node List");
 				} else {
 					var data = {
 							network_code : cnocConnector.codeNetGlobal,
 							hostname : cnocConnector.nodeGlobal,
+							nmisServer : cnocConnector.nmisServer,
+							community1 : cnocConnector.community1,
+							community2 : cnocConnector.community2,
 							contactMail : null
 						};
 					drawElementsGral.ipAccounting(data);
-				}				
+				}
 			});
 			
 			$( ".nodeDetailView").click(function(event){	

@@ -52,8 +52,9 @@
 	
 	<!-- google maps -->
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>	
 	
-		<!-- jQuery Version 1.11.0 -->	
+	<!-- jQuery Version 1.11.0 -->	
 	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->

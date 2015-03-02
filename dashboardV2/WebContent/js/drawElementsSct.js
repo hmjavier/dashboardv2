@@ -20,22 +20,23 @@ var drawElementsSct = {
 			} else {
 				
 				this.builder(codeNet);
-				this.setMarkersMap();
+				//this.setMarkersMap();
 				//cnocConnector.invokeMashup(cnocConnector.service1, {},drawElementsSct.selectCustom, "SelectCustomer", "opt");
 
 			}
 
-		},builder: function(codenet){				
+		},builder: function(codenet){
 				
 			cnocConnector.invokeMashup(cnocConnector.service2, {"status" : ""},drawElementsSct.countStatus, "countAllSct", "countAllSctG");
 			cnocConnector.invokeMashup(cnocConnector.service2, {"status" : "1"},drawElementsSct.countStatus, "onlineSct", "onlineSctG");
 			cnocConnector.invokeMashup(cnocConnector.service2, {"status" : "2"},drawElementsSct.countStatus, "offline", "offlineG");
 			cnocConnector.invokeMashup(cnocConnector.service2, {"status" : "3"},drawElementsSct.countStatus, "invalid", "invalidG");
 			cnocConnector.invokeMashup(cnocConnector.service2, {"status" : "0"},drawElementsSct.countStatus, "noDetected", "noDetectedG");
+			cnocConnector.invokeMashup(cnocConnector.service16, {"code_net" : "N000333"}, drawElementsSct.setMarkersMap, "containerMapSCT");
 			
 			cnocConnector.invokeMashup(cnocConnector.service3, {"id":"","status":""},drawElementsSct.drawListNodes, "listNodesSct", "listNodesSctG");
 			
-			this.setMarkersMap();
+			//this.setMarkersMap();
 			
 		},selectCustom : function(datos, selector, opt) {
 
@@ -346,105 +347,68 @@ var drawElementsSct = {
 	        var dataChart = {color:"#33297A", name:"ifoutdiscards", data: data};
 			onDataReceived(dataChart);
 			
-		}, setMarkersMap: function(){
+		}, setMarkersMap: function(datos, container) {
 			
-			$( "#containerMapSCT").mask("Waiting...");
-			var markers = [];
-			var iterator = 0;
 			var morelosState = new google.maps.LatLng(18.7318964, -99.0633631);
-			var map;
 
-			
-			var morelosSCTSites = [
-			               ['44665_USG', 18.942899,	-98.9033196, 4],       
-			               ['44930_USG', 18.666341,	-99.3774053, 3],
-			               ['46008_USG', 18.61471,	-99.18066, 2],
-			               ['44072_USG', 18.617,	-99.17673, 1]
-			                
-			                /*
-			               ['44600_USG', 18.847953, -98.9488239, 17],
-			               ['44311_USG', 18.7412,	-98.95368, 16],
-			               ['44327_USG', 18.68378,	-99.11965, 15],
-			               ['44375_USG', 18.908121,	-98.9726968, 14],
-			               ['44478_USG', 19.013541,	-99.0613863, 13],
-			               ['44553_USG', 18.815151,	-98.9507069, 12],
-			               ['44586_USG', 18.847953, -98.9488239, 11],
-			               ['44600_USG', 18.76278,	-99.12032, 10],
-			               ['44653_USG', 18.891104,	-99.0275055, 9],
-			               ['44665_USG', 18.942899,	-98.9033196, 8],
-			               ['44838_USG', 18.69183,	-99.119, 7],
-			               ['44943_USG', 18.882549,	-99.0673166, 6],
-			               ['44952_USG', 18.931001,	-99.0282406, 5],
-			               ['44979_USG', 18.943607,	-98.9063966, 4],
-			               ['45015_USG', 18.580985,	-98.7483515, 3],
-			               ['45028_USG', 18.526381,	-98.7930463, 2],
-			               ['45150_USG', 18.6168,	-99.17789, 1]*/
-			             ];
-							
-				  var mapOptions = {
-				    zoom: 10,
-				    center: morelosState,
-				    mapTypeId: google.maps.MapTypeId.TERRAIN,
-			        styles: stylesMap
-				  };
+			var mapOptions = {
+				zoom: 10,
+				center: morelosState,
+				mapTypeId: google.maps.MapTypeId.TERRAIN,
+				styles: stylesMap
+			};
 			      
-				  map = new google.maps.Map(document.getElementById('containerMapSCT'), mapOptions);
+			var map = new google.maps.Map(document.getElementById(container), mapOptions);
+			var mcOptions = {
+					gridSize: 50,
+					maxZoom: null,
+					styles: [{
+						height: 53,
+						url: "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png",
+						width: 53
+						}]
+				};
+			var markers = [];
 				  
+			$.each(datos.records.record, function(key, value) {
+//				site.push(value.ci_name);
+				var latLng = new google.maps.LatLng(Number(value.latitude),
+					Number(value.longitude));
+				var marker = new google.maps.Marker({
+					'position': latLng,
+					title: value.ci_name
+				});
+				markers.push(marker);
+			});
+			
+			var estados = polygons.mexico.records.record;
+
+			for (var i = 0; i < estados.length; i++) {
+				var estado = estados[i];
+				var polygon = [];
+
+				if("MORELOS" === estado['name'].toUpperCase() ) {
+					var coords = estado['coords'];
+					for (var j = 0; j < coords.length; j++) {
+						var coord = coords[j];
+						var point = new google.maps.LatLng(coord[1], coord[0]);
+						polygon.push(point);
+					}
+			            
+					mapaNacional = new google.maps.Polygon({
+						paths: polygon,
+						strokeColor: '#22FF00',
+						strokeOpacity: 0.8,
+						strokeWeight: 3,
+						fillColor: '#22FF00',
+						fillOpacity: 0.35
+					});
+					mapaNacional.setMap(map);
+				}
+			}
 				  
-				  var estados = polygons.mexico.records.record;
+			var markerCluster = new MarkerClusterer(map, markers, mcOptions);
 
-			      for (var i = 0; i < estados.length; i++) {
-			        var estado = estados[i];
-			        var polygon = [];	
-
-			        	if("MORELOS" === estado['name'].toUpperCase() ){
-			            var coords = estado['coords'];
-			            for (var j = 0; j < coords.length; j++) {
-			              var coord = coords[j];
-			              var point = new google.maps.LatLng(coord[1], coord[0]);
-			              polygon.push(point);
-			            }
-			            
-			            mapaNacional = new google.maps.Polygon({
-			              paths: polygon,
-			              strokeColor: '#22FF00',
-			              strokeOpacity: 0.8,
-			              strokeWeight: 3,
-			              fillColor: '#22FF00',
-			              fillOpacity: 0.35
-			            });
-			            mapaNacional.setMap(map);
-			            
-			          } 
-			      }
-			      
-				  drop();
-
-
-			function drop() {
-			  for (var i = 0; i < morelosSCTSites.length; i++) {
-			    setTimeout(function() {
-			      addMarker();
-			    }, i * 200);
-			  }
-			}
-			
-			
-			function addMarker() {
-				
-				 for (var i = 0; i < morelosSCTSites.length; i++) {
-		                var sites = morelosSCTSites[i];
-		                var myLatLng = new google.maps.LatLng(sites[1], sites[2]);
-		                var marker = new google.maps.Marker({
-		                    position: myLatLng,
-		                    map: map,
-		                    title: sites[0],
-		                    zIndex: sites[3]//,
-		                    //animation: google.maps.Animation.DROP
-		                });
-		              }
-			}
-			$( "#containerMapSCT").unmask();
 		},gridAp: function(datos, container, divTable){
 			var rowsData = new Array();
 			try {

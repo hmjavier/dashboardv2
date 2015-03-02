@@ -60,6 +60,18 @@ var drawElementsPerformanceGraph = {
 			var cpu = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"cpu","node":"'+name+'","translation":"","field":""}}',"ip":drawElementsPerformanceGraph.nmis};
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, cpu, drawElementsPerformanceGraph.containerChart, "cpu", "#0C66ED", false, name);	
 			
+		},drawChartResponseTime: function(name){
+			drawElementsPerformanceGraph.chartIdPerformance = "1";
+			drawElementsPerformanceGraph.subtitlePerformance = "";
+			drawElementsPerformanceGraph.metricUnit = "";
+			drawElementsPerformanceGraph.subtitlePerformance = "Response Time";
+			drawElementsPerformanceGraph.metricUnit = "Milliseconds";
+			var responsetime = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"health","node":"'+name+'","resource":"health","translation":"","field":"responsetime"}}',"ip":drawElementsPerformanceGraph.nmis};			
+											  // {"model":"nmis_rrd","model_view":"graph","parameters":{"start_date_raw":1422921507,"end_date_raw":1423526307,"period":"7d","update_time_from_window":1,"resource_index":"","graph_type":"health","index_graph_type":"","axis":"0","node":"SBM_001015_VALLE_RT01","resource":"health","translation":"","field":"responsetime"},"options":{"gui_component_mode":1,"titleText":"SBM_001015_VALLE_RT01 -- responsetime","xAxisType":"datetime"},"data_source":"local_nmis"}
+			
+			
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, responsetime, drawElementsPerformanceGraph.containerChart, "Response Time", "#0C66ED", false, name);	
+			
 		},drawChartMemoryIO: function(name){
 			drawElementsPerformanceGraph.chartIdPerformance = "2";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
@@ -181,7 +193,7 @@ var drawElementsPerformanceGraph = {
 		   			},
 		   			success: function(response) {	
 		   				var dataChart = "";
-		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos" || labelMetric === "memoryH" || labelMetric === "QosHuawei"){	   					
+		   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "cpu" || labelMetric === "availability" || labelMetric === "MemoryIO" || labelMetric === "MemoryProc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "qos" || labelMetric === "memoryH" || labelMetric === "QosHuawei" || labelMetric === "responsetime"){	   					
 		   					var json = response.replyData.data;
 		   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 		   					for(var idx=0; idx<json.length; idx++){

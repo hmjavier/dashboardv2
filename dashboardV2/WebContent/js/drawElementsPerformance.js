@@ -118,10 +118,11 @@ var drawElementsPerformance = {
 
 			if(drawElementsPerformance.vendor === "HuaweiRouter"){
 				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance HUAWEI</span><ul>";
-				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'>Health</i></span></li>";
-				tree += "<li id='cpuPH' class='cpuPH'><span class='treeNode'><i class='icon-minus-sign'>CPU</i></span></li>";			
+				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
+				tree += "<li id='cpuPH' class='cpuPH'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>CPU</a></i></span></li>";
+				tree += "<li id='healthRT' class='healthRT'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Response Time</a></i></span></li>";
 				tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
-				tree += "<li id='memProcH' class='memProcH'><span class='treeNode '><i class='icon-minus-sign'>Memory Proc</i></span></li>";
+				tree += "<li id='memProcH' class='memProcH'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Memory Proc</a></i></span></li>";
 				tree += "</ul></li>";
 				tree += "</ul></li></ul>";
 				tree += "<ul>";
@@ -182,7 +183,8 @@ var drawElementsPerformance = {
 			}else{
 				tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Performance </span><ul>";
 				tree += "<li id='healthP' class='healthP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Health</a></i></span></li>";
-				tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>CPU</a></i></span></li>";			
+				tree += "<li id='cpuP' class='cpuP'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>CPU</a></i></span></li>";
+				tree += "<li id='healthRT' class='healthRT'><span class='treeNode'><i class='icon-minus-sign'><a href='#nodeChart'>Response Time</a></i></span></li>";
 				tree += "<li id=''><span class='treeNodeDetailInterfaz badge label-success'><i class='icon-minus-sign'>Memory</i></span><ul>";
 				tree += "<li id='memProc' class='memProc'><span class='treeNode '><i class='icon-minus-sign'><a href='#nodeChart'>Memory Proc</a></i></span></li>";
 				tree += "<li id='memIo' class='memIo'><span class='treeNode '><a href='#nodeChart'>Memory I/O</a></span></li>";
@@ -255,7 +257,11 @@ var drawElementsPerformance = {
 			
 			$( ".cpuP" ).click(function() {
 				drawElementsPerformance.drawChartCPU();
-			});			
+			});
+			
+			$( ".healthRT" ).click(function() {
+				drawElementsPerformance.drawChartHealtRT();
+			});
 			
 			$( ".memIo" ).click(function() {
 				drawElementsPerformance.drawChartMemoryIO();
@@ -370,6 +376,17 @@ var drawElementsPerformance = {
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, avgBusy1, "containerChartPerformance", "avgBusy1", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, avgBusy5, "containerChartPerformance", "avgBusy5","#2BC70D", false);	
+			
+		},drawChartHealtRT: function(){
+			drawElementsPerformance.chartIdPerformance = "1";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Response Time";
+			drawElementsPerformance.metricUnit = "Milliseconds";
+			var responsetime = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"health","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"responsetime"}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, responsetime, "containerChartPerformance", "Response Time", "#0C66ED", false);
 			
 		},drawChartMemoryIO: function(){
 			drawElementsPerformance.chartIdPerformance = "2";
