@@ -108,17 +108,14 @@ function generateMenu(){
         			$(".menuCnoc").append(general);
 
         		}else if(value === "tck=true"){
-
-        			var tickets = "<li><a href='tickets.jsp'><i class='fa fa-fw fa-tag'></i> Tickets </a></li>";
+        			var tickets = "<li><a href='tickets.jsp'><i class='fa fa-tags'></i> Tickets </a></li>";
         			$(".menuCnoc").append(tickets);
         			
         		}else if(value === "inv=true"){
-
         			var inventory = "<li><a href='inventory.jsp'><i class='fa fa-fw fa-list-alt'></i> Inventory </a></li>";
         			$(".menuCnoc").append(inventory);
         			
         		}else if(value === "esc=true"){
-        			
         			var esclations = "<li><a href='escalation.jsp'><i class='fa fa-fw fa-cloud-upload'></i> Escalaciones </a></li>";
         			$(".menuCnoc").append(esclations);
         			
@@ -127,25 +124,28 @@ function generateMenu(){
         			$(".menuCnoc").append(nagios);
         			
         		}else if(value === "sct=true"){
-        			/*var sct = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
-        			$(".menuCnoc").append(sct);*/
         			var general = "<li><a href='mainsct.jsp'><i class='fa fa-fw fa-home'></i> SCT MORELOS </a></li>";
         			general +="<li><a href='incidentssct.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
         			
         			$(".menuCnoc").append(general);
         			
         		}else if(value === "perf=false"){
-            			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
-            			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
-            			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
-            			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
-            			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
+        			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
+        			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";
+        			general +="<li><a href='changes.jsp'><i class='fa fa-fw fa-refresh'></i> Changes </a></li>";
+        			general +="<li><a href='performance.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance </a></li>";
+        			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
             			
-            			$(".menuCnoc").append(general);
-        		}/*else if(value === "pwd=true"){
+        			$(".menuCnoc").append(general);
         			
-        			var esclations = ;
-        		}*/        		
+        		}else if(value === "sisatck=true"){
+        			var sisatck = "<li><a href='sisatck.jsp'><i class='fa fa-fw fa-tag'></i> Tickets SISA </a></li>";
+        			$(".menuCnoc").append(sisatck);
+        			
+        		}else if(value === "elara=true"){
+        			var sisatck = "<li><a href='https://201.131.60.39:8098' target='_blank'><i class='fa fa-bar-chart-o'></i> ELARA </a></li>";
+        			$(".menuCnoc").append(sisatck);
+        		}
         	});
         	
         	$(".menuCnoc").append("<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>");
@@ -264,7 +264,7 @@ function generateMenu(){
 
 						if (datos.records.record.url_nmis_internet != '') {
 							var url_nmis = datos.records.record;
-							console.log(url_nmis.url_nmis_internet);
+							
 							if (url_nmis.url_nmis_internet.indexOf("\n") > 0) {
 								var nmis = url_nmis.url_nmis_internet.split("\n");
 								$.each(nmis, function(m, n){

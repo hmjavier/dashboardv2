@@ -364,7 +364,7 @@ var drawElementsSct = {
 					maxZoom: null,
 					styles: [{
 						height: 53,
-						url: "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png",
+						url: "https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png",
 						width: 53
 						}]
 				};

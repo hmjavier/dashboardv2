@@ -304,6 +304,26 @@ var cnocConnector = {
 			});
 		}
 		
+		if (divTable === "openTaskEscalateListTi") {
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+				$("#listActivitiesTaskEscalate").empty();
+				dTable.$('tr.row_selected').removeClass('row_selected');
+				$(this).addClass('row_selected');
+				var nTds = $('td', dTable.$('tr.row_selected'));				
+				
+				cnocConnector.invokeMashup(
+						cnocConnector.service2,
+						{
+							"incident_id" : $(nTds[1]).text()
+						},
+						drawElementsTaskEscalate.activitiesIncidents,
+						"listActivitiesTaskEscalate",
+						"listActivitiesTaskEscalateTi"
+					);
+				
+			});
+		}
+		
 		if (divTable === "listNodesG") {
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					dTable.$('tr.row_selected').removeClass('row_selected');
@@ -970,6 +990,8 @@ var cnocConnector = {
 				drawElementsPerformanceGraph.init($(this).val());
 			}else if(module==="tickets"){
 				drawElementsTickets.init($(this).val());
+			}else if(module==="sisatck"){
+				drawElementsTaskEscalate.init($(this).val());
 			}
 		});
 		cnocConnector.codeNetGlobal = $("#" + container).val();

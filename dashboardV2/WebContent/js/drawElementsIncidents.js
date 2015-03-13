@@ -5,27 +5,60 @@
 
 var drawElementsIncidents = {
 		init : function(codeNet) {
-			
 			if (codeNet != undefined) {
-				
 				this.builder(codeNet);
-			
 			} else {				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsIncidents.selectCustom, "SelectCustomer", "opt");
 				this.builder(codeNet);
 			}
 
-		},builder: function(codeNet){
-			//this.drawPerformance(null, null, null)
-			//cnocConnector.invokeMashup(cnocConnector.serviceI12, {"jsonC":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1402459367":"10-Jun-2014 23:02:47","time_period":"time_difference","10-Jun-2014 22:47:47":"end_date","end_date":"10-Jun-2014 23:02:47","start_date":"3-Jun-2014 23:02:47","end_date_raw":1402459367,"start_date_raw":1401854567,"resource_index":"","graph_type":"nodehealth","index_graph_type":"","axis":"0","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"avgBusy1"},"options":{"xAxisType":"datetime"},"data_source":"local_nmis"}}'},drawElementsIncidents.drawPerformance, "chartSector", "chartSectorI");
-			//cnocConnector.invokeMashup(cnocConnector.serviceI12, {"jsonC":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"nodehealth","node":"sbm_010035_la_castilla-n000093-ci0000005356","translation":"","field":"MemoryFreePROC"}}}'},drawElementsIncidents.drawPerformance, "chartSector", "chartSectorI");
-			//cnocConnector.invokeMashup(cnocConnector.serviceI12, {"jsonC":'{"requestData":{"model":"nmis_rrd","model_view":"graph","parameters":{"1403067600":"18-Jun-2014 00:00:00","end_date_raw":1403067600,"start_date_raw":1402462800,"graph_type":"interface","node":"sbm_145039_diaz_de_berlanga-n000093-ci0000005302","translation":"","field":"ifOutOctets","resource_index": "3","index_graph_type": ""}}}'},drawElementsIncidents.drawPerformance, "chartSector", "chartSectorI");
+		},builder: function(codeNet) {
 			
-			cnocConnector.invokeMashup(cnocConnector.service1, {},drawElementsIncidents.drawChartSector, "chartSector", "chartSectorI");
-			cnocConnector.invokeMashup(cnocConnector.service2, {},drawElementsIncidents.drawChartCompaniesSector, "chartCompaniesSector", "chartCompaniesSectorI");
+			cnocConnector.invokeMashup(
+					cnocConnector.getLdap,
+					{},
+					function (data) {						
+						if(data.aut.module[1]==="CLIENTE") {					
+							$("#containerChartCompaniesSector").remove();
+							$("#containerChartSector").remove();
+							$("#containerChartIncidentsGroups").show();
+							$("#mapIncidents").removeClass("chartCompaniesBySector");
+							$("#mapIncidents").addClass("chartIncidentsGroups");
+							cnocConnector.invokeMashup(
+									cnocConnector.service5,
+									{"code_net" : cnocConnector.codeNetGlobal},
+									drawElementsIncidents.drawChartIncidentsGroups,
+									"chartIncidentsGroups",
+									"chartIncidentsGroupsI"
+								);
+							
+						} else {
+							$("#containerChartIncidentsGroups").hide();
+							
+							cnocConnector.invokeMashup(
+									cnocConnector.service2, 
+									{},
+									drawElementsIncidents.drawChartCompaniesSector,
+									"chartCompaniesSector",
+									"chartCompaniesSectorI"
+								);
+							
+							cnocConnector.invokeMashup(
+									cnocConnector.service1,
+									{},
+									drawElementsIncidents.drawChartSector,
+									"chartSector",
+									"chartSectorI"
+								);
+							
+						}
+					},
+					null,
+					null
+				);
+			
 			cnocConnector.invokeMashup(cnocConnector.service3, {"code_net" : codeNet},drawElementsIncidents.drawChartIncidentsPhase, "chartIncidentsPhase", "chartIncidentsPhaseI");
 			cnocConnector.invokeMashup(cnocConnector.service4, {"code_net" : codeNet},drawElementsIncidents.drawChartIncidentsStatus, "chartIncidentsStatus", "chartIncidentsStatusI");
-			cnocConnector.invokeMashup(cnocConnector.service5, {},drawElementsIncidents.drawChartIncidentsGroups, "chartIncidentsGroups", "chartIncidentsGroupsI");
 			cnocConnector.invokeMashup(cnocConnector.service8, {"code_net" : codeNet},drawElementsIncidents.detailIncidents, "listIncidents", "listIncidentsI");
 			cnocConnector.invokeMashup(cnocConnector.serviceI9, {"code_net" : codeNet},drawElementsIncidents.drawCountAll, "countAllI", "countAllII");
 			cnocConnector.invokeMashup(cnocConnector.serviceI10, {"code_net" : codeNet},drawElementsIncidents.drawCountAll, "countOpenI", "countOpenII");

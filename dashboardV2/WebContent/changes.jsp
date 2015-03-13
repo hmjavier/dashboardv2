@@ -364,44 +364,48 @@
 		
 		drawElements.init();
 		
-		
-		cnocConnector.invokeMashup(cnocConnector.getLdap,{},function (data){
-			if(data.aut.module[1]==="CLIENTE"){
+		cnocConnector.invokeMashup(cnocConnector.getLdap,{},function (data) {
+			if(data.aut.module[1]==="CLIENTE") {
 				$("#changesGroups").show();
 				$("#changesListT").removeClass("col-lg-12");
 				$("#changesListT").addClass("col-lg-9");
-				cnocConnector.invokeMashup(cnocConnector.service11,{"code_net":cnocConnector.codeNetGlobal},drawElements.chartGroups, "changesGroupsChart", "changesGroupsChartC");
-				
+				cnocConnector.invokeMashup(
+						cnocConnector.service11,
+						{"code_net" : cnocConnector.codeNetGlobal},
+						drawElements.chartGroups,
+						"changesGroupsChart",
+						"changesGroupsChartC"
+					);
 			}
 		}, null, null);
 			
-			$( ".logout").click(function(event){	
-				logout();
-			});
-			
-			$( ".back").click(function(event){
-				home();
-			});
-			
-			
-			$(".themeW").click(function(event){
-				var filename = $(this).attr('rel');				
-				themeChanges(filename, false);			
-				Highcharts.setOptions(Highcharts.themeW);
-				stylesMap = null;
-				drawElements.builder();
-			});
-			
-			$(".themeB").click(function(event){
-				var filename = $(this).attr('rel');				
-				themeChanges(filename,true);				
-				Highcharts.setOptions(Highcharts.themeB);
-				drawElements.builder();
-			});
-			
-			var refresh = setInterval(function(){
-				drawElements.init();
-			},300000);
+		$( ".logout").click(function(event){
+			logout();
+		});
+		
+		$( ".back").click(function(event){
+			home();
+		});
+		
+		
+		$(".themeW").click(function(event){
+			var filename = $(this).attr('rel');
+			themeChanges(filename, false);
+			Highcharts.setOptions(Highcharts.themeW);
+			stylesMap = null;
+			drawElements.builder();
+		});
+		
+		$(".themeB").click(function(event){
+			var filename = $(this).attr('rel');
+			themeChanges(filename,true);
+			Highcharts.setOptions(Highcharts.themeB);
+			drawElements.builder();
+		});
+		
+		var refresh = setInterval(function(){
+			drawElements.init();
+		},300000);
 
 	});
 	</script>

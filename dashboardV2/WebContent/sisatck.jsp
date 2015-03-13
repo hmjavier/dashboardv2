@@ -114,66 +114,38 @@
 		<%@ include file="menu.jsp" %>
 
         <div id="page-wrapper">        
-        	<!-- Nav tabs -->
-			<ul class="nav nav-tabs" role="tablist">
-				<li class="active"><a href="#openTicket" role="tab" data-toggle="tab">Open Ticket</a></li>
-				<li><a id="aUpdateTicket" href="#updateTicket" role="tab" data-toggle="tab">Update Ticket</a></li>
-			</ul>
-		
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div class="tab-pane active openTicket" id="openTicket">
-					<div class="container-fluid">
-		                <!-- /.row -->
-		                <div class="row">
-							<div class="row">
-						  			<div class="col-lg-12">
-								    	<div class="panel panel-primary">
-								    		<div class="panel-heading">
-										    	<h3 class="panel-title">Configuration Item List</h3>
-										  	</div>
-								    		<div id="listBizserviceT"></div>
-								    	</div>		
+        	<div class="tab-pane updateTicket" id="updateTicket">
+				<div class="container-fluid">
+	                <!-- /.row -->
+	                <div class="row">
+						<div class="row">
+					  			<div class="col-lg-12">
+							    	<div class="panel panel-primary">
+							    		<div class="panel-heading">
+									    	<h3 class="panel-title">Open Tickets List</h3>
+									  	</div>
+							    		<div id="openTaskEscalateList"></div>
 							    	</div>
-						  		</div>
-		                </div>
-		                <!-- /.row -->						  
-		            </div>
-		            <!-- /.container-fluid -->
-				</div>
-				<div class="tab-pane updateTicket" id="updateTicket">
-					<div class="container-fluid">
-		                <!-- /.row -->
-		                <div class="row">
-							<div class="row">
-						  			<div class="col-lg-12">
-								    	<div class="panel panel-primary">
-								    		<div class="panel-heading">
-										    	<h3 class="panel-title">Open Tickets List</h3>
-										  	</div>
-								    		<div id="openTicketsList"></div>
-								    	</div>		
-							    	</div>
-						  		</div>
-		                </div>
-		                <!-- /.row -->		
-		                <!-- /.row -->
-		                <div class="row">
-							<div class="row">
-						  			<div class="col-lg-12">
-								    	<div class="panel panel-primary">
-								    		<div class="panel-heading">
-										    	<h3 class="panel-title">Tickets Activities</h3>
-										  	</div>
-								    		<div id="openTicketsListActivities"></div>
-								    	</div>		
-							    	</div>
-						  		</div>
-		                </div>
-		                <!-- /.row -->						 
-		            </div>
-		            <!-- /.container-fluid -->
-				</div>
+						    	</div>
+					  		</div>
+	                </div>
+	                <!-- /.row -->
+	                <!-- /.row -->
+	                <div class="row">
+						<div class="row">
+					  			<div class="col-lg-12">
+							    	<div class="panel panel-primary">
+							    		<div class="panel-heading">
+									    	<h3 class="panel-title">Tickets Activities</h3>
+									  	</div>
+							    		<div id="listActivitiesTaskEscalate"></div>
+							    	</div>		
+						    	</div>
+					  		</div>
+	                </div>
+	                <!-- /.row -->						 
+	            </div>
+	            <!-- /.container-fluid -->
 			</div>
         </div>
         <!-- /#page-wrapper -->
@@ -197,10 +169,10 @@
 	
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
-	<script src="js/drawElementsTickets.js"></script>
+	<script src="js/drawElementsTaskEscalate.js"></script>		
 	
 	<!-- jQuery Loadmask -->
-	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
+	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>	
 	
 	<!-- remove css/js -->
 	<script type="text/javascript" src="js/script.js"></script>
@@ -224,12 +196,9 @@
 		    		cnocConnector.incidents = incidentService;
 		    		cnocConnector.getLdap = getLdap;
 		    		cnocConnector.service9 = serviceC9;
-		    		cnocConnector.service1 = serviceTic1;
-		    		cnocConnector.service2 = serviceTic2;
-		    		cnocConnector.service3 = serviceTic3;
-		    		cnocConnector.service4 = serviceTic4;
-		    		cnocConnector.menu = serviceMenu;
-		    		cnocConnector.serviceI17 = serviceTic5;
+		    		cnocConnector.service1 = serviceTE1;
+		    		cnocConnector.service2 = serviceTE2;
+		    		cnocConnector.menu = serviceMenu;		    		
 		    		cnocConnector.nmis_urls = nmis_urls;
 		    }
 		});
@@ -237,46 +206,31 @@
 		/*Genera Menu*/
 		generateMenu();
 		
-		drawElementsTickets.init();
+		drawElementsTaskEscalate.init();
 		
-			$( ".logout").click(function(event){	
-				logout();
-			});
-			
-			$( ".back").click(function(event){
-				home();
-			});
-			
-			
-			$(".themeW").click(function(event){
-				var filename = $(this).attr('rel');				
-				themeChanges(filename, false);			
-				Highcharts.setOptions(Highcharts.themeW);
-				stylesMap = null;
-				drawElements.builder();
-			});
-			
-			$(".themeB").click(function(event){
-				var filename = $(this).attr('rel');				
-				themeChanges(filename,true);				
-				Highcharts.setOptions(Highcharts.themeB);
-				drawElements.builder();
-			});
-			
-			$("#aUpdateTicket").click(function(event){
-				cnocConnector.invokeMashup(
-						cnocConnector.service3,
-						{"code_net":cnocConnector.codeNetGlobal},
-						drawElementsTickets.drawOpenTicketsList,
-						"openTicketsList",
-						"openTicketsListTi"
-					);
-			});
-			
-			/*
-			var refresh = setInterval(function(){
-				drawElements.init();
-			},cnocConnector.refresh);*/
+		$( ".logout").click(function(event){	
+			logout();
+		});
+		
+		$( ".back").click(function(event){
+			home();
+		});
+		
+		
+		$(".themeW").click(function(event){
+			var filename = $(this).attr('rel');				
+			themeChanges(filename, false);			
+			Highcharts.setOptions(Highcharts.themeW);
+			stylesMap = null;
+			drawElements.builder();
+		});
+		
+		$(".themeB").click(function(event){
+			var filename = $(this).attr('rel');				
+			themeChanges(filename,true);				
+			Highcharts.setOptions(Highcharts.themeB);
+			drawElements.builder();
+		});
 
 	});
 	</script>

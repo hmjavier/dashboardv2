@@ -450,21 +450,6 @@
 			generateMenu();
 			
 			drawElementsIncidents.init();
-		 	
-			
-			cnocConnector.invokeMashup(cnocConnector.getLdap,{},function (data){
-				if(data.aut.module[1]==="CLIENTE"){
-					//if(true){
-					$("#containerChartCompaniesSector").remove();
-					$("#containerChartSector").remove();
-					$("#containerChartIncidentsGroups").show();
-					$("#mapIncidents").removeClass("chartCompaniesBySector");
-					$("#mapIncidents").addClass("chartIncidentsGroups");
-				}else{
-					$("#containerChartIncidentsGroups").hide();
-				}
-			}, null, null);
-			 	
 			
 			$( ".logout").click(function(event){	
 				logout();
