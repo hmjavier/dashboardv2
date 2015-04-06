@@ -197,15 +197,15 @@ var drawElementsPerformance = {
 			try {
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
-						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+"</a></i></span>";
+						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"</a></i></span>";
 						if(datos.results.datum[i].active.toString() === "1"){
 							tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 							if(datos.results.datum[i].classes.length > 1){
 								for(var j=1; j<datos.results.datum[i].classes.length; j ++){
-									tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes[j]+"</a></i></span></li>";
+									tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes[j]+"</a></i></span></li>";
 								}
 							}else{
-								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes+"</a></i></span></li>";
+								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum[i].classes+"</a></i></span></li>";
 							}
 							
 							tree+= "</ul></li></ul>";
@@ -213,15 +213,15 @@ var drawElementsPerformance = {
 						tree+="</li>";
 					}					
 				}else{
-					tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum.name.toString()+"</a></i></span>";
+					tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum.name.toString()+" -- "+datos.results.datum.value.toString()+"</a></i></span>";
 					if(datos.results.datum.active.toString() === "1"){
 						tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 						if(datos.results.datum.classes.length > 1){
 							for(var j=1; j<datos.results.datum.classes.length; j ++){
-								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes[j]+"</a></i></span></li>";
+								tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+" -- "+datos.results.datum.value.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes[j]+"</a></i></span></li>";
 							}
 						}else{
-							tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes+"</a></i></span></li>";
+							tree+= "<li><span class='treeNode'><i id='"+datos.results.datum.name.toString()+" -- "+datos.results.datum.value.toString()+"' class='intfChartQos'><a href='#nodeChart'>"+datos.results.datum.classes+"</a></i></span></li>";
 						}
 						
 						tree+= "</ul></li></ul>";

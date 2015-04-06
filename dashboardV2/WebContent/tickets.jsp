@@ -76,6 +76,12 @@
 		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+				<input type="text" id="ticketIdTCK" class="form-control ticketIdTCK" style="height: 30px;" placeholder="Customer Incident Number" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
 				<input type="text" id="sdTCK" class="form-control" style="height: 30px;" placeholder="SDCOM000000" disabled="disabled">
 			</div>
 		</div>		
@@ -139,6 +145,7 @@
 		                </div>
 		                <!-- /.row -->						  
 		            </div>
+		            <%@ include file="footer.jsp" %>
 		            <!-- /.container-fluid -->
 				</div>
 				<div class="tab-pane updateTicket" id="updateTicket">
@@ -172,6 +179,7 @@
 		                </div>
 		                <!-- /.row -->						 
 		            </div>
+		            <%@ include file="footer.jsp" %>
 		            <!-- /.container-fluid -->
 				</div>
 			</div>

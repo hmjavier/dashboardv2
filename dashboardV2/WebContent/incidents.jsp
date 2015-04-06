@@ -366,6 +366,7 @@
 				</div>
 				<!-- end/.row -->
             </div>
+            <%@ include file="footer.jsp" %>
             <!-- /.container-fluid -->
 
         </div>

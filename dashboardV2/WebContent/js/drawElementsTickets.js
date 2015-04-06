@@ -87,7 +87,7 @@ var drawElementsTickets = {
 		}, {
 			"sTitle" : "Location Code"
 		}];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);		
+		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	}, drawOpenTicketsList: function(datos, container, divTable) {
 		var rowsData = new Array();
@@ -96,6 +96,7 @@ var drawElementsTickets = {
 				for ( var i = 0; i < datos.records.record.length; i++) {
 					var fields = new Array();
 					fields.push(datos.records.record[i].number.toString());
+					fields.push(datos.records.record[i].customer_reference.toString());
 					fields.push(datos.records.record[i].incident_id.toString());							
 					fields.push(datos.records.record[i].affected_item.toString());
 					fields.push(datos.records.record[i].service_uniqueid.toString());
@@ -108,6 +109,7 @@ var drawElementsTickets = {
 			} else {
 				var fields = new Array();
 				fields.push(datos.records.record.number.toString());
+				fields.push(datos.records.record.customer_reference.toString());
 				fields.push(datos.records.record.incident_id.toString());
 				fields.push(datos.records.record.affected_item.toString());
 				fields.push(datos.records.record.service_uniqueid.toString());
@@ -122,6 +124,8 @@ var drawElementsTickets = {
 		};
 		var rowsHeaders = [ {
 			"sTitle" : "IM"
+		}, {
+			"sTitle" : "Customer Incident Number"
 		}, {
 			"sTitle" : "SD"
 		}, {
@@ -155,6 +159,7 @@ var drawElementsTickets = {
 					var description = modal.find(".descriptionTCK");
 					var contactPerson = modal.find(".contactPersonTCK");
 					var contactMail = modal.find(".contactEmailTCK");
+					var ticketID = modal.find(".ticketIdTCK");
 					var sd = modal.find( '#sdTCK' );
 					var im = modal.find( '#imTCK' );
 					var message = modal.find( '#messageTCK' );
@@ -163,6 +168,7 @@ var drawElementsTickets = {
 					data.description = description.val()+" open by: "+cnocConnector.userName;;
 					data.contactPerson = contactPerson.val();
 					data.contactMail = contactMail.val();
+					data.ticketID = ticketID.val();
 					
 					$( sd ).attr("disabled", "disabled");
 					$( im ).attr("disabled", "disabled");
@@ -175,6 +181,7 @@ var drawElementsTickets = {
 					$( description ).attr("disabled", "disabled");
 					$( contactPerson ).attr("disabled", "disabled");
 					$( contactMail ).attr("disabled", "disabled");
+					$( ticketID ).attr("disabled", "disabled");
 					
 					$( sd ).val("Waiting...");
 					$( im ).val("Waiting...");
@@ -186,6 +193,7 @@ var drawElementsTickets = {
 						$( description ).removeAttr("disabled");
 						$( contactPerson ).removeAttr("disabled");
 						$( contactMail ).removeAttr("disabled");
+						$( ticketID ).removeAttr("disabled");						
 						
 						$( sd ).val("ERROR");
 						$( im ).val("ERROR");									
@@ -200,6 +208,7 @@ var drawElementsTickets = {
 						$( description ).removeAttr("disabled");
 						$( contactPerson ).removeAttr("disabled");
 						$( contactMail ).removeAttr("disabled");
+						$( ticketID ).removeAttr("disabled");						
 						
 						$( sd ).val("ERROR");									
 						$( im ).val("ERROR");
@@ -214,6 +223,7 @@ var drawElementsTickets = {
 						$( description ).removeAttr("disabled");
 						$( contactPerson ).removeAttr("disabled");
 						$( contactMail ).removeAttr("disabled");
+						$( ticketID ).removeAttr("disabled");						
 					
 						$( sd ).val("ERROR");
 						$( im ).val("ERROR");
@@ -228,6 +238,7 @@ var drawElementsTickets = {
 						$( description ).removeAttr("disabled");
 						$( contactPerson ).removeAttr("disabled");
 						$( contactMail ).removeAttr("disabled");
+						$( ticketID ).removeAttr("disabled");						
 					
 						$( sd ).val("ERROR");
 						$( im ).val("ERROR");
@@ -248,6 +259,7 @@ var drawElementsTickets = {
 										$( description ).removeAttr("disabled");
 										$( contactPerson ).removeAttr("disabled");
 										$( contactMail ).removeAttr("disabled");
+										$( ticketID ).removeAttr("disabled");
 									
 										$( sd ).val("ERROR");
 										$( im ).val("ERROR");
@@ -262,6 +274,7 @@ var drawElementsTickets = {
 										$( description ).removeAttr("disabled");
 										$( contactPerson ).removeAttr("disabled");
 										$( contactMail ).removeAttr("disabled");
+										$( ticketID ).removeAttr("disabled");										
 										
 										$( sd ).val(result.incidentId);
 										$( sd ).removeAttr("disabled");

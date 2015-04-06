@@ -237,6 +237,7 @@
 				  </div>
 				<!-- /.row -->
             </div>
+            <%@ include file="footer.jsp" %>
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
