@@ -73,7 +73,7 @@ var drawElementsTaskEscalate = {
 		var rowsHeaders = [ {
 			"sTitle" : "ID"
 		}, {
-			"sTitle" : "IM"
+			"sTitle" : "TICKET CNOC"
 		}, {
 			"sTitle" : "TICKET SISA"
 		}, {
@@ -83,7 +83,7 @@ var drawElementsTaskEscalate = {
 		}, {
 			"sTitle" : "DESCRIPTION"
 		}, {
-			"sTitle" : "UNIQUE IDENTIFIER"
+			"sTitle" : "IDENTIFICADOR CASE"
 		}, {
 			"sTitle" : "STATUS"
 		}, {

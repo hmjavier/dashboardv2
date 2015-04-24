@@ -700,31 +700,28 @@ var drawElementsGral = {
 		}
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
-	},topGrid: function(datos, container, divTable){
+	
+	}, topGrid: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
-			if (datos.records.record.length > 1) {
-				for ( var i = 0; i < datos.records.record.length; i++) {
-					var fields = new Array();
-					fields.push(datos.records.record[i].top.toString());
-					fields.push(datos.records.record[i].name.toString());
-					rowsData.push(fields);
-				}
-			} else {
+			for ( var i = 0; i < datos.length; i++) {
 				var fields = new Array();
-				fields.push(datos.records.record.top.toString());
-				fields.push(datos.records.record.name.toString());
+				fields.push(datos[i].node);
+				fields.push(datos[i].value);
+				fields.push(datos[i].element);
 				rowsData.push(fields);
 			}
-		} catch (err) {	};
+		} catch (err) { console.log(err); };
 		var rowsHeaders = [ {
-			"sTitle" : "Percent"
+			"sTitle" : "Node"
 		}, {
-			"sTitle" : "Node Name"
+			"sTitle" : "Value"
+		}, {
+			"sTitle" : "Element"
 		} ];
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
-	},detailIncidents: function(datos, container, divTable){
+	}, detailIncidents: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			if (datos.records.record.length > 1) {

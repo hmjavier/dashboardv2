@@ -212,13 +212,16 @@
 						</div>
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">TOPS</h3>
+						    <h3 class="panel-title">Tops</h3>
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-					        <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li>
-					        <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li>
-					        <!-- <li class="tops list-group-item" id="tUtilCountG"><a href="#">Top Utilization</a></li>-->
+						  	<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+					        <li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
+					        <li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
+					        <li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
+					        <li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
+					        <li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
 					      </ul>
 						  </div>
 						</div>
@@ -518,7 +521,7 @@
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
 			    		cnocConnector.service16 = serviceG6;
-			    		cnocConnector.service17 = serviceG7;
+			    		//cnocConnector.service17 = serviceG7;
 			    		cnocConnector.service18 = serviceG8;
 			    		cnocConnector.service19 = serviceG9;
 			    		cnocConnector.service20 = serviceG10;
@@ -575,14 +578,19 @@
 		    	$(this).addClass("active");
 		    });
 			
-		 	$('#tCpuCountG').click(function(e){
-		 		$("#headerGridsDetailG").text("Top CPU");
-				cnocConnector.invokeMashup(cnocConnector.service16, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tCpuG");			
-			});
-		 	
-			$('#tMemoryCountG').click(function(e){
-				$("#headerGridsDetailG").text("Top Memory");
-				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
+		 	$('.topMeasure').click(function(e) {
+		 		var currentId = $( this ).attr( 'id' );
+		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
+				cnocConnector.invokeMashup(
+						cnocConnector.service16,
+						{
+							"network_code" : cnocConnector.codeNetGlobal,
+							"topID" : currentId
+						},
+						drawElementsGral.topGrid,
+						"tTops",
+						"tTopsTable"
+					);
 			});
 			
 			$('#listIncidentG').click(function(e){

@@ -13,7 +13,7 @@ var cnocConnector = {
 	community1:'',
 	community2:'',
 	
-	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -43,9 +43,9 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****/
+	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -81,7 +81,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();		
 				
@@ -120,7 +120,28 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 			
-		}else{
+		} else if ( divTable === 'tTopsTable' ) {
+			jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
+			dTable = jQuery("#" + divTable).dataTable({
+				"sDom": 'T<"clear">lfrtip',
+				"oTableTools": {
+			        "aButtons": [
+			            "copy",
+			            "csv",
+			            "xls"
+			            ]
+			    },
+				"aaData" : rowsData,
+				"aoColumns" : rowsHeaders,
+				"sScrollX": "100%",
+				"sScrollXInner": "100%",
+				"sScrollY": "200",
+				"bScrollCollapse": true,
+				"bProcessing": true,
+				"bSort": false
+			});
+			
+		} else {
 			var scrollY = "200";
 			if(divTable === "listCustomerCostosC"){
 				scrollY = "320";
@@ -1012,7 +1033,7 @@ var cnocConnector = {
 		} else {
 			jQuery("#" + container).append(
 					"<option rel='"+datos.records.record.nmisserver.toString()+"' value='"
-							+ datos.records.record.name.toString()
+							+ datos.records.record.name.toString()+"|"+datos.records.record.nmisserver.toString() +"|"+datos.records.record.model.toString()
 							+ "'>" + datos.records.record.name.toString()
 							+ "</option>");
 
@@ -1146,7 +1167,7 @@ var cnocConnector = {
 		} else {
 			jQuery("#" + container).append(
 					"<option value='"
-							+ datos.records.record.name.toString()
+							+ datos.records.record.name.toString()+"|"+datos.records.record.nmisserver.toString()+"|"+datos.records.record.nodemodel.toString()
 							+ "'>" + datos.records.record.name.toString()
 							+ "</option>");
 
