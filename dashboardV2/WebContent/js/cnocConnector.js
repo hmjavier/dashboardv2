@@ -25,6 +25,7 @@ var cnocConnector = {
 					console.log(jqXHR);
 					console.log(textStatus);
 					console.log(errorThrown);
+					$( "#" + divcontainer ).unmask();
 				},
 				success : function(response) {
 					try {
@@ -63,6 +64,7 @@ var cnocConnector = {
 					console.log(jqXHR);
 					console.log(textStatus);
 					console.log(errorThrown);
+					$( "#" + divcontainer ).unmask();
 				},
 				success : function(response) {
 					try {
