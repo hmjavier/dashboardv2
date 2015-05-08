@@ -701,7 +701,7 @@ var drawElementsGral = {
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
-	}, topGrid: function(datos, container, divTable) {
+	},/* topGrid: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -718,6 +718,31 @@ var drawElementsGral = {
 			"sTitle" : "Value"
 		}, {
 			"sTitle" : "Element"
+		} ];
+		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+	}, */
+	topGrid: function(datos, container, divTable){
+		var rowsData = new Array();
+		try {
+			if (datos.records.record.length > 1) {
+				for ( var i = 0; i < datos.records.record.length; i++) {
+					var fields = new Array();
+					fields.push(datos.records.record[i].top.toString());
+					fields.push(datos.records.record[i].name.toString());
+					rowsData.push(fields);
+				}
+			} else {
+				var fields = new Array();
+				fields.push(datos.records.record.top.toString());
+				fields.push(datos.records.record.name.toString());
+				rowsData.push(fields);
+			}
+		} catch (err) {	};
+		var rowsHeaders = [ {
+			"sTitle" : "Percent"
+		}, {
+			"sTitle" : "Node Name"
 		} ];
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		

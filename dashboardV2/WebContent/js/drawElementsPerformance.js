@@ -36,7 +36,7 @@ var drawElementsPerformance = {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performance");
 			
-			var codeNet = $("#SelectCustomer").val(); 
+			var codeNet = $("#SelectCustomer").val();
 
 			drawElementsPerformance.builder(codeNet);
 

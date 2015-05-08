@@ -85,7 +85,7 @@ var cnocConnector = {
 		}
 	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
-		jQuery("#" + container).empty();		
+		jQuery("#" + container).empty();
 				
 		var dTable;
 		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG" || divTable==="listTunelStateG"){
@@ -122,7 +122,7 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 			
-		} else if ( divTable === 'tTopsTable' ) {
+		}/** Top else if ( divTable === 'tTopsTable' ) {
 			jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
 			dTable = jQuery("#" + divTable).dataTable({
 				"sDom": 'T<"clear">lfrtip',
@@ -143,7 +143,7 @@ var cnocConnector = {
 				"bSort": false
 			});
 			
-		} else {
+		} */ else {
 			var scrollY = "200";
 			if(divTable === "listCustomerCostosC"){
 				scrollY = "320";

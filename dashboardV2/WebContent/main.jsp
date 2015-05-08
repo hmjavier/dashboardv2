@@ -216,12 +216,14 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-						  	<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
-					        <li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
-					        <li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
-					        <li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
-					        <li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-					        <li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
+							<li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li>
+							<li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li>
+							<!-- <li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
+							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
+							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
+							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
+							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li> -->
 					      </ul>
 						  </div>
 						</div>
@@ -520,8 +522,8 @@
 			    		cnocConnector.service13 = serviceG3;
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
-			    		cnocConnector.service16 = serviceG6;
-			    		//cnocConnector.service17 = serviceG7;
+			    		cnocConnector.service16 = serviceG6; // Top
+			    		cnocConnector.service17 = serviceG7;
 			    		cnocConnector.service18 = serviceG8;
 			    		cnocConnector.service19 = serviceG9;
 			    		cnocConnector.service20 = serviceG10;
@@ -577,7 +579,20 @@
 		    	$(".tops").removeClass("active");
 		    	$(this).addClass("active");
 		    });
+		    
+		    /** Start Old Top **/
+		    $('#tCpuCountG').click(function(e){
+		 		$("#headerGridsDetailG").text("Top CPU");
+				cnocConnector.invokeMashup(cnocConnector.service16, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tCpuG");			
+			});
+		 	
+			$('#tMemoryCountG').click(function(e){
+				$("#headerGridsDetailG").text("Top Memory");
+				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
+			});
+		    /** End Old Top **/
 			
+			/* Top
 		 	$('.topMeasure').click(function(e) {
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
@@ -591,7 +606,7 @@
 						"tTops",
 						"tTopsTable"
 					);
-			});
+			}); */
 			
 			$('#listIncidentG').click(function(e){
 				$("#headerGridsDetailG").text("Incident Detail");
