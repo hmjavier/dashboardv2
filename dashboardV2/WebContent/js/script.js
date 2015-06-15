@@ -105,6 +105,11 @@ function generateMenu(){
         			general +="<li><a href='performanceGraph.jsp'><i class='fa fa-fw fa-bar-chart-o'></i> Performance Report </a></li>";
         			general +="<li><a href='ftp://ftp.cnoc.telmexit.com/'><i class='fa fa-fw fa-folder-open'></i> Reports </a></li>";
         			
+        			/*** ABC Load ***/
+        			//general +="<li><a href='http://dashboarddev.cnoc.telmexit.com:8080/abcConfig/mainCap.jsp'><i class='fa fa-fw fa-folder-open'></i> Alta CAP (ABC Config) </a></li>";
+                   	//general +="<li><a href='http://dashboarddev.cnoc.telmexit.com:8080/abcConfig/mainTest.jsp'><i class='fa fa-fw fa-folder-open'></i> INBOX (ABC Config) </a></li>";
+                   	/****************/
+        			
         			$(".menuCnoc").append(general);
 
         		}else if(value === "tck=true"){

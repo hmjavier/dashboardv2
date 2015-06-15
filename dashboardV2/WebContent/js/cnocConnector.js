@@ -261,7 +261,7 @@ var cnocConnector = {
 		}
 		
 		if(divTable === "listIncidentsI") {
-			$("#" + divTable).delegate("tbody tr", "click", function () {					
+			$("#" + divTable).delegate("tbody tr", "click", function () {
 				dTable.$('tr.row_selected').removeClass('row_selected');
 				$(this).addClass('row_selected');
 				

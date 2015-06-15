@@ -521,10 +521,9 @@ var drawElementsPerformance = {
 	   			error : function(jqXHR, textStatus, errorThrown) {
 	   				console.log(jqXHR);
 	   			},
-	   			success: function(response) {	   				
-
+	   			success: function(response) {
 	   				var dataChart = "";
-	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"){	   					
+	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"){
 	   					var json = response.replyData.data;
 	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 	   					for(var idx=0; idx<json.length; idx++){
@@ -538,8 +537,7 @@ var drawElementsPerformance = {
 	   				}else{
 	   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
 	   					onDataReceived(dataChart);
-	   				}	   				
-	   				
+	   				}
 	   			}
 	   		});
 			

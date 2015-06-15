@@ -38,25 +38,39 @@
 	<!-- jQuery Datepicker -->
 	<link rel="stylesheet" type="text/css" href="css/datepicker.css">
 	<style>
-		.tooltipMap{
+		.tooltipMap {
 			color: #000000;
 		}	
-		#tooltip{
+		#tooltip {
 			z-index: 9000;
 		}
-		.treeNode{
+		.treeNode {
 			font-size: 10px;
 		}
 		
-		.treeNodeDetail{
+		.treeNodeDetail {
 			font-size: 9px;
 		}
 		
-		.listNodesF{
+		.listNodesF {
 			font-size: 10px;
+		}		
+		
+		table {
+			max-width: none
 		}
 		
-		div.dataTables_scroll { clear: both; }
+		.rceDataTable * {
+			box-sizing: initial;
+		}
+		
+		table.dataTable,
+		table.dataTable th,
+		table.dataTable td {
+			-webkit-box-sizing: content-box;
+			-moz-box-sizing: content-box;
+			box-sizing: content-box;
+		}
 	</style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,32 +93,30 @@
 	</div>
     <div id="wrapper">
 		
-		<!-- MENU  -->		
+		<!-- MENU  -->
 		<%@ include file="menu.jsp" %> 
 		
         <div id="page-wrapper">
-
             <div class="container-fluid">
-                <!-- /.row -->
-
-                <div class="row">
+                <!-- /.row --><br>                
+				<div class="row">
                 	<div class="col-lg-3"></div>
-					<div class="col-lg-6">
-				    	<div class="form-group">
+					<div class="col-lg-6">				        
+				        <div class="form-group">
 							<div class="input-daterange input-group" >
-							    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input type="text" class="input-sm form-control datesPerformance" id="startDate" placeholder="Start Date">
+							    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span><input type="text" class="input-sm form-control datesReport" id="startDate" placeholder="dd/mm/yyyy">
 							    <span class="input-group-addon"> to </span>			    
-							    <input type="text" class="input-sm form-control datesPerformance" id="endDate" placeholder="End Date"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							    <input type="text" class="input-sm form-control datesReport" id="endDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 							    <div class="input-group input-group-sm">
 							      <span class="input-group-btn">
-							        <button class="btn btn-success glyphicon glyphicon-list-alt" type="button" id="selectGraph">  Get</button>
+							        <button class="btn btn-success glyphicon glyphicon-stats" type="button" id="getReportBtn">  Get Report</button>
 							      </span>
 								</div>		    			    
 							</div>			
-				        </div>        			    	        
+				        </div>				        
     				</div>
-    				<div class="col-lg-3"></div>
-                </div>
+    			<div class="col-lg-3"></div>
+                </div><br>
                 <!-- /.row -->
 				<div class="row">
 					<div class="col-lg-12">
@@ -113,49 +125,51 @@
 								<h3 class="panel-title">Incidents</h3>
 							</div>
 							<div id="chartIncidents">
-								<table id="tableIncidents" class="display" cellspacing="0" width="100%">
+								<table id="tableIncidents" class="display" cellpadding="0" cellspacing="0" border="0" width="100%">
 							        <thead>
 							            <tr>
-							                <th>Number</th>
-							                <th>Interaction</th>
-							                <th>Brief Description</th>
-							                <th>Network Code</th>
-							                <th>Company</th>
-							                <th>Open Time</th>
-							                <th>Last Update</th>
-							                <th>Close Time</th>
-							                <th>Hostname</th>
-							                <th>Service Unique ID</th>
-							                <th>Problem Status</th>
-							                <th>Operator</th>
-							                <th>Opened by</th>
-							                <th>Closure Code</th>
-							                <th>Service Type</th>
+							            	<th>Network Code</th>
+											<th>Company</th>
+											<th>Number</th>
+											<th>Interaction</th>
+											<th>Problem Status</th>
+											<th>Divisional</th>
+											<th>Location Code</th>
+											<th>CI Service</th>
+											<th>CI Affected</th>
+											<th>Location</th>
+											<th>Hostname</th>
+											<th>Site Category</th>
+											<th>Service Type</th>
+											<th>Reference No</th>
+											<th>Proactivity</th>
+											<th>Priority Code</th>
+											<th>Open Source</th>
+											<th>Function</th>
+											<th>Severity</th>
+											<th>Afecta Disp</th>
+											<th>Vendor</th>
+											<th>Vendor Ticket</th>
+											<th>Responsable</th>
+											<th>Autorizado por</th>
+											<th>Codigo Cierre</th>
+											<th>Brief Description</th>
+											<th>Action</th>
+											<th>Resolution</th>
+											<th>Open Time</th>
+											<th>Downtime End</th>
+											<th>Resolved Time</th>
+											<th>Last Update</th>				
+											<th>Close Time</th>
+											<th>Mes</th>
+											<th>Afectacion</th>
+											<th>Operator</th>
+											<th>Opened by</th>
 							            </tr>
 							        </thead>
-							 
-							        <tfoot>
-							            <tr>
-							                <th>Number</th>
-							                <th>Interaction</th>
-							                <th>Brief Description</th>
-							                <th>Network Code</th>
-							                <th>Company</th>
-							                <th>Open Time</th>
-							                <th>Last Update</th>
-							                <th>Close Time</th>
-							                <th>Hostname</th>
-							                <th>Service Unique ID</th>
-							                <th>Problem Status</th>
-							                <th>Operator</th>
-							                <th>Opened by</th>
-							                <th>Closure Code</th>
-							                <th>Service Type</th>
-							            </tr>
-							        </tfoot>
 							    </table>
 							</div>
-						</div>		
+						</div>
 					</div>
 				</div>
 				<!-- /.row -->
@@ -227,7 +241,74 @@
 		    		cnocConnector.menu = serviceMenu;
 		    		cnocConnector.nmis_urls = nmis_urls;
 		    }
+		});		
+		
+		$('.datesReport').datepicker({
+			format: "dd/mm/yyyy",
+			todayBtn: true,
+		    autoclose: true,
+		    todayHighlight: true//,
+		    //startDate: '-5d'
 		});
+		
+		var dTable = $('#tableIncidents').dataTable( {
+			"bDestroy": true,
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },			    
+			"sScrollX": "100%",
+			"bScrollCollapse": true,
+			"bProcessing": true,			
+			aoColumns: [
+				{ "mData": "network_code" },
+				{ "mData": "company" },
+				{ "mData": "number" },
+				{ "mData": "interaction" },
+				{ "mData": "problem_status" },
+				{ "mData": "divisional" },
+				{ "mData": "location_code" },
+				{ "mData": "ci_service" },
+				{ "mData": "ci_affected" },
+				{ "mData": "location" },
+				{ "mData": "hostname" },
+				{ "mData": "site_category" },
+				{ "mData": "service_type" },
+				{ "mData": "reference_no" },
+				{ "mData": "proactivity" },
+				{ "mData": "priority_code" },
+				{ "mData": "open_source" },
+				{ "mData": "function" },
+				{ "mData": "severity" },
+				{ "mData": "afecta_disp" },
+				{ "mData": "vendor" },
+				{ "mData": "vendor_ticket" },
+				{ "mData": "responsable" },
+				{ "mData": "autorizado_por" },
+				{ "mData": "cod_cierre" },
+				{ "mData": "brief_description" },
+				{ "mData": "action" },
+				{ "mData": "resolution" },
+				{ "mData": "open_time" },
+				{ "mData": "downtime_end" },
+				{ "mData": "resolved_time" },
+				{ "mData": "last_update" },				
+				{ "mData": "close_time" },
+				{ "mData": "mes" },
+				{ "mData": "afectacion" },
+				{ "mData": "operator" },
+				{ "mData": "opened_by" }
+			],
+			"order": [[ 1, "desc" ]],
+	    } );
+		
+		setTimeout(function(){
+			dTable.fnAdjustColumnSizing();
+		 },10);		
 		
 		/*Genera Menu*/
 		generateMenu();	
@@ -238,22 +319,14 @@
 				"SelectCustomer",
 				"opt"
 			);
-
-	 	$('.datesPerformance').datepicker({
-	 		dateFormat: "dd-mm-yyyy",
-			todayBtn: true,
-		    autoclose: true,
-		    todayHighlight: true//,
-		    //startDate: '-5d'
-		});
 		
-		$("#selectGraph").click(function(event) {
+		$("#getReportBtn").click(function(event) {
 			
 			var startDate = $( '#startDate' ).val();
 			var endDate = $( '#endDate' ).val();
 			var code_net = $( '#SelectCustomer' ).val();			
 			
-			$('#tableIncidents').dataTable( {
+			dTable = $('#tableIncidents').dataTable( {
 				"bDestroy": true,
 				"sDom": 'T<"clear">lfrtip',
 				"oTableTools": {
@@ -263,7 +336,7 @@
 			            "xls"
 			            ]
 			    },			    
-				"sScrollX": "100%",
+				"sScrollX": "100%",				
 				"bScrollCollapse": true,
 				"bProcessing": true,
 				"sPaginationType": "full_numbers",
@@ -281,40 +354,70 @@
 					} );
 				},
 				aoColumns: [
-					{ "mData": "number" },
-					{ "mData": "interaction" },        
-					{ "mData": "brief_description" },
 					{ "mData": "network_code" },
-					{ "mData": "company" },					
-					{ "mData": "open_time" },		                      
-					{ "mData": "last_update" },
-					{ "mData": "close_time" },
-					{ "mData": "hostname" },
-					{ "mData": "service_uniqueid" },
+					{ "mData": "company" },
+					{ "mData": "number" },
+					{ "mData": "interaction" },
 					{ "mData": "problem_status" },
+					{ "mData": "divisional" },
+					{ "mData": "location_code" },
+					{ "mData": "ci_service" },
+					{ "mData": "ci_affected" },
+					{ "mData": "location" },
+					{ "mData": "hostname" },
+					{ "mData": "site_category" },
+					{ "mData": "service_type" },
+					{ "mData": "reference_no" },
+					{ "mData": "proactivity" },
+					{ "mData": "priority_code" },
+					{ "mData": "open_source" },
+					{ "mData": "function" },
+					{ "mData": "severity" },
+					{ "mData": "afecta_disp" },
+					{ "mData": "vendor" },
+					{ "mData": "vendor_ticket" },
+					{ "mData": "responsable" },
+					{ "mData": "autorizado_por" },
+					{ "mData": "cod_cierre" },
+					{ "mData": "brief_description" },
+					{ "mData": "action" },
+					{ "mData": "resolution" },
+					{ "mData": "open_time" },
+					{ "mData": "downtime_end" },
+					{ "mData": "resolved_time" },
+					{ "mData": "last_update" },				
+					{ "mData": "close_time" },
+					{ "mData": "mes" },
+					{ "mData": "afectacion" },
 					{ "mData": "operator" },
-					{ "mData": "opened_by" },
-					{ "mData": "closure_code" },
-					{ "mData": "service_type" }
+					{ "mData": "opened_by" }
 				],
-				"order": [[ 0, "desc" ]],
+				"order": [[ 1, "desc" ]],
 		    } );
+			
+			setTimeout(function() {
+				dTable.fnAdjustColumnSizing();
+			 },30);
+			
+			$(".dataTables_scrollHeadInner").css({"width":"100%"});
+			$(".table ").css({"width":"100%"});
+			
 		});
 	 	
-		$( ".logout").click(function(event){	
+		$( ".logout").click(function(event) {
 			logout();
 		});
 		
-		$( ".back").click(function(event){
+		$( ".back").click(function(event) {
 			home();
 		});		
 		
-		$(".themeW").click(function(event){
+		$(".themeW").click(function(event) {
 			var filename = $(this).attr('rel');				
 			themeChanges(filename, false);
 		});
 		
-		$(".themeB").click(function(event){
+		$(".themeB").click(function(event) {
 			var filename = $(this).attr('rel');				
 			themeChanges(filename,true);
 		});
