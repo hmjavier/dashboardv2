@@ -903,7 +903,8 @@ var drawElementsGral = {
 					tableT += "<td>"+datos.records.record[i].ipadentaddr1.toString()+"</td>";
 					tableT += "<td>"+datos.records.record[i].lastupdate.toString()+"</td>";
 					tableT += "<td>"+datos.records.record[i].ifoperstatus.toString()+"</td>";
-					tableT += "<td>"+datos.records.record[i].ifadminstatus.toString()+"</td></tr>";
+					tableT += "<td>"+datos.records.record[i].ifadminstatus.toString()+"</td>";
+					tableT += "<td>"+datos.records.record[i].ifspeed.toString()+"</td></tr>";
 				}
 			} else {
 				var int1 = datos.records.record.ifadminstatus.toString();
@@ -919,7 +920,8 @@ var drawElementsGral = {
 				tableT += "<td>"+datos.records.record.ipadentaddr1.toString()+"</td>";
 				tableT += "<td>"+datos.records.record.lastupdate.toString()+"</td>";
 				tableT += "<td>"+datos.records.record.ifoperstatus.toString()+"</td>";
-				tableT += "<td>"+datos.records.record.ifadminstatus.toString()+"</td></tr>";
+				tableT += "<td>"+datos.records.record.ifadminstatus.toString()+"</td>";
+				tableT += "<td>"+datos.records.record.ifspeed.toString()+"</td></tr>";
 			}
 		} catch (err) {};
 
@@ -934,6 +936,8 @@ var drawElementsGral = {
 				"sTitle" : "Oper Status"
 			}, {
 				"sTitle" : "Admin Status"
+			}, {
+				"sTitle" : "Bandwidth (Kbps)"
 			} ];
 		} catch (err) {
 		}
