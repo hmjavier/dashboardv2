@@ -6,6 +6,9 @@
 var modalIP;
 
 var drawElementsGral = {
+		
+		nodes : [],
+		
 		dataChartMemory : [],
 		
 		init : function(codeNet) {
@@ -19,30 +22,176 @@ var drawElementsGral = {
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsGral.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){				
-				
-			cnocConnector.invokeMashup(cnocConnector.service13, {"codenet" : codenet},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		},builder: function(codenet) {
 			
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
-			
-			
-			/*if(codenet.indexOf('L')>=0 || codenet.indexOf('N000269')>=0){
-				this.mapaMundial(codenet);
-			}else{
-				this.mapaGeneral(codenet);
-			}*/
-			
 
-			this.mapaGeneral(codenet, null ,false);
+			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
+				this.mapaGeneral(codenet,"NACIONAL", true);
+			else
+				this.mapaGeneral(codenet, null ,false);
 			
-			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : ""},drawElementsGral.countStatus, "countAll", "countAllG");
-			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "reachable"},drawElementsGral.countStatus, "countReachable", "countReachableG");
-			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "degraded"},drawElementsGral.countStatus, "countDegraded", "countDegradedG");
-			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "unreachable"},drawElementsGral.countStatus, "countUnreachable", "countUnreachableG");
+			/*** Getting NMIS Groups, Status and list o nodes ***/
+			var totalValues = [ $('#totalDiv'), $('#totalReachable'), $('#totalDegraded'), $('#totalUnreachable') ];
+			var totalDivs = [ $('#countAll'), $('#countReachable'), $('#countDegraded'),$('#countUnreachable') ];
+			
+			drawElementsGral.reachableNodes = [];
+			drawElementsGral.degradedNodes = [],
+			drawElementsGral.unreachableNodes = [];
+			
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getNmisGroups,
+				params : {"networkCode" : codenet},
+				callback : function(response, divContainers, divElements) {
+					
+					var reachable = 0;
+					var degraded = 0;
+					var unreachable = 0;
+					var ipslaArray = []; // IPSLA node list
+					
+					var stopMask = response.records.record.length;
+					
+					try {
+						$.each(response.records.record, function(k,value) { /*** Loop through Groups ***/
+							cnocFramework.invokeMashup({
+								invokeUrl : endpoint.getNmisStatus,
+								params : {
+									"ip" : value.nmisserver.toString(),
+									"query" : '["config.group","' + value.group.toString() + '"]',
+									"properties" : '["node_name","status.nodestatus","info.status","info.echoRtt"]'
+								},
+								callback : function(response, divContainers, divElements) {									
+									
+									$.each(response, function(k,v) { /*** Loop through Nodes ***/
+										
+										/*** Node properties ***/
+										var status = v.status.nodestatus.toString();
+										var nodeName = v.node_name.toString();
+										var event = '';										
+										
+										try { /*** Getting IPSLA ***/
+											$.each(v.info.echoRtt, function(m,n) {
+												if (n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') {
+													var ipsla = {
+														'nodeName' : nodeName,
+														'status' : n.OperSense,
+														'ipTarget' : n.JAdminTargetAddress,
+														'ipSource' : n.JAdminSourceAddress,
+														'index' : n.index
+													};
+													ipslaArray.push(ipsla);
+												}
+											});
+										} catch(err) {
+											;
+//											console.log(err);
+//											console.log("No IPSLA [" + nodeName + "]");
+										}
+
+										if (status === 'reachable') { // Reachable nodes
+											reachable++;
+										
+										} else if (status === 'degraded') {  // Degraded nodes
+											degraded++;											
+											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+												if (v.info.status[prop].status.toString() != 'ok') {
+													event = v.info.status[prop].event;
+													break;
+												}												
+											}																						
+										
+										} else if (status === 'unreachable') { // Unreachable Nodes
+											unreachable++;											
+											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+												if (v.info.status[prop].status.toString() != 'ok') {
+													event = v.info.status[prop].event;
+													break;
+												}												
+											}											
+										}
+										
+										/*** Push nodes ***/
+										drawElementsGral.nodes.push({
+											'name' : nodeName,
+											'status_value' : status,
+											'event' : event
+										});
+										
+									});
+									
+									if(stopMask == 1) {
+										divElements[0].text(reachable + degraded + unreachable);
+										divElements[1].text(reachable);
+										divElements[2].text(degraded);
+										divElements[3].text(unreachable);
+										
+										/*** Unmask all div containers ***/
+										cnocFramework.unmask(divContainers);
+										
+										/*** Draw complete node list ***/
+										drawElementsGral.drawListNodes(drawElementsGral.nodes, 'listNodes', 'listNodesG');
+										
+										console.log(ipslaArray);
+										
+									}
+									
+									stopMask--;
+									
+								},
+								divContainers : totalDivs,
+								divElements : totalValues
+							});
+							
+						});
+						
+					} catch (e) {
+						console.log(e);
+						divElements[0].text(reachable + degraded + unreachable);
+						divElements[1].text(reachable);
+						divElements[2].text(degraded);
+						divElements[3].text(unreachable);
+						
+						/*** Unmask all div containers ***/
+						cnocFramework.unmask(divContainers);
+					}
+				},
+				divContainers : [],
+				divElements : totalValues
+			});
+			
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");			
 			
-		},selectCustom : function(datos, selector, opt) {
+		}, listNodes : function(nodes, status) {
+			
+			var nodeList = [];
+			
+			if (status === 'complete') { // Draw complete node list
+				nodeList = nodes;
+			
+			} else if (status === 'reachable') { // Draw reachable node list
+				$.each(nodes, function(k,v) {
+					if (v.status_value === status)
+						nodeList.push(v);
+				});
+			
+			} else if (status === 'degraded') { // Draw degraded node list
+				$.each(nodes, function(k,v) {
+					if (v.status_value === status)
+						nodeList.push(v);
+				});
+			
+			} else if (status === 'unreachable') { // Draw unreachable node list
+				$.each(nodes, function(k,v) {
+					if (v.status_value === status)
+						nodeList.push(v);
+				});
+			}
+			
+			drawElementsGral.drawListNodes(nodeList, 'listNodes', 'listNodesG');
+			
+		
+		}, selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "general");		
 			var codeNet = $("#SelectCustomer").val(); 
@@ -72,19 +221,18 @@ var drawElementsGral = {
 					console.log("error");
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
-					//drawElementsGral.mapaGeneral(cnocConnector.codeNetGlobal);
 				},
-				success : function(response) {
+				success : function(response) {					
 					var tmp = "";
 					if(response.results){
 						tmp = response.results.international.toString();
 					}else{
 						tmp = response.international.toString();
-					}
+					}					
 					
 					try{
 
-						if(tmp === "false" || flgNacional === true){
+						if(tmp === "false" || flgNacional === true) {
 							$.each( response, function( key, val ) {
 								$.each( val, function( key, val ) {
 									var array = [];
@@ -179,23 +327,20 @@ var drawElementsGral = {
 						                infoWindow.setPosition(event.latLng);
 						                infoWindow.open(map);
 						            });
-						            infoWindow = new google.maps.InfoWindow();
-						            
-						            
-						            //if(codenet === 'N000269'){
-						            	google.maps.event.addListener(map, 'zoom_changed', function() {
-							            	var zoomLevel = map.getZoom();					            	
+						            infoWindow = new google.maps.InfoWindow();						            
+
+						            	google.maps.event.addListener(map, 'zoom_changed', function() {						            		
+							            	var zoomLevel = map.getZoom();
+//							            	console.log(zoomLevel);
 							                if (zoomLevel == 3) {
-							                	//drawElementsGral.mapaMundial(codenet);
 							                	drawElementsGral.mapaGeneral(codenet, null , false);
 							                }
 						        		});
-						            //}
 
 						          } //Cierre IF
 						        } // Cierre FOR states
 						      }
-						}else if(tmp === "true"){
+						} else if(tmp === "true") {
 							var records = [];
 							$.each( response, function( key, val ) {																
 								$.each( val, function( key, val ) {
@@ -261,15 +406,14 @@ var drawElementsGral = {
 							      countries[record['country']] = record;
 							      totalServicios += parseFloat(record['conteo']);
 							    }
-						    console.log(countries);
+
 						    var rows = polygons.mundial.records.record;
 
 						    jQuery.each(rows, function(index, item) {
 						      var poly = [];
-						      //console.log(item[0]);
+
 						      if (item[0] === "Antarctica")
-						    	  return true;
-				        
+						    	  return true;				        
 
 						      if (item[1].type == 'GeometryCollection') {
 
@@ -328,120 +472,9 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-						//response = null;
 						console.log("fallo");
-						//drawElementsGral.mapaGeneral(codenet);
 					}
-					
-
-					/*
-					$.each( response, function( key, val ) {
-						var array = [];
-						var reachableT = 0;
-						var degradedT = 0;
-						var unreachableT = 0;
-						var color ="#22FF00";
-						$.each( val, function( key, val ) {
-							if(key.toString() === "reachable"){
-								reachableT = val;
-							}
-							
-							if(key.toString() === "degraded"){
-								degradedT = val;
-							}
-							
-							if(key.toString() === "unreachable"){
-								unreachableT = val;
-							}
-						});
-						
-						var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
-						
-						if(parseInt(unreachableT)> (totalN * .02)){
-							color = "#FF1600";
-						}else if(parseInt(degradedT)> (totalN * .05)){
-							color = "#FFE200";
-						}else {
-							color ="#22FF00";
-						}
-						
-						array.push(key);
-						array.push("Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT);
-						array.push(color);
-						states.push(array);
-						
-					});
-
-		            var mapOptions = {
-							zoom: 5,
-							center: new google.maps.LatLng(21.8833, -102.3),
-							mapTypeId: google.maps.MapTypeId.TERRAIN, 
-							infoWindow: null,
-							styles: stylesMap
-						};
-					var mapaNacional;
-					map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
-					
-					infoWindow = new google.maps.InfoWindow({
-					        content: "Cargando . . ."
-					});
-					
-					 var bounds = new google.maps.LatLngBounds();
-				     var estados = polygons.mexico.records.record;
-
-				      for (var i = 0; i < estados.length; i++) {
-				        var estado = estados[i];
-				        var polygon = [];	
-
-				        for (var a = 0; a< states.length; a++) {				        	
-				        	
-				        	//if(states[a][0].indexOf(estado['name'].toUpperCase()) >-1 ){
-				        	if(states[a][0] === estado['name'].toUpperCase() ){
-
-				            var coords = estado['coords'];
-				            for (var j = 0; j < coords.length; j++) {
-				              var coord = coords[j];
-				              var point = new google.maps.LatLng(coord[1], coord[0]);
-				              polygon.push(point);
-				              bounds.extend(point);
-				            }
-				            // Construct the polygon.
-				            mapaNacional = new google.maps.Polygon({
-				              paths: polygon,
-				              strokeColor: states[a][2],
-				              strokeOpacity: 0.8,
-				              strokeWeight: 3,
-				              fillColor: states[a][2],
-				              fillOpacity: 0.35,
-				              info: states[a][0],
-				              totalIncidents: states[a][1]
-				            });
-				            mapaNacional.setMap(map);
-				            // Add a listener for the click event.
-				            google.maps.event.addListener(mapaNacional, 'mouseover', function(event){
-				            	var info = this.info;
-				                var total = this.totalIncidents;
-				                var contentString = '<div class="tooltipMap"><b>Total Nodes by Status:</b><br>' + 'State: ' + info + ' <br>' + total + '<br></div>';
-				                // Replace the info window's content and position.
-				                infoWindow.setContent(contentString);
-				                infoWindow.setPosition(event.latLng);
-				                infoWindow.open(map);
-				            });
-				            infoWindow = new google.maps.InfoWindow();
-				            
-				            if(codenet === 'N000269'){
-				            	google.maps.event.addListener(map, 'zoom_changed', function() {
-					            	var zoomLevel = map.getZoom();					            	
-					                if (zoomLevel == 3) {
-					                	drawElementsGral.mapaMundial(codenet);
-					                }
-				        		});
-				            }
-
-				          } //Cierre IF
-				        } // Cierre FOR states
-				      }*/
-				      $( "#mapGral").unmask();
+					$( "#mapGral").unmask();
 				}
 			});
 
@@ -639,40 +672,39 @@ var drawElementsGral = {
 			chart = new Highcharts.Chart(optChart);
 			
 			
-	},drawListNodes: function (datos, container, divTable) {
+	}, drawListNodes: function (datos, container, divTable) {
 		jQuery("#" + container).empty();	
 		var tableT = "";
-		try {
-			if (datos.records.record.length > 1) {
-				for ( var i = 0; i < datos.records.record.length; i++) {
-					if(datos.records.record[i].status_value.toString()==="degraded"){
-						tableT += "<tr class='warning'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
-					}else if(datos.records.record[i].status_value.toString()==="reachable"){
-						tableT += "<tr class='success'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
-					}else if(datos.records.record[i].status_value.toString()==="unreachable"){
-						tableT += "<tr class='danger'><td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td></tr>";
-					};					
-				};
-			} else {
-				if(datos.records.record.status_value.toString()==="degraded"){
-					tableT += "<tr class='warning'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
-				}else if(datos.records.record.status_value.toString()==="reachable"){
-					tableT += "<tr class='success'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
-				}else if(datos.records.record.status_value.toString()==="unreachable"){
-					tableT += "<tr class='danger'><td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td></tr>";
-				}
-			}
+		
+		try {			
+			$.each(datos, function(k,v) {
+				var _class = '';
+				
+				if(v.status_value === 'reachable')
+					_class = 'success';
+				else if(v.status_value === 'degraded')
+					_class = 'warning';
+				else if(v.status_value.toString()==="unreachable")
+					_class = 'danger';				
+					
+				tableT +=
+					"<tr class='" + _class + "'>" +
+						"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
+						"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
+					"</tr>";
+			});
+			
 		} catch (err) {
 			console.log(err);
-		};
-		/*GENERA ARRAY DE ENCABEZADOS DE GRAFICA*/
-		try {
-			var rowsHeaders = [{
-				"sTitle" : "Node Name"
-			}];
-		} catch (err) {	};
+		};		
 		
-		var grid = cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);		
+		var rowsHeaders = [
+			{ "sTitle" : "Node Name" },
+			{ "sTitle" : "Event" }
+		];
+		
+		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
+		
 	},countTotal: function(datos, container, divPanel){
 		/*GENERA ARRAY DE DATOS A GRAFICAR*/
 		var rowsData = new Array();
@@ -701,7 +733,7 @@ var drawElementsGral = {
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
-	},/* topGrid: function(datos, container, divTable) {
+	}, topGrid: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -721,8 +753,9 @@ var drawElementsGral = {
 		} ];
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
-	}, */
-	topGrid: function(datos, container, divTable){
+	},
+	/*** Old Tops 
+	 topGrid: function(datos, container, divTable){
 		var rowsData = new Array();
 		try {
 			if (datos.records.record.length > 1) {
@@ -746,7 +779,8 @@ var drawElementsGral = {
 		} ];
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
-	}, detailIncidents: function(datos, container, divTable) {
+	}, Old Tops ***/
+	detailIncidents: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			if (datos.records.record.length > 1) {
@@ -903,7 +937,8 @@ var drawElementsGral = {
 					tableT += "<td>"+datos.records.record[i].ipadentaddr1.toString()+"</td>";
 					tableT += "<td>"+datos.records.record[i].lastupdate.toString()+"</td>";
 					tableT += "<td>"+datos.records.record[i].ifoperstatus.toString()+"</td>";
-					tableT += "<td>"+datos.records.record[i].ifadminstatus.toString()+"</td></tr>";
+					tableT += "<td>"+datos.records.record[i].ifadminstatus.toString()+"</td>";
+					tableT += "<td>"+datos.records.record[i].ifspeed.toString()+"</td></tr>";
 				}
 			} else {
 				var int1 = datos.records.record.ifadminstatus.toString();
@@ -919,7 +954,8 @@ var drawElementsGral = {
 				tableT += "<td>"+datos.records.record.ipadentaddr1.toString()+"</td>";
 				tableT += "<td>"+datos.records.record.lastupdate.toString()+"</td>";
 				tableT += "<td>"+datos.records.record.ifoperstatus.toString()+"</td>";
-				tableT += "<td>"+datos.records.record.ifadminstatus.toString()+"</td></tr>";
+				tableT += "<td>"+datos.records.record.ifadminstatus.toString()+"</td>";
+				tableT += "<td>"+datos.records.record.ifspeed.toString()+"</td></tr>";
 			}
 		} catch (err) {};
 
@@ -934,6 +970,8 @@ var drawElementsGral = {
 				"sTitle" : "Oper Status"
 			}, {
 				"sTitle" : "Admin Status"
+			}, {
+				"sTitle" : "Bandwidth (Kbps)"
 			} ];
 		} catch (err) {
 		}
@@ -1068,7 +1106,7 @@ var drawElementsGral = {
 				
 		modal.modal("show");
 		
-	},ipAccounting: function(data) {		
+	},ipAccounting: function(data) {
 		
 		modalIP = bootbox.dialog({
 			message: $("#ipAcc").html(),
@@ -1289,5 +1327,27 @@ var drawElementsGral = {
 		} ];
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
+	
+	}, unmanaged: function(data, container, divTable) {
+		if (data.results.result === 'success') {
+			$( '#modalUnmanagedContent' ).append(
+					'<br><div class="row">' +
+				    	'<div class="col-lg-12">' +
+							'<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-fw"></i> You had deactivated all monitoring for: ' + 
+							cnocConnector.nodeGlobal + '</div>' +
+						'</div>' +
+					'</div>');
+			
+			$( '#saveUnmanaged' ).attr('disabled','disabled');
+		
+		} else {
+			$( '#modalUnmanagedContent' ).append(
+					'<br><div class="row">' +
+				    	'<div class="col-lg-12">' +
+							'<div class="alert alert-danger" role="alert"><i class="fa fa-warning fa-fw"></i> Can&#39;t unmanaged ' + 
+							cnocConnector.nodeGlobal + '</div>' +
+						'</div>' +
+					'</div>');
+		}
 	}
 };

@@ -117,7 +117,7 @@
 				  			<div class="col-lg-3">
 						    	<div class="panel panel-primary">
 						    		<div class="panel-heading">
-								    	<h3 class="panel-title">Changes Category</h3>
+								    	<i class="fa fa-bar-chart-o fa-fw"></i> Changes Category
 								  	</div>
 						    		<div id="containerCategory" style="height: 200px;"></div>
 						    	</div>		
@@ -125,7 +125,7 @@
 					    	<div class="col-lg-9" >
 						    	<div class="panel panel-primary">
 						    		<div class="panel-heading">
-								    	<h3 class="panel-title">Changes By Phase</h3>
+								    	<i class="fa fa-bar-chart-o fa-fw"></i> Changes By Phase
 								  	</div>
 						    		<div id="containerPhase" style="height: 200px;"></div>
 						    	</div>		
@@ -135,7 +135,7 @@
 				  			<div id="changesGroups" class="col-lg-3" style="display: none;">
 						    	<div class="panel panel-primary">
 						    		<div class="panel-heading">
-								    	<h3 class="panel-title">Changes By Group</h3>
+								    	<i class="fa fa-bar-chart-o fa-fw"></i> Changes By Group
 								  	</div>
 						    		<div id="changesGroupsChart" style="height: 300px;"></div>
 						    	</div>		
@@ -144,7 +144,7 @@
 						    	<div class="panel panel-primary">
 						    		<div class="panel-heading">
 						    			<a name="listChanges"></a>
-								    	<h3 class="panel-title">Changes List</h3>
+								    	<i class="fa fa-list-alt fa-fw"></i> Changes List
 								  	</div>
 						    		<div id="lista" style="height: 300px;"></div>
 						    	</div>		
@@ -157,7 +157,7 @@
 				    <div class="col-lg-3">
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Change Detail</h3>
+						    <i class="fa fa-list fa-fw"></i> Change Detail
 						  </div>
 						  <div class="panel-body">		  	
 							<!-- <div id="listNodeDetail"></div>-->
@@ -260,7 +260,7 @@
 					<div id="changesListT" class="col-lg-6">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<h3 class="panel-title">Change Activities</h3>
+								<i class="fa fa-list-alt fa-fw"></i> Change Activities
 							</div>
 							<div id="tabsChangesActivities" style="height: 300px;"></div>
 						</div>		
@@ -268,7 +268,7 @@
 					<div id="changesListT" class="col-lg-6">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<h3 class="panel-title">Change Tasks</h3>
+								<i class="fa fa-list-alt fa-fw"></i> Change Tasks
 							</div>
 							<div id="tabsChangesTasks" style="height: 300px;"></div>
 						</div>		

@@ -1,3 +1,7 @@
+/**
+ * Get emails from JSON 
+ * @param reportType
+ */
 function getEmails (reportType) {
 	
 //	console.log(reportType);
@@ -19,10 +23,13 @@ $.ajax({
 //					console.log(key + ", " + value);
 					$.each(value, function(k, v) {
 //						console.log(k + ", " + v);
-						if (v.id == reportType) {
+						if (v.id === reportType) { // found it...
 //							console.log("found it...");
-				            // found it...
-							$( '#to_ES' ).val(v.to);
+							if (reportType === 'Teldat') {
+								getEmailSelect(v.to);
+							} else {
+								$( '#to_ES' ).val(v.to);								
+							}
 							$( '#cc_ES' ).val(v.cc);
 				            return false; // stops the loop
 				        }
@@ -35,4 +42,19 @@ $.ajax({
 			$( "#error_dialog" ).dialog( "open" );
 	    }
 	});
-}
+};
+
+/**
+ * Turn emails into select HTML tag
+ * @param emails
+ */
+function getEmailSelect (emails) {
+	var array = emails.split(';');
+	$( '#to_ES' ).remove();
+	$( '#address_ES' ).append('<select id="to_ES" class="form-control" multiple></select>');
+	$.each(array, function(key, value) {
+//		console.log(value);
+		var arrayTo = value.split(',');
+		$( '#to_ES' ).append('<option value="' + arrayTo[1] +'">' + arrayTo[0] +'</option>');		
+	});	
+};

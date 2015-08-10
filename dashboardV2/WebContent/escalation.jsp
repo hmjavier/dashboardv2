@@ -60,7 +60,7 @@
 
 
                 <div class="row">
-                	<div class="col-md-5 col-md-offset-3">
+                	<div class="col-md-6 col-md-offset-3">
                 		<div class="btn-group">    
 					    	<button type="button" class="btn btn-info">CSC</button>
 							<button type="button" class="btn btn-info">GFC</button>
@@ -68,6 +68,7 @@
 							<button type="button" class="btn btn-info">ESCALACION CASE</button>
 							<button type="button" class="btn btn-info">SMS-INT</button>
 							<button type="button" class="btn btn-info">SMS-CLIE</button>
+							<!-- <button type="button" class="btn btn-info">Teldat</button> -->
 							<!-- <button id="getButton" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>-->
 						</div>						
                 	</div>
@@ -134,7 +135,8 @@
 	<script src="js/jsEscalaciones/function_CNOC_NOTI.js"></script>
 	<script src="js/jsEscalaciones/function_ESCALACION_CASE.js"></script>
 	<script src="js/jsEscalaciones/function_SMS_INT.js"></script>
-	<script src="js/jsEscalaciones/function_SMS_CLIE.js"></script>	
+	<script src="js/jsEscalaciones/function_SMS_CLIE.js"></script>
+	<script src="js/jsEscalaciones/function_Teldat.js"></script>
 	
 	<!-- jQuery Loadmask -->
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
@@ -227,11 +229,19 @@
 				    		"chartEscalation", // Container
 				    		"formEscalation" // Div
 				    	);
+		 		}  else if (report == 'Teldat') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_Teldat, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);
 		 		} else 
 		 			console.log("unknown report");
 			});
 
-			$( ".logout").click(function(event){	
+			$( ".logout").click(function(event){
 				logout();
 			});
 			

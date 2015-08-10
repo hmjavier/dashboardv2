@@ -111,7 +111,7 @@
 			        <div class="col-lg-4">   	
 				      	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Resources</h3>
+						    <i class="fa fa-sitemap fa-fw"></i> Node Resources
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
 						  	<div id="cmbNodesPerformance">
@@ -126,7 +126,7 @@
 				    <div class="col-lg-8" id="GraficasPerformance">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Chart</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart
 						  	</div>
 						  	<div class="panel-body">
 						  		<a name="nodeChart"></a>

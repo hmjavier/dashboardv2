@@ -32,10 +32,13 @@
 	<!-- jQuery Loadmask -->
 	<link rel="stylesheet" type="text/css" href="js/jquery-loadmask-0.4/jquery.loadmask.css">
 	
+	<!-- Datetimepicker -->
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">
+	
 	<style>
-		.tooltipMap{
-		color: #000000;
-		}
+		.tooltipMap{ color: #000000; }
+		.datepicker{ z-index:1151 !important; }
+		.date input { height: 31px; }
 	</style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -78,7 +81,29 @@
 			</div>
 		</div>
 	</div>
-    <div id="wrapper">
+
+	<!-- Modal Unmanaged -->
+	<div class="modal fade" id="boxUnmanaged" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" id="unModal">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="uModalLabel">Unmanaged node</h4>
+				</div>
+				<div class="modal-body" id="modalBodyUnmanaged"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="saveUnmanaged">Unmanaged</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="wrapper">
 		<%@ include file="menu.jsp" %> 
         <div id="page-wrapper">
 
@@ -87,13 +112,14 @@
 
 
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-primary">
+<!--                     <div class="col-md-2 col-md-6 col-md-offset-1"> -->
+                    <div class="col-md-3 col-md-6">
+                        <div class="panel panel-primary" id="countAll">
                             <div class="panel-heading">
                                 <div class="row">
 									<div class="col-xs-12 text-center">
 										<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="countAll"></div>
+                                        	<div class="huge" id="totalDiv"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -107,13 +133,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green">
+                    <div class="col-md-3 col-md-6">
+                        <div class="panel panel-green" id="countReachable">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="countReachable"></div>
+                                        	<div class="huge" id="totalReachable"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -127,13 +153,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-yellow">
+                    <div class="col-md-3 col-md-6">
+                        <div class="panel panel-yellow" id="countDegraded">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="countDegraded"></div>
+                                        	<div class="huge" id="totalDegraded"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -147,13 +173,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red">
+                    <div class="col-md-3 col-md-6">
+                        <div class="panel panel-red" id="countUnreachable">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="countUnreachable"></div>
+                                        	<div class="huge" id="totalUnreachable"></div>
                                         </a>                                        
                                     </div>
                                 </div>
@@ -167,13 +193,35 @@
                             </a>
                         </div>
                     </div>
+                    <!-- Unmanaged start -->
+                    <!-- <div class="col-md-2 col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                    	<a href="#nodeList" style="color: #ffffff;">
+                                        	<div class="huge" id="countUnmanaged">0</div>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">Unmanaged</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div> -->
+                    <!-- Unmanaged end -->
                 </div>
                 <!-- /.row -->
 				<div class="row">
 				    <div class="col-lg-4">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Groups</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Groups
 						  	</div>
 				    		<div id="chartGrupos" style="height: 500px;"></div>
 				    	</div>		
@@ -181,7 +229,7 @@
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary" id="mapaAll">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Nodes By State</h3>
+						    	<i class="fa fa-globe fa-fw"></i> Nodes By State
 						  	</div>
 				    		<div id="mapGral" class="mapGral"></div>
 				    	</div>		
@@ -190,7 +238,7 @@
 				    <div class="col-lg-3">
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Services</h3>
+						    <i class="fa fa-book fa-fw"></i> Services
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
@@ -212,18 +260,18 @@
 						</div>
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Tops</h3>
+						    <i class="fa fa-long-arrow-up fa-fw"></i> Tops
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-							<li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li>
-							<li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li>
-							<!-- <li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+							<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
+							<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
+							<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
 							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li> -->
+							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
 					      </ul>
 						  </div>
 						</div>
@@ -237,7 +285,7 @@
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
-						    	<h3 class="panel-title">Node List</h3>
+						    	<i class="fa fa-list-alt fa-fw"></i> Node List
 						  	</div>
 							<div id="listNodes" class="listNodes"></div>
 							<br>
@@ -247,7 +295,7 @@
 				    <div class="col-lg-4">
 				    	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Relationships</h3>
+						    <i class="fa fa-random fa-fw"></i> Relationships
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
@@ -264,7 +312,7 @@
 						</div>
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Tools</h3>
+						    <i class="fa fa-magic fa-fw"></i> Node Tools
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
@@ -285,7 +333,7 @@
 						</div>
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Resources</h3>
+						    <i class="fa fa-sitemap fa-fw"></i> Node Resources
 						  </div>
 						  <div class="treeContainer panel-body" id="treeContainer">
 						  	<a name="nodeResource"></a>
@@ -297,9 +345,24 @@
 				    
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary">
-						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Details</h3>
-						  </div>
+							<div class="panel-heading">
+								<i class="fa fa-list fa-fw"></i> Node Details
+								<!-- Unmanaged Star -->
+								<!-- <div class="pull-right">
+									<div class="btn-group">
+										<button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">
+										Actions
+										<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu pull-right" role="menu">
+											<li><a id="actionUnmanaged" data-toggle="modal" data-target="#boxUnmanaged">Unmanaged</a>
+											</li>
+										</ul>
+									</div>
+								</div> -->
+								<!-- Unmanaged End -->
+							</div>
+							<!-- /.panel-heading -->						  
 						  <div class="panel-body" style="font-size: 9px;">		  	
 							<!-- <div id="listNodeDetail"></div>-->
 							<!-- <div class="alert alert-info" style="display: none;" id="msgPingOnly">
@@ -320,7 +383,7 @@
 							    		<input class="form-control" type="text" id="sysdescr" >
 							  		</div>
 									
-								</div>		
+								</div>
 								<div class="row" style="padding-left: 7px; padding-right: 7px;">
 										<div class="col-lg-4 form-group has-success">
 										  <label class="control-label" for="inputSuccess">Node Type:</label>
@@ -431,7 +494,7 @@
 						</div> 
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Chart</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart
 						  	</div>
 						  	<div class="panel-body">
 						  		<a name="nodeChart"></a>
@@ -460,8 +523,8 @@
     </div>
     <!-- /#wrapper -->
 
-	<!-- jQuery Version 1.11.0 -->	
-	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+	<!-- jQuery Version 1.11.0 -->
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>	
 	
 	<!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.js"></script>
@@ -482,6 +545,11 @@
 	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
+	<!-- Endpoint Properties -->
+	<script src="js/cnoc/endpoint.js"></script>
+	<!-- CNOC Framework -->
+	<script src="js/cnoc/cnocFramework.js"></script>
+	
 	<!-- higcharts -->
 	<script type="text/javascript" src="js/highcharts.js"></script>
 	<script type="text/javascript" src="js/exporting.js"></script>
@@ -497,6 +565,11 @@
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
 	
+	<!-- Datetimepicker -->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/en-gb.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	
+	
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
 	</script>
@@ -505,7 +578,7 @@
 	var stylesMap = null;
 	
 	$(document).ready(function(){
-
+		
 			jQuery.i18n.properties({
 			    name:'config', 
 			    path:'prop/', 
@@ -540,10 +613,14 @@
 			    		cnocConnector.service31 = serviceG20;
 			    		cnocConnector.service32 = serviceG21;
 			    		cnocConnector.service33 = serviceG22;
-			    		cnocConnector.service34 = serviceG23;			    		
+			    		cnocConnector.service34 = serviceG23;
+			    		cnocConnector.service35 = serviceG24;
 			    		
 			    }
 			});
+			
+			/*** Load Enpoints services ***/
+	    	endpoint.getproperties();
 		
 		 	//$( "#sortableLeft" ).sortable({revert: true});
 		 	
@@ -551,21 +628,58 @@
 			generateMenu();
 		 	
 		 
-		 	$('#countAll').click(function(){
-		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":""},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		 	$('#countAll').click(function() {
+		 		/*** Draw complete node list ***/
+				drawElementsGral.listNodes(drawElementsGral.nodes, 'complete');
 			});
 		 	
-		 	$('#countReachable').click(function(){
-		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"reachable"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		 	$('#countReachable').click(function() {
+		 		/*** Draw complete node list ***/
+		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'reachable');
 			});
 	
-		 	$('#countDegraded').click(function(){
-		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"degraded"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		 	$('#countDegraded').click(function() {
+		 		/*** Draw complete node list ***/
+		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'degraded');
 			});
-		
-		 	$('#countUnreachable').click(function(){
-		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"unreachable"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		 	
+		 	$('#countUnreachable').click(function() {
+		 		/*** Draw complete node list ***/
+		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'unreachable');
 			});
+
+			/*** Degraded list nodes ***
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getNmisStatus,
+				params : {
+					"ip" : v.nmisserver.toString(),
+					"query" : '["config.group","' + v.group.toString() + '"]',
+					"properties" : '["node_name","status.nodestatus","info.status"]'
+				},
+				callback : function(response, divContainers, divElements) {
+					$.each(response, function(k,v) {
+						console.log(v.status.nodestatus);
+						if(v.status.nodestatus.toString() === 'reachable')
+							reachable++;
+						else if(v.status.nodestatus.toString() === 'degraded')
+							degraded++;
+						else if(v.status.nodestatus.toString() === 'unreachable')
+							unreachable++;										
+					});
+					
+					if(stopMask == 1) {
+						divElements[0].text(reachable + degraded + unreachable);
+						divElements[1].text(reachable);
+						divElements[2].text(degraded);
+						divElements[3].text(unreachable);
+					}
+					
+					stopMask--;
+					
+				},
+				divContainers : totalDivs,
+				divElements : totalValues
+			});*/		 	
 			
 		 	
 		 	Highcharts.setOptions({
@@ -580,7 +694,7 @@
 		    	$(this).addClass("active");
 		    });
 		    
-		    /** Start Old Top **/
+		    /*** Start Old Top
 		    $('#tCpuCountG').click(function(e){
 		 		$("#headerGridsDetailG").text("Top CPU");
 				cnocConnector.invokeMashup(cnocConnector.service16, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tCpuG");			
@@ -590,9 +704,9 @@
 				$("#headerGridsDetailG").text("Top Memory");
 				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
 			});
-		    /** End Old Top **/
+		    End Old Top ***/
 			
-			/* Top
+			/*** Top ***/
 		 	$('.topMeasure').click(function(e) {
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
@@ -606,7 +720,7 @@
 						"tTops",
 						"tTopsTable"
 					);
-			}); */
+			});
 			
 			$('#listIncidentG').click(function(e){
 				$("#headerGridsDetailG").text("Incident Detail");
@@ -708,7 +822,7 @@
 			
 			$(".themeW").click(function(event){
 				var filename = $(this).attr('rel');				
-				themeChanges(filename, false);			
+				themeChanges(filename, false);
 				Highcharts.setOptions(Highcharts.themeW);
 				stylesMap = null;
 				drawElementsGral.builder(cnocConnector.codeNetGlobal);
@@ -726,6 +840,62 @@
 			},300000);
 			
 			$( '.chartFirewall' ).hide();
+			
+			/** Node Actions ***/
+			
+			/******* START Unmanaged *******/
+			$( '#boxUnmanaged' ).on('hidden.bs.modal', function (e) {
+				$( '#uStartDate' ).val('');
+				$( '#uEndDate' ).val('');
+				$( '#saveUnmanaged' ).removeAttr("disabled");				
+			});
+			
+			$( '#boxUnmanaged' ).on('show.bs.modal', function (e) {
+				if (cnocConnector.nodeGlobal === '' || cnocConnector.nodeGlobal === null) {					
+					$( '#modalBodyUnmanaged' ).empty();
+					$( '#modalBodyUnmanaged' ).append('<div class="alert alert-danger" role="alert">Please select node from Node List <i class="fa fa-list-alt fa-fw"></i></div>');
+				} else {
+					$( '#uModalLabel' ).text('Unmanaged node ' + cnocConnector.nodeGlobal);
+					$( '#modalBodyUnmanaged' ).empty();
+					$( '#modalBodyUnmanaged' ).append(
+							'<div class="container-fluid" id="modalUnmanagedContent">' +
+								'<div class="row">' +
+							    	'<div class="col-lg-12">' +
+										'<label>Select Date:</label>' +
+										'<div class="input-daterange input-group" >' +
+											'<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>' +
+											'<input type="text" class="input-sm form-control" id="uStartDate" placeholder="Start Date">' +
+											'<span class="input-group-addon"> to </span>' +
+											'<input type="text" class="input-sm form-control" id="uEndDate" placeholder="End Date">' +
+											'<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>' +
+										'</div>' +
+									'</div>' +
+								'</div>' +
+							'</div>');
+					$( '#uStartDate' ).datetimepicker({
+		 				format: 'DD-MMM-YYYY HH:mm:ss'
+		 			});
+		 			$( '#uEndDate' ).datetimepicker({
+		 				format: 'DD-MMM-YYYY HH:mm:ss'
+		 			});
+				}
+			});
+			
+			$( '#saveUnmanaged' ).click(function() {
+				cnocConnector.invokeMashup(
+						cnocConnector.service35,
+						{
+							"operation" : "unmanaged",
+							"node" : cnocConnector.nodeGlobal,
+							"start_date" : $( '#uStartDate' ).val(),
+							"end_date" : $( '#uEndDate' ).val(),
+							"user" : cnocConnector.userName
+						},
+						drawElementsGral.unmanaged,
+						"unModal",
+						"");
+			});
+			/******* END Unmanaged *******/
 	});
 	</script>
 
