@@ -12,7 +12,9 @@ var drawElementsGral = {
 		dataChartMemory : [],
 		
 		init : function(codeNet) {
-
+			
+			drawElementsGral.nodes.length = 0;
+			
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
@@ -32,8 +34,9 @@ var drawElementsGral = {
 				this.mapaGeneral(codenet, null ,false);
 			
 			/*** Getting NMIS Groups, Status and list o nodes ***/
-			var totalValues = [ $('#totalDiv'), $('#totalReachable'), $('#totalDegraded'), $('#totalUnreachable') ];
-			var totalDivs = [ $('#countAll'), $('#countReachable'), $('#countDegraded'),$('#countUnreachable') ];
+			var totalValues = [ $('#totalDiv'), $('#totalReachable'), $('#totalDegraded'), $('#totalUnreachable'), $('#listBanorteIPSLA') ];
+			var totalDivs = [ $('#countAll'), $('#countReachable'), $('#countDegraded'),$('#countUnreachable'), $('#listBanorteIPSLAG') ];
+			
 			
 			drawElementsGral.reachableNodes = [];
 			drawElementsGral.degradedNodes = [],
@@ -44,6 +47,7 @@ var drawElementsGral = {
 				params : {"networkCode" : codenet},
 				callback : function(response, divContainers, divElements) {
 					
+					console.log(response);
 					var reachable = 0;
 					var degraded = 0;
 					var unreachable = 0;
@@ -52,26 +56,35 @@ var drawElementsGral = {
 					var stopMask = response.records.record.length;
 					
 					try {
-						$.each(response.records.record, function(k,value) { /*** Loop through Groups ***/
+						
+						
+							
+						$.each(response.records.record, function(k,value) { // Loop through Groups
+						
 							cnocFramework.invokeMashup({
 								invokeUrl : endpoint.getNmisStatus,
 								params : {
 									"ip" : value.nmisserver.toString(),
 									"query" : '["config.group","' + value.group.toString() + '"]',
+									//"ip" :"10.237.7.45",
+									//"query":'["config.group","BNT-CCB_K3"]',
 									"properties" : '["node_name","status.nodestatus","info.status","info.echoRtt"]'
 								},
 								callback : function(response, divContainers, divElements) {									
 									
-									$.each(response, function(k,v) { /*** Loop through Nodes ***/
+									$.each(response, function(k,v) { // Loop through Nodes 
 										
-										/*** Node properties ***/
+										// Node properties 
 										var status = v.status.nodestatus.toString();
 										var nodeName = v.node_name.toString();
-										var event = '';										
+										var event = '';
+										var value = '';
+										var updated = '';
+										var element = '';
 										
-										try { /*** Getting IPSLA ***/
+										try { // Getting IPSLA 
 											$.each(v.info.echoRtt, function(m,n) {
-												if (n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') {
+												if (((n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') || (n.CtrlAdminRttType.toString() === 'echo' && n.OperCompletionTime === '0')) && (n.index==="1" || n.index==="2")) {
 													var ipsla = {
 														'nodeName' : nodeName,
 														'status' : n.OperSense,
@@ -82,6 +95,7 @@ var drawElementsGral = {
 													ipslaArray.push(ipsla);
 												}
 											});
+											
 										} catch(err) {
 											;
 //											console.log(err);
@@ -93,45 +107,58 @@ var drawElementsGral = {
 										
 										} else if (status === 'degraded') {  // Degraded nodes
 											degraded++;											
-											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+											for (var prop in v.info.status) { // Loop through info.status properties 
 												if (v.info.status[prop].status.toString() != 'ok') {
 													event = v.info.status[prop].event;
+													value = v.info.status[prop].value;
+													updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+													element = v.info.status[prop].element;
 													break;
 												}												
 											}																						
 										
 										} else if (status === 'unreachable') { // Unreachable Nodes
 											unreachable++;											
-											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+											for (var prop in v.info.status) { // Loop through info.status properties
 												if (v.info.status[prop].status.toString() != 'ok') {
 													event = v.info.status[prop].event;
+													value = v.info.status[prop].value;
+													updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+													element = v.info.status[prop].element;
 													break;
 												}												
 											}											
 										}
 										
-										/*** Push nodes ***/
+										// Push nodes
 										drawElementsGral.nodes.push({
 											'name' : nodeName,
 											'status_value' : status,
-											'event' : event
+											'event' : event,
+											'value' : value,
+											'updated': updated,
+											'element': element
+											
 										});
 										
 									});
 									
 									if(stopMask == 1) {
+									
 										divElements[0].text(reachable + degraded + unreachable);
 										divElements[1].text(reachable);
 										divElements[2].text(degraded);
 										divElements[3].text(unreachable);
 										
-										/*** Unmask all div containers ***/
+										//Unmask all div containers 
 										cnocFramework.unmask(divContainers);
 										
-										/*** Draw complete node list ***/
+										// Draw complete node list
 										drawElementsGral.drawListNodes(drawElementsGral.nodes, 'listNodes', 'listNodesG');
 										
-										console.log(ipslaArray);
+										//console.log(ipslaArray);
+										
+										drawElementsGral.banorteIPSLA(ipslaArray, totalValues[4], totalDivs[4]);
 										
 									}
 									
@@ -144,6 +171,7 @@ var drawElementsGral = {
 							
 						});
 						
+						
 					} catch (e) {
 						console.log(e);
 						divElements[0].text(reachable + degraded + unreachable);
@@ -151,7 +179,7 @@ var drawElementsGral = {
 						divElements[2].text(degraded);
 						divElements[3].text(unreachable);
 						
-						/*** Unmask all div containers ***/
+						// Unmask all div containers 
 						cnocFramework.unmask(divContainers);
 					}
 				},
@@ -160,7 +188,90 @@ var drawElementsGral = {
 			});
 			
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");			
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");
+			
+			
+			//cnocFramework.invokeMashup({endpoint.serviceBanorteATM, {"codenet" : codenet},drawElementsGral.banorteATM, [$("#listBanorteATMG")], [$("#listBanorteATMG")]});
+			
+			cnocFramework.invokeMashup({invokeUrl : endpoint.serviceBanorteATM,
+				params : {"codenet" : codenet.toLowerCase()},
+				callback : drawElementsGral.banorteATM,
+				divContainers :  [$("#listBanorteATM")],
+				divElements : [$("#listBanorteATMG")]
+			});
+			
+		},banorteATM: function(datos, divContainers, divElements){
+
+			var rowsData = new Array();
+			try {
+				if (datos.records.record.length > 1) {
+					for ( var i = 0; i < datos.records.record.length; i++) {
+						var fields = new Array();
+						fields.push(datos.records.record[i].name.toString());
+						fields.push(datos.records.record[i].status_value.toString());
+						fields.push(datos.records.record[i].serial.toString());
+						fields.push(datos.records.record[i].atm.toString());		
+						rowsData.push(fields);
+					}
+				} else {
+					var fields = new Array();
+					fields.push(datos.records.record.name.toString());
+					fields.push(datos.records.record.status_value.toString());
+					fields.push(datos.records.record.serial.toString());
+					fields.push(datos.records.record.atm.toString());
+					rowsData.push(fields);
+				}
+			} catch (err) {	};
+			var rowsHeaders = [ {
+				"sTitle" : "NAME"
+			}, {
+				"sTitle" : "STATUS"
+			},{
+				"sTitle" : "SERIAL"
+			}, {
+				"sTitle" : "ATM"
+			} ];
+			cnocConnector.drawGrid(divContainers[0].selector.replace("#",""), divElements[0].selector.replace("#",""), rowsData, rowsHeaders, false);
+			
+			
+		},banorteIPSLA:function(datos, divContainers, divElements){
+
+			var rowsData = new Array();
+			try {
+				if (datos.length > 1) {
+					for ( var i = 0; i < datos.length; i++) {
+						var fields = new Array();
+						fields.push(datos[i].nodeName.toString());
+						fields.push(datos[i].status.toString());
+						fields.push(datos[i].ipSource.toString());
+						fields.push(datos[i].ipTarget.toString());
+						fields.push(datos[i].index.toString());
+						rowsData.push(fields);
+					}
+				} else {
+					var fields = new Array();
+					fields.push(datos.nodeName.toString());
+					fields.push(datos.status.toString());
+					fields.push(datos.ipSource.toString());
+					fields.push(datos.ipTarget.toString());
+					fields.push(datos.index.toString());
+					rowsData.push(fields);
+				}
+			} catch (err) {	};
+			
+			var rowsHeaders = [ {
+				"sTitle" : "NODE NAME"
+			}, {
+				"sTitle" : "STATUS"
+			},{
+				"sTitle" : "IP SOURCE"
+			}, {
+				"sTitle" : "IP TARGET"
+			}, {
+				"sTitle" : "INDEX"
+			} ];
+			cnocConnector.drawGrid(divContainers.selector.replace("#",""), divElements.selector.replace("#",""), rowsData, rowsHeaders, false);
+			
 			
 		}, listNodes : function(nodes, status) {
 			
@@ -176,9 +287,13 @@ var drawElementsGral = {
 				});
 			
 			} else if (status === 'degraded') { // Draw degraded node list
+
 				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
+					
+					if (v.status_value === status){
 						nodeList.push(v);
+						console.log(v);
+					}
 				});
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
@@ -691,6 +806,9 @@ var drawElementsGral = {
 					"<tr class='" + _class + "'>" +
 						"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
 						"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
+						"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
+						"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
+						"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
 					"</tr>";
 			});
 			
@@ -700,7 +818,10 @@ var drawElementsGral = {
 		
 		var rowsHeaders = [
 			{ "sTitle" : "Node Name" },
-			{ "sTitle" : "Event" }
+			{ "sTitle" : "Event" },
+			{ "sTitle" : "Value" },
+			{ "sTitle" : "Element" },
+			{ "sTitle" : "Updated" }
 		];
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
@@ -1349,5 +1470,16 @@ var drawElementsGral = {
 						'</div>' +
 					'</div>');
 		}
-	}
+	},timeConverter: function (UNIX_timestamp){
+		  var a = new Date(UNIX_timestamp * 1000);
+		  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		  var year = a.getFullYear();
+		  var month = months[a.getMonth()];
+		  var date = a.getDate();
+		  var hour = a.getHours();
+		  var min = a.getMinutes();
+		  var sec = a.getSeconds();
+		  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+		  return time;
+		}
 };

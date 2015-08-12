@@ -13,7 +13,7 @@ var cnocConnector = {
 	community1:'',
 	community2:'',
 	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV 
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -45,8 +45,8 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	
-	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
+	/*
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -591,7 +591,7 @@ var cnocConnector = {
 		                        	}else if(event.point.series.name==="Critical"){
 		                        		status = "unreachable";
 		                        	}
-		                        	cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+		                        	//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
 		                        }
 		                      }
 		                },

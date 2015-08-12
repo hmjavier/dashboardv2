@@ -33,7 +33,7 @@
 	<link rel="stylesheet" type="text/css" href="js/jquery-loadmask-0.4/jquery.loadmask.css">
 	
 	<!-- Datetimepicker -->
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">
+	<!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">-->
 	
 	<style>
 		.tooltipMap{ color: #000000; }
@@ -514,6 +514,32 @@
 				  </div>
 
 				<!-- /.row -->
+
+				  <div class="row">
+				    <div class="col-lg-6">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> RESPALDOS
+						  	</div>
+							<div id="listBanorteATM" class="listBanorteATM"></div>
+							<br>
+							<br>
+						</div>   
+				    </div>
+				    <div class="col-lg-6">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> IPSLA-GETVPN
+						  	</div>
+							<div id="listBanorteIPSLA" class="listBanorteIPSLA"></div>
+							<br>
+							<br>
+						</div>   
+				    </div>
+				</div>
+				<!-- /.row -->
             </div>
             <%@ include file="footer.jsp" %>
             <!-- /.container-fluid -->
@@ -566,9 +592,9 @@
 	<script src="js/bootstrap-tree.js" /></script>
 	
 	<!-- Datetimepicker -->
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/en-gb.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	-->
 	
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
@@ -615,6 +641,7 @@
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
 			    		cnocConnector.service35 = serviceG24;
+			    					    		
 			    		
 			    }
 			});
@@ -639,7 +666,7 @@
 			});
 	
 		 	$('#countDegraded').click(function() {
-		 		/*** Draw complete node list ***/
+		 		/*** Draw complete node list ***/		 		
 		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'degraded');
 			});
 		 	

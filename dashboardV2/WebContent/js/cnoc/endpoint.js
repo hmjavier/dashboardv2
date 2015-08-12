@@ -12,6 +12,7 @@ var endpoint = {
 		    	endpoint.main = data.main;
 				endpoint.getNmisStatus = endpoint.main + data.getNmisStatus;
 				endpoint.getNmisGroups = endpoint.main + data.getNmisGroups;
+				endpoint.serviceBanorteATM = endpoint.main + data.serviceBanorteATM;
 			}
 		});
 	}
