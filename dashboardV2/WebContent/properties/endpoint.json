@@ -1,9 +1,12 @@
 {
 
-"main" : "https://dashboard-i2.cnoc.telmexit.com",
+"main" : "",
 
-"getNmisStatus" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",
+"getNmisStatus" : "/presto/edge/api/rest/ms_nmis_status/Invoke?x-presto-resultFormat=json",
+"getDegradedNodes" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",
 "getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json",
-"serviceBanorteATM" : "/presto/edge/api/rest/ms_gral_nmis_banorte/Invoke?x-presto-resultFormat=json"
+"getBackups" : "/presto/edge/api/rest/ms_nmis_backups/Invoke?x-presto-resultFormat=json",
+"getIpsla" : "/presto/edge/api/rest/ms_nmis_ipsla/Invoke?x-presto-resultFormat=json",
+"getBackupsDown" : "/presto/edge/api/rest/ms_nmis_backups_down/Invoke?x-presto-resultFormat=json"
 
 }
