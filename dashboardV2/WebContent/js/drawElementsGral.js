@@ -23,8 +23,8 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-			
-			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
+			console.log(codenet);
+			//cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
@@ -39,6 +39,7 @@ var drawElementsGral = {
 			drawElementsGral.degradedNodes = [],
 			drawElementsGral.unreachableNodes = [];
 			
+			/*
 			cnocFramework.invokeMashup({
 				invokeUrl : endpoint.getNmisGroups,
 				params : {"networkCode" : codenet},
@@ -52,7 +53,7 @@ var drawElementsGral = {
 					var stopMask = response.records.record.length;
 					
 					try {
-						$.each(response.records.record, function(k,value) { /*** Loop through Groups ***/
+						$.each(response.records.record, function(k,value) { // Loop through Groups 
 							cnocFramework.invokeMashup({
 								invokeUrl : endpoint.getNmisStatus,
 								params : {
@@ -62,14 +63,14 @@ var drawElementsGral = {
 								},
 								callback : function(response, divContainers, divElements) {									
 									
-									$.each(response, function(k,v) { /*** Loop through Nodes ***/
+									$.each(response, function(k,v) { // Loop through Nodes 
 										
-										/*** Node properties ***/
+										// Node properties
 										var status = v.status.nodestatus.toString();
 										var nodeName = v.node_name.toString();
 										var event = '';										
 										
-										try { /*** Getting IPSLA ***/
+										try { // Getting IPSLA 
 											$.each(v.info.echoRtt, function(m,n) {
 												if (n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') {
 													var ipsla = {
@@ -93,7 +94,7 @@ var drawElementsGral = {
 										
 										} else if (status === 'degraded') {  // Degraded nodes
 											degraded++;											
-											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+											for (var prop in v.info.status) { // Loop through info.status properties 
 												if (v.info.status[prop].status.toString() != 'ok') {
 													event = v.info.status[prop].event;
 													break;
@@ -102,7 +103,7 @@ var drawElementsGral = {
 										
 										} else if (status === 'unreachable') { // Unreachable Nodes
 											unreachable++;											
-											for (var prop in v.info.status) { /*** Loop through info.status properties ***/
+											for (var prop in v.info.status) { // Loop through info.status properties 
 												if (v.info.status[prop].status.toString() != 'ok') {
 													event = v.info.status[prop].event;
 													break;
@@ -110,7 +111,7 @@ var drawElementsGral = {
 											}											
 										}
 										
-										/*** Push nodes ***/
+										// Push nodes 
 										drawElementsGral.nodes.push({
 											'name' : nodeName,
 											'status_value' : status,
@@ -125,10 +126,10 @@ var drawElementsGral = {
 										divElements[2].text(degraded);
 										divElements[3].text(unreachable);
 										
-										/*** Unmask all div containers ***/
+										// Unmask all div containers
 										cnocFramework.unmask(divContainers);
 										
-										/*** Draw complete node list ***/
+										// Draw complete node list
 										drawElementsGral.drawListNodes(drawElementsGral.nodes, 'listNodes', 'listNodesG');
 										
 										console.log(ipslaArray);
@@ -151,16 +152,156 @@ var drawElementsGral = {
 						divElements[2].text(degraded);
 						divElements[3].text(unreachable);
 						
-						/*** Unmask all div containers ***/
+						// Unmask all div containers 
 						cnocFramework.unmask(divContainers);
 					}
 				},
 				divContainers : [],
 				divElements : totalValues
 			});
-			
+			*/
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");			
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");	
+			
+			
+			if(cnocConnector.codeNetGlobal === 'N000382'){
+
+				// TOPS REST OPCHARTS				
+				cnocConnector.invokeMashup(
+						cnocConnector.service16,
+						{
+							"network_code" : cnocConnector.codeNetGlobal,
+							"topID" : "ifInUtil"
+						},
+						drawElementsGral.topGrid,
+						"topInUtilization",
+						"topInUtilizationG"
+				);
+				cnocConnector.invokeMashup(
+						cnocConnector.service16,
+						{
+							"network_code" : cnocConnector.codeNetGlobal,
+							"topID" : "ifOutUtil"
+						},
+						drawElementsGral.topGrid,
+						"topOutUtilization",
+						"topOutUtilizationG"
+				);
+				
+			}
+			
+			
+			
+						
+			
+		},getTopOpFlow: function(node ){
+			
+			var unixtime = new Date().getTime() / 1000 | 0;
+			
+			//TOPS NETFLOW
+			var getTopdata = ["getTopNTalkers", "getTopNListeners", "getTopNApplications", "getTopNApplicationSources", "getTopNProtocols", "getRawFlowMatrix"];
+			for(var i=0; i<getTopdata.length; i++){
+				$(".tops").empty();
+				cnocFramework.invokeMashup({invokeUrl : endpoint.getOpFlowTopN,
+					params : {
+						"dns" : "true",
+						"period" : "15",
+						"time_tag_end" : unixtime,
+						"rate" : "",
+						"summary" : "bytes",
+						"summarise" : "",
+						"topn" : "10",
+						"site_name" : node,
+						"act" : "tableLoad",
+						"data" : getTopdata[i],
+						"ip" : "10.237.7.136"
+						},
+					callback : drawElementsGral.topOpFlowPyrs,
+					divContainers :  [$("#top"+i)],
+					divElements : [$("#top"+i)]
+				});
+
+			}
+			
+			modelView();
+			
+			
+		},topOpFlowPyrs: function(datos, divContainers, divElements){
+		
+			console.log("........................................................");
+			console.log(datos);
+			
+			var table = "<table id='"+datos.table.id+"'>";
+			
+			table +="<thead><tr>";
+			for(var idxth=0; idxth<datos.table.thead.tr.th.length; idxth++){
+				table += "<th>";
+				table += datos.table.thead.tr.th[idxth].content;
+				table += "</th>";
+			}
+			table +="</tr></thead>";
+			
+			table +="</tbody>";
+								
+			
+			for(var idxtr=0; idxtr<datos.table.tbody.tr.length; idxtr++){
+				table += "<tr>";
+				for(var idxtd=0; idxtd<datos.table.tbody.tr[idxtr].td.length; idxtd++){
+
+					if(idxtd==0){
+						if(datos.table.id === "getTopNProtocols"){
+							table += "<td>";
+							table += datos.table.tbody.tr[idxtr].td[idxtd];
+							table += "</td>";
+						}else{
+							table += "<td title='"+datos.table.tbody.tr[idxtr].td[idxtd].a[1].title+"'>";
+							table += datos.table.tbody.tr[idxtr].td[idxtd].a[1].content;
+							table += "</td>";
+						}						
+					}else if(idxtd==1 && (datos.table.id === "getTopNApplicationSources" || datos.table.id === "getRawFlowMatrix")){
+						table += "<td title='"+datos.table.tbody.tr[idxtr].td[idxtd].a[1].title+"'>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd].a[1].content;
+						table += "</td>";
+					}else if(datos.table.id === "getTopNApplications" && idxtd==1){
+						table += "<td>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd];
+						table += "</td>";
+					}else{
+						table += "<td>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd].content;
+						table += "</td>";
+					}
+									
+				}
+				table += "</tr>";
+			}
+			
+			table += "</tbody></table>";
+
+			
+			divContainers[0].append(table);
+			
+			
+			console.log(table);
+			
+			jQuery("#" + datos.table.id).dataTable({
+				"sDom": 'T<"clear">lfrtip',		
+				"oTableTools": {
+			        "aButtons": [
+			            "copy",
+			            "csv",
+			            "xls"
+			        ]
+			    },
+				 "sScrollX": "100%",
+				 "sScrollY": 300,
+				 "bScrollCollapse": true,
+				 "bProcessing": true,
+				 "iDisplayLength": 20
+			});
+			
+			cnocFramework.unmask(divContainers);
+			/*$("#getTopNTalkersG").html(datos.html.body.div.table);*/
 			
 		}, listNodes : function(nodes, status) {
 			
@@ -734,24 +875,93 @@ var drawElementsGral = {
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
 	}, topGrid: function(datos, container, divTable) {
+		
+		$("#"+container).empty();
+		
+		console.log(datos);
 		var rowsData = new Array();
+		tableT = "";
 		try {
 			for ( var i = 0; i < datos.length; i++) {
-				var fields = new Array();
-				fields.push(datos[i].node);
-				fields.push(datos[i].value);
-				fields.push(datos[i].element);
-				rowsData.push(fields);
+				var _class = "success";
+				if(datos[i].value > 90){
+					_class = "danger";
+				}else if(datos[i].value > 80 && datos[i].value < 90){
+					_class = "warning";
+				}else if(datos[i].value < 80){
+					_class = "success";
+				}
+				
+				tableT += "<tr class='"+_class+"'>";
+				
+				tableT += '<td><div class="progress">';
+				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
+				tableT += datos[i].value+'%</div></div></td>';
+				
+				tableT += 
+				"<td>"+datos[i].node+"</td>" +
+				"<td>"+datos[i].value+"</td>" +
+				"<td>"+datos[i].element+"</td>";
+				
+				tableT += "</tr>";
 			}
+			
 		} catch (err) { console.log(err); };
 		var rowsHeaders = [ {
+			"sTitle" : "   "
+		},{
 			"sTitle" : "Node"
 		}, {
 			"sTitle" : "Value"
 		}, {
 			"sTitle" : "Element"
 		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+		
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '">'+tableT+'</table>');
+		
+		console.log(tableT);
+		
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			//"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": 350,
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		
+		$("#" + divTable).delegate("tbody tr", "click", function () {
+			dTable.$('tr.row_selected').removeClass('row_selected');
+			$(this).addClass('row_selected');
+			
+			var nTds = $('td', dTable.$('tr.row_selected'));
+			console.log(nTds);
+			var node = $(nTds[0]).text();				
+			
+			
+			drawElementsGral.getTopOpFlow(node);
+			
+			
+			console.log(node);
+			
+		});
+		if(container==="tTops"){
+			modelView();
+		}
+		
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},
 	/*** Old Tops 

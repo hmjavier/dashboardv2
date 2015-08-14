@@ -12,6 +12,7 @@ var endpoint = {
 		    	endpoint.main = data.main;
 				endpoint.getNmisStatus = endpoint.main + data.getNmisStatus;
 				endpoint.getNmisGroups = endpoint.main + data.getNmisGroups;
+				endpoint.getOpFlowTopN = endpoint.main + data.getOpFlowTopN;
 			}
 		});
 	}

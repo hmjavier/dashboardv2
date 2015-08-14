@@ -149,8 +149,8 @@ var cnocConnector = {
 				scrollY = "320";
 			} else if(divTable === "listBizserviceTi" || divTable === "openTicketsListTi"){
 				scrollY = "400";
-			}else if(divTable==="containerApG"){
-				
+			}else if(divTable==="topInUtilization"){
+				scrollY = "200";
 			}
 			
 			if(divTable === "tableInventory"){

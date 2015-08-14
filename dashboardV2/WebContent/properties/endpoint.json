@@ -1,8 +1,9 @@
 {
 
-"main" : "http://dashboarddev.cnoc.telmexit.com:8080",
+"main" : "https://dashboard-i2.cnoc.telmexit.com",
 
 "getNmisStatus" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",
-"getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json"
+"getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json",
+"getOpFlowTopN" : "/presto/edge/api/rest/ms_rest_opflow/Invoke?x-presto-resultFormat=json"
 
 }
