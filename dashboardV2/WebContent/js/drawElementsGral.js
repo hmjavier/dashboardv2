@@ -6,14 +6,16 @@
 var modalIP;
 
 var drawElementsGral = {
-		
-		nodes : [],
+
+		/*** List nodes by status ***/
+		reachableNodes : [],
+		degradedNodes : [],
+		unreachableNodes : [],		
+		groups : [],
 		
 		dataChartMemory : [],
 		
-		init : function(codeNet) {
-			
-			drawElementsGral.nodes.length = 0;
+		init : function(codeNet) {			
 			
 			if (codeNet != undefined) {
 				
@@ -25,182 +27,271 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-			
-			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
 			else
 				this.mapaGeneral(codenet, null ,false);
 			
-			/*** Getting NMIS Groups, Status and list o nodes ***/
-			var totalValues = [ $('#totalDiv'), $('#totalReachable'), $('#totalDegraded'), $('#totalUnreachable'), $('#listBanorteIPSLA') ];
-			var totalDivs = [ $('#countAll'), $('#countReachable'), $('#countDegraded'),$('#countUnreachable'), $('#listBanorteIPSLAG') ];
+			drawElementsGral.getNodeStatus(codenet);
 			
+			drawElementsGral.getIpsla(codenet);
 			
-			drawElementsGral.reachableNodes = [];
-			drawElementsGral.degradedNodes = [],
-			drawElementsGral.unreachableNodes = [];
+			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");
 			
+			/*** Getting Backup List ***/
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getBackups,
+				params : {"codenet" : codenet},
+				callback : drawElementsGral.backupList,
+				divContainers :  [ $("#listBanorteATM") ],
+				divElements : [ $("#listBanorteATMG") ]
+			});
+			
+			/*** Getting Backup Down List ***/
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getBackupsDown,
+				params : {"codenet" : codenet},
+				callback : drawElementsGral.backupDownList,
+				divContainers :  [ $("#listBackupsDown") ],
+				divElements : [ $("#listBackupsDownG") ]
+			});			
+		
+		}, 
+		
+		/**
+		 * Getting NMIS Status and list nodes
+		 * @param codenet
+		 */
+		getNodeStatus: function(codenet) {
+						
+			var divContainers = [
+						$('#countAll'),			// Total Nodes
+						$('#countReachable'),	// Reachable Nodes 
+						$('#countDegraded'),	// Degraded Nodes
+						$('#countUnreachable'),	// Unreachable Nodes
+						$('#listNodes'),		// Node List 
+						$('#containerGroups')	// Groups Chart
+				];
+			
+			var divElements = [
+						$('#totalDiv'),			// Total Nodes
+						$('#totalReachable'),	// Reachable Nodes
+						$('#totalDegraded'),	// Degraded Nodes
+						$('#totalUnreachable'),	// Unreachable Nodes
+						$('#listNodesG'),		// Node List
+						$('#chartGrupos')		// Groups Chart
+				];
+			
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getNmisStatus,
+				params : {"networkCode" : codenet},
+				callback : function(response, divContainers, divElements) {
+					
+					drawElementsGral.reachableNodes.length = 0;
+					drawElementsGral.degradedNodes.length = 0;
+					drawElementsGral.unreachableNodes.length = 0;
+					drawElementsGral.groups.length = 0;
+					
+					try {
+						if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+							if (response.records.record.length > 1) { // If response is an array
+								$.each(response.records.record, function(k,v) { // Loop through Nodes
+									/*** Node variable ***/
+									var node = {
+										'status' : v.status.toString(),
+										'name' : v.name.toString(),
+										'group' : v.group.toString(),
+										'updated' : v.updated.toString()
+									};
+									
+									var found = false;
+									
+									$.each(drawElementsGral.groups, function(m,n) {
+										if (n.groups === node.group) { // If found Group then add status
+											found = true;
+											if (node.status === 'reachable') { // Reachable nodes
+												drawElementsGral.reachableNodes.push(node);
+												n.reachable += 1;
+												return false;
+											
+											} else if (node.status === 'degraded') { // Degraded nodes
+												drawElementsGral.degradedNodes.push(node);
+												n.degraded += 1;
+												return false;
+											
+											} else if (node.status === 'unreachable') { // Unreachable Nodes
+												drawElementsGral.unreachableNodes.push(node);
+												n.unreachable += 1;
+												return false;
+											}
+										}
+									});
+									
+									if (!found) { // If not found then add Group and Nodes
+										var group = {
+											'groups' : node.group,
+											'reachable' : 0,
+											'degraded' : 0,
+											'unreachable' : 0
+										};
+										
+										if (node.status === 'reachable') { // Reachable nodes
+											drawElementsGral.reachableNodes.push(node);
+											group.reachable += 1;
+										} else if (node.status === 'degraded') { // Degraded nodes
+											drawElementsGral.degradedNodes.push(node);
+											group.degraded += 1;
+										} else if (node.status === 'unreachable') { // Unreachable Nodes
+											drawElementsGral.unreachableNodes.push(node);
+											group.unreachable += 1;
+										}
+										
+										drawElementsGral.groups.push(group);
+										
+									}
+								});
+								
+							} else { // Else response is not an array
+								/*** Node variable ***/
+								var node = {
+										'status' : response.records.record.toString(),
+										'name' : response.records.record.name.toString()
+									};
+								
+								if (node.status === 'reachable') // Reachable nodes									
+									drawElementsGral.reachableNodes.push(node);
+								else if (node.status === 'degraded') // Degraded nodes
+									drawElementsGral.degradedNodes.push(node);
+								else if (node.status === 'unreachable') // Unreachable Nodes
+									drawElementsGral.unreachableNodes.push(node);
+							}							
+						
+						} else {
+							console.log("response.records.record.length is undefined ");
+						}
+							
+					} catch (e) {
+						console.log(e);						
+					
+					} finally {
+						/*** Draw Tops Status Totals ***/
+						divElements[0].text(
+								drawElementsGral.reachableNodes.length +
+								drawElementsGral.degradedNodes.length +
+								drawElementsGral.unreachableNodes.length
+						);
+						divElements[1].text(drawElementsGral.reachableNodes.length);
+						divElements[2].text(drawElementsGral.degradedNodes.length);
+						divElements[3].text(drawElementsGral.unreachableNodes.length);
+						
+						// Unmask all div containers 
+						cnocFramework.unmask(divContainers);
+						
+						/*** Draw node list ***/
+						drawElementsGral.listNodes('complete');
+						
+						/*** Draw cart Groups ***/
+						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
+						
+					}
+					
+				},
+				divContainers : divContainers,
+				divElements : divElements
+			});			
+		},
+		   
+		/**
+		 * Getting Nodes by Status
+		 * @param codenet
+		 */
+		getNodesByStatus : function (status, codenet) {
+			
+			drawElementsGral.degradedNodes = [];
+			
+			/*** Invoke NMIS Groups ***/
 			cnocFramework.invokeMashup({
 				invokeUrl : endpoint.getNmisGroups,
 				params : {"networkCode" : codenet},
 				callback : function(response, divContainers, divElements) {
 					
-					console.log(response);
-					var reachable = 0;
-					var degraded = 0;
-					var unreachable = 0;
-					var ipslaArray = []; // IPSLA node list
-					
-					var stopMask = response.records.record.length;
-					
-					try {
+					if (typeof response.records.record.length !== 'undefined') { // The variable is defined
 						
+						var stopMask = response.records.record.length;
 						
-							
-						$.each(response.records.record, function(k,value) { // Loop through Groups
-						
-							cnocFramework.invokeMashup({
-								invokeUrl : endpoint.getNmisStatus,
-								params : {
-									"ip" : value.nmisserver.toString(),
-									"query" : '["config.group","' + value.group.toString() + '"]',
-									//"ip" :"10.237.7.45",
-									//"query":'["config.group","BNT-CCB_K3"]',
-									"properties" : '["node_name","status.nodestatus","info.status","info.echoRtt"]'
-								},
-								callback : function(response, divContainers, divElements) {									
-									
-									$.each(response, function(k,v) { // Loop through Nodes 
-										
-										// Node properties 
-										var status = v.status.nodestatus.toString();
-										var nodeName = v.node_name.toString();
-										var event = '';
-										var value = '';
-										var updated = '';
-										var element = '';
-										
-										try { // Getting IPSLA 
-											$.each(v.info.echoRtt, function(m,n) {
-												if (((n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') || (n.CtrlAdminRttType.toString() === 'echo' && n.OperCompletionTime === '0')) && (n.index==="1" || n.index==="2")) {
-													var ipsla = {
-														'nodeName' : nodeName,
-														'status' : n.OperSense,
-														'ipTarget' : n.JAdminTargetAddress,
-														'ipSource' : n.JAdminSourceAddress,
-														'index' : n.index
-													};
-													ipslaArray.push(ipsla);
-												}
-											});
-											
-										} catch(err) {
-											;
-//											console.log(err);
-//											console.log("No IPSLA [" + nodeName + "]");
-										}
+						try {							
+							$.each(response.records.record, function(k,value) { // Loop through Groups
+								/*** Invoke NMIS Nodes by Status ***/
+								cnocFramework.invokeMashup({
+									invokeUrl : endpoint.getDegradedNodes,
+									params : {
+										"ip" : value.nmisserver.toString(),
+										"query" : '["config.group","' + value.group.toString() + '","status.nodestatus","' + status +'"]',
+										"properties" : '["node_name","info.status"]'
+									},									
+									callback : function(response, divContainers, divElements) {
+										$.each(response, function(k,v) { // Loop through Nodes
+											// Node properties
+											var node = {
+												'name' : v.node_name.toString(),											
+												'event' : '',
+												'value' : '',
+												'updated': '',
+												'element': ''
+												
+											};
 
-										if (status === 'reachable') { // Reachable nodes
-											reachable++;
-										
-										} else if (status === 'degraded') {  // Degraded nodes
-											degraded++;											
 											for (var prop in v.info.status) { // Loop through info.status properties 
 												if (v.info.status[prop].status.toString() != 'ok') {
-													event = v.info.status[prop].event;
-													value = v.info.status[prop].value;
-													updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
-													element = v.info.status[prop].element;
+													node.event = v.info.status[prop].event;
+													node.value = v.info.status[prop].value;
+													node.updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+													node.element = v.info.status[prop].element;
 													break;
-												}												
-											}																						
-										
-										} else if (status === 'unreachable') { // Unreachable Nodes
-											unreachable++;											
-											for (var prop in v.info.status) { // Loop through info.status properties
-												if (v.info.status[prop].status.toString() != 'ok') {
-													event = v.info.status[prop].event;
-													value = v.info.status[prop].value;
-													updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
-													element = v.info.status[prop].element;
-													break;
-												}												
-											}											
-										}
-										
-										// Push nodes
-										drawElementsGral.nodes.push({
-											'name' : nodeName,
-											'status_value' : status,
-											'event' : event,
-											'value' : value,
-											'updated': updated,
-											'element': element
+												}
+											}
+											
+											// Push nodes
+											drawElementsGral.degradedNodes.push(node);
 											
 										});
 										
-									});
-									
-									if(stopMask == 1) {
-									
-										divElements[0].text(reachable + degraded + unreachable);
-										divElements[1].text(reachable);
-										divElements[2].text(degraded);
-										divElements[3].text(unreachable);
+										if(stopMask == 1) {										
+											
+											//Unmask all div containers 
+											cnocFramework.unmask(divContainers);
+											
+											// Draw complete node list
+											drawElementsGral.drawListNodesDegraded(drawElementsGral.degradedNodes, 'listNodes', 'listNodesG');										
+										}
 										
-										//Unmask all div containers 
-										cnocFramework.unmask(divContainers);
+										stopMask--;
 										
-										// Draw complete node list
-										drawElementsGral.drawListNodes(drawElementsGral.nodes, 'listNodes', 'listNodesG');
-										
-										//console.log(ipslaArray);
-										
-										drawElementsGral.banorteIPSLA(ipslaArray, totalValues[4], totalDivs[4]);
-										
-									}
-									
-									stopMask--;
-									
-								},
-								divContainers : totalDivs,
-								divElements : totalValues
+									},
+									divContainers : [ $('#listNodes') ],
+									divElements : [ $('#listNodesG') ]
+								});
+								
 							});
 							
-						});
+							
+						} catch (e) {
+							console.log(e);
+							
+							// Unmask all div containers 
+							cnocFramework.unmask(divContainers);
+						}
 						
-						
-					} catch (e) {
-						console.log(e);
-						divElements[0].text(reachable + degraded + unreachable);
-						divElements[1].text(reachable);
-						divElements[2].text(degraded);
-						divElements[3].text(unreachable);
-						
-						// Unmask all div containers 
-						cnocFramework.unmask(divContainers);
-					}
+					} else {
+						console.log("response.records.record.length is undefined ");
+					}				
 				},
-				divContainers : [],
-				divElements : totalValues
+				divContainers : [ ],
+				divElements : [ ]
+				
 			});
 			
-			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");
-			
-			
-			//cnocFramework.invokeMashup({endpoint.serviceBanorteATM, {"codenet" : codenet},drawElementsGral.banorteATM, [$("#listBanorteATMG")], [$("#listBanorteATMG")]});
-			
-			cnocFramework.invokeMashup({invokeUrl : endpoint.serviceBanorteATM,
-				params : {"codenet" : codenet.toLowerCase()},
-				callback : drawElementsGral.banorteATM,
-				divContainers :  [$("#listBanorteATM")],
-				divElements : [$("#listBanorteATMG")]
-			});
-			
-		},banorteATM: function(datos, divContainers, divElements){
+		}, backupList: function(datos, divContainers, divElements) {
 
 			var rowsData = new Array();
 			try {
@@ -221,91 +312,219 @@ var drawElementsGral = {
 					fields.push(datos.records.record.atm.toString());
 					rowsData.push(fields);
 				}
-			} catch (err) {	};
+			} catch (err) { console.log(err); };
+			
 			var rowsHeaders = [ {
-				"sTitle" : "NAME"
+				"sTitle" : "Name"
 			}, {
-				"sTitle" : "STATUS"
+				"sTitle" : "Status"
 			},{
-				"sTitle" : "SERIAL"
+				"sTitle" : "Serial"
 			}, {
 				"sTitle" : "ATM"
 			} ];
 			cnocConnector.drawGrid(divContainers[0].selector.replace("#",""), divElements[0].selector.replace("#",""), rowsData, rowsHeaders, false);
 			
 			
-		},banorteIPSLA:function(datos, divContainers, divElements){
+		}, backupDownList: function(response, divContainers, divElements) {
 
 			var rowsData = new Array();
-			try {
-				if (datos.length > 1) {
-					for ( var i = 0; i < datos.length; i++) {
-						var fields = new Array();
-						fields.push(datos[i].nodeName.toString());
-						fields.push(datos[i].status.toString());
-						fields.push(datos[i].ipSource.toString());
-						fields.push(datos[i].ipTarget.toString());
-						fields.push(datos[i].index.toString());
-						rowsData.push(fields);
-					}
-				} else {
-					var fields = new Array();
-					fields.push(datos.nodeName.toString());
-					fields.push(datos.status.toString());
-					fields.push(datos.ipSource.toString());
-					fields.push(datos.ipTarget.toString());
-					fields.push(datos.index.toString());
-					rowsData.push(fields);
-				}
-			} catch (err) {	};
-			
 			var rowsHeaders = [ {
-				"sTitle" : "NODE NAME"
+				"sTitle" : "Name"
 			}, {
-				"sTitle" : "STATUS"
-			},{
-				"sTitle" : "IP SOURCE"
+				"sTitle" : "Interface"
 			}, {
-				"sTitle" : "IP TARGET"
-			}, {
-				"sTitle" : "INDEX"
+				"sTitle" : "Status"
 			} ];
-			cnocConnector.drawGrid(divContainers.selector.replace("#",""), divElements.selector.replace("#",""), rowsData, rowsHeaders, false);
 			
+			try {
+				if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+					$.each(response.records.record, function(k,v) {
+						var fields = new Array();
+						fields.push(v.name.toString());
+						fields.push(v.interface.toString());
+						fields.push(v.status.toString());
+						rowsData.push(fields);
+					}); 
+					
+				} else {
+					console.log("response.records.record.length is undefined ");
+					
+					var fields = new Array();
+					fields.push(response.records.record.name.toString());
+					fields.push(response.records.record.interface.toString());
+					fields.push(response.records.record.status.toString());								
+					rowsData.push(fields);						
+				}				
+				
+			} catch (e) {
+				console.log(e);
+				
+			} finally {
+				
+				divContainers[0].empty();					
+				divContainers[0].append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divElements[0].selector.replace("#","") + '"></table>');					
+				
+				$(divElements[0].selector).dataTable({
+					"sDom": 'T<"clear">lfrtip',
+					"oTableTools": {
+				        "aButtons": [
+				            "copy",
+				            "csv",
+				            "xls"
+				            ]
+				    },
+					"aaData" : rowsData,
+					"aoColumns" : rowsHeaders,
+					"sScrollX": "100%",
+					"sScrollY": 200,
+					"bScrollCollapse": true,
+					"bProcessing": true
+				});
+				
+				// Unmask all div containers 
+				cnocFramework.unmask(divContainers);
+			}
+		},
+		
+		getIpsla : function(networkCode) {
 			
-		}, listNodes : function(nodes, status) {
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getIpsla,
+				params : {"networkCode" : networkCode},
+				callback : function(response, divContainers, divElements) {
+					
+					var rowsData = new Array();
+					var rowsHeaders = [ {
+						"sTitle" : "Name"
+					}, {
+						"sTitle" : "Index"
+					}, {
+						"sTitle" : "Status"
+					}, {
+						"sTitle" : "Completion Time"
+					}, {
+						"sTitle" : "IP Source"
+					}, {
+						"sTitle" : "IP Target"
+					}, {
+						"sTitle" : "Last Update"
+					} ];
+					
+					try {
+						if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+							$.each(response.records.record, function(k,v) {
+								var fields = new Array();
+								fields.push(v.name.toString());
+								fields.push(v.index.toString());
+								fields.push(v.status.toString());
+								fields.push(v.completiontime.toString());
+								fields.push(v.ipsource.toString());								
+								fields.push(v.iptarget.toString());							
+								fields.push(v.lastupdate.toString());								
+								rowsData.push(fields);
+							}); 
+							
+						} else {
+							console.log("response.records.record.length is undefined ");
+							
+							var fields = new Array();
+							fields.push(response.records.record.name.toString());
+							fields.push(response.records.record.index.toString());
+							fields.push(response.records.record.status.toString());
+							fields.push(response.records.record.completiontime.toString());
+							fields.push(response.records.record.ipsource.toString());								
+							fields.push(response.records.record.iptarget.toString());
+							fields.push(response.records.record.lastupdate.toString());								
+							rowsData.push(fields);						
+						}
+						
+					} catch(e) {
+						console.log(e);
+						
+					} finally {
+						divContainers[0].empty();					
+						divContainers[0].append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divElements[0].selector.replace("#","") + '"></table>');					
+						
+						$(divElements[0].selector).dataTable({
+							"sDom": 'T<"clear">lfrtip',
+							"oTableTools": {
+						        "aButtons": [
+						            "copy",
+						            "csv",
+						            "xls"
+						            ]
+						    },
+							"aaData" : rowsData,
+							"aoColumns" : rowsHeaders,
+							"sScrollX": "100%",
+							"sScrollY": 200,
+							"bScrollCollapse": true,
+							"bProcessing": true
+						});					
+						
+						// Unmask all div containers 
+						cnocFramework.unmask(divContainers);
+					}					
+					
+				},
+				divContainers : [ $('#listBanorteIPSLA') ],
+				divElements : [ $('#listBanorteIPSLAG') ]
+				
+			});
+			
+		}, listNodes : function(status) {
 			
 			var nodeList = [];
 			
 			if (status === 'complete') { // Draw complete node list
-				nodeList = nodes;
+				nodeList = drawElementsGral.reachableNodes.concat(drawElementsGral.degradedNodes);
+				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
 			
 			} else if (status === 'reachable') { // Draw reachable node list
-				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
-						nodeList.push(v);
-				});
+				nodeList = nodeList.concat(drawElementsGral.reachableNodes);
 			
 			} else if (status === 'degraded') { // Draw degraded node list
-
-				$.each(nodes, function(k,v) {
-					
-					if (v.status_value === status){
-						nodeList.push(v);
-						console.log(v);
-					}
-				});
+//				nodeList = nodeList.concat(drawElementsGral.degradedNodes);
+				drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
-				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
-						nodeList.push(v);
-				});
+				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
 			}
 			
-			drawElementsGral.drawListNodes(nodeList, 'listNodes', 'listNodesG');
+			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
+		}, drawListNodesDegraded: function (datos, container, divTable) {
+			jQuery("#" + container).empty();	
+			var tableT = "";
+			
+			try {
+				$.each(datos, function(k,v) {
+					tableT +=
+						"<tr class='warning'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
+							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
+						"</tr>";
+				});
+				
+			} catch (err) {
+				console.log(err);
+			};		
+			
+			var rowsHeaders = [
+				{ "sTitle" : "Node Name" },
+				{ "sTitle" : "Event" },
+				{ "sTitle" : "Value" },
+				{ "sTitle" : "Element" },
+				{ "sTitle" : "Updated" }
+			];
+			
+			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
+			
 		}, selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "general");		
@@ -743,34 +962,19 @@ var drawElementsGral = {
 
 		    return newCoordinates;
 
-		  },chartGroups:function(datos, container, divgroups){
+		  }, chartGroups : function(datos, container) {
 			
 			var categorias = new Array();
 			var unreachable = new Array();
 			var reachable = new Array();
 			var degraded = new Array();
-			var i = 0;
-
-			try {
-				if (datos.records.record.length > 1) {
-					for (i = 0; i < datos.records.record.length; i++) {
-						categorias.push(datos.records.record[i].groups.toString());
-						unreachable.push(parseInt(datos.records.record[i].unreachable.toString()));
-						reachable.push(parseInt(datos.records.record[i].reachable.toString()));
-						degraded.push(parseInt(datos.records.record[i].degraded.toString()));
-					}
-				} else {
-					categorias.push(datos.records.record.groups.toString());
-					unreachable.push(parseInt(datos.records.record.unreachable.toString()));
-					reachable.push(parseInt(datos.records.record.reachable.toString()));
-					degraded.push(parseInt(datos.records.record.degraded.toString()));
-				}
-			} catch (err) {
-				var categorias = new Array();
-				var unreachable = new Array();
-				var reachable = new Array();
-				var degraded = new Array();
-			}
+			
+			$.each(datos, function(k,v) {
+				categorias.push(v.groups.toString());
+				unreachable.push(v.unreachable);
+				reachable.push(v.reachable);
+				degraded.push(v.degraded);
+			});			
 			
 			var totalNodos = [{
 					"name" : "Normal",
@@ -783,46 +987,102 @@ var drawElementsGral = {
 					"data" : degraded,									
 				}];
 
-			var optChart = cnocConnector.drawChartGroups("bar", container, "",totalNodos, categorias);			
-			chart = new Highcharts.Chart(optChart);
+			new Highcharts.Chart({
+				chart : {
+					renderTo : container.selector.substring(1),
+					plotBackgroundColor : null,
+					plotBorderWidth : null,
+					plotShadow : false,
+					type : 'bar'
+				},
+				title : {
+					text : null
+				},
+				credits : {
+					enabled : false
+				},
+				xAxis : {
+					categories : categorias,
+					labels : {
+						style : {
+							fontSize : '8px',
+							fontFamily : 'Verdana, sans-serif'
+						}
+					}
+				},
+				yAxis : {
+					min : 0,
+					title : {
+						text : 'Total Nodes'
+					}
+				},
+				legend : {
+					reversed : true
+				},
+				plotOptions : {
+					series : {
+						stacking : 'normal',
+						events : {
+							click : function(event) {
+								if (event.point.series.name === "Normal") {
+									status = "reachable";
+								} else if (event.point.series.name === "Warning") {
+									status = "degraded";
+								} else if (event.point.series.name === "Critical") {
+									status = "unreachable";
+								}
+							}
+						}
+					},
+					color : [ '#FF0000', '#000000' ]
+				},
+				series : totalNodos
+			});			
 			
-			
-	}, drawListNodes: function (datos, container, divTable) {
-		jQuery("#" + container).empty();	
+	}, drawListNodes: function (datos, status, container, divTable) {
+		jQuery("#" + container).empty();
 		var tableT = "";
+		var rowsHeaders = [];
+		
+		if (status === 'unreachable') {
+			rowsHeaders = [
+			       			{ "sTitle" : "Node Name" },
+			       			{ "sTitle" : "Updated" }
+			       		];
+		
+		} else {
+			rowsHeaders = [ { "sTitle" : "Node Name" } ];			
+		}
 		
 		try {			
 			$.each(datos, function(k,v) {
 				var _class = '';
 				
-				if(v.status_value === 'reachable')
+				if(v.status === 'reachable')
 					_class = 'success';
-				else if(v.status_value === 'degraded')
+				else if(v.status === 'degraded')
 					_class = 'warning';
-				else if(v.status_value.toString()==="unreachable")
-					_class = 'danger';				
+				else if(v.status.toString()==="unreachable")
+					_class = 'danger';
+				
+				if (status === 'unreachable') {
+					tableT +=
+						"<tr class='" + _class + "'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +						
+							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
+						"</tr>";
 					
-				tableT +=
-					"<tr class='" + _class + "'>" +
-						"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
-						"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
-						"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
-						"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
-						"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
-					"</tr>";
+				} else {
+					tableT +=
+						"<tr class='" + _class + "'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
+						"</tr>";					
+				}
 			});
 			
 		} catch (err) {
 			console.log(err);
 		};		
-		
-		var rowsHeaders = [
-			{ "sTitle" : "Node Name" },
-			{ "sTitle" : "Event" },
-			{ "sTitle" : "Value" },
-			{ "sTitle" : "Element" },
-			{ "sTitle" : "Updated" }
-		];
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 		

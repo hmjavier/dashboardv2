@@ -38,7 +38,23 @@
 	<style>
 		.tooltipMap{ color: #000000; }
 		.datepicker{ z-index:1151 !important; }
-		.date input { height: 31px; }
+		.date input { height: 31px; }			
+		
+		table {
+			max-width: none
+		}
+		
+		.rceDataTable * {
+			box-sizing: initial;
+		}
+		
+		table.dataTable,
+		table.dataTable th,
+		table.dataTable td {
+			-webkit-box-sizing: content-box;
+			-moz-box-sizing: content-box;
+			box-sizing: content-box;
+		}
 	</style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -219,7 +235,7 @@
                 <!-- /.row -->
 				<div class="row">
 				    <div class="col-lg-4">
-				    	<div class="panel panel-primary">
+				    	<div class="panel panel-primary" id="containerGroups">
 				    		<div class="panel-heading">
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> Groups
 						  	</div>
@@ -520,12 +536,19 @@
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> RESPALDOS
+						    	<i class="fa fa-list-alt fa-fw"></i> Backups
 						  	</div>
 							<div id="listBanorteATM" class="listBanorteATM"></div>
-							<br>
-							<br>
-						</div>   
+						</div>
+						<!-- ./panel -->
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Backups down
+						  	</div>
+							<div id="listBackupsDown"></div>
+						</div>
+						<!-- ./panel -->
 				    </div>
 				    <div class="col-lg-6">
 				    	<div class="panel panel-primary">
@@ -534,12 +557,10 @@
 						    	<i class="fa fa-list-alt fa-fw"></i> IPSLA-GETVPN
 						  	</div>
 							<div id="listBanorteIPSLA" class="listBanorteIPSLA"></div>
-							<br>
-							<br>
 						</div>   
 				    </div>
 				</div>
-				<!-- /.row -->
+				<!-- /.row -->				
             </div>
             <%@ include file="footer.jsp" %>
             <!-- /.container-fluid -->
@@ -617,7 +638,7 @@
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service11 = serviceG1;
-			    		cnocConnector.service12 = serviceG2;
+			    		//cnocConnector.service12 = serviceG2;
 			    		cnocConnector.service13 = serviceG3;
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
@@ -657,56 +678,23 @@
 		 
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
-				drawElementsGral.listNodes(drawElementsGral.nodes, 'complete');
+				drawElementsGral.listNodes('complete');
 			});
 		 	
 		 	$('#countReachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'reachable');
+		 		drawElementsGral.listNodes('reachable');
 			});
 	
 		 	$('#countDegraded').click(function() {
-		 		/*** Draw complete node list ***/		 		
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'degraded');
+		 		/*** Draw complete node list ***/
+		 		drawElementsGral.listNodes('degraded');
 			});
 		 	
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'unreachable');
-			});
-
-			/*** Degraded list nodes ***
-			cnocFramework.invokeMashup({
-				invokeUrl : endpoint.getNmisStatus,
-				params : {
-					"ip" : v.nmisserver.toString(),
-					"query" : '["config.group","' + v.group.toString() + '"]',
-					"properties" : '["node_name","status.nodestatus","info.status"]'
-				},
-				callback : function(response, divContainers, divElements) {
-					$.each(response, function(k,v) {
-						console.log(v.status.nodestatus);
-						if(v.status.nodestatus.toString() === 'reachable')
-							reachable++;
-						else if(v.status.nodestatus.toString() === 'degraded')
-							degraded++;
-						else if(v.status.nodestatus.toString() === 'unreachable')
-							unreachable++;										
-					});
-					
-					if(stopMask == 1) {
-						divElements[0].text(reachable + degraded + unreachable);
-						divElements[1].text(reachable);
-						divElements[2].text(degraded);
-						divElements[3].text(unreachable);
-					}
-					
-					stopMask--;
-					
-				},
-				divContainers : totalDivs,
-				divElements : totalValues
-			});*/		 	
+		 		drawElementsGral.listNodes('unreachable');
+			});				 	
 			
 		 	
 		 	Highcharts.setOptions({
