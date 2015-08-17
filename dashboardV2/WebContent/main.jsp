@@ -76,9 +76,9 @@
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
 	  
-	  <div class="divContainerTops" style="width:100%; height: 400px; overflow: scroll;">
+	  <div class="divContainerTops" id ="divContainerTops" style="width:100%; height: 400px; overflow: scroll;">
 				<div class="row">
-				    <div class="col-lg-6">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -89,7 +89,9 @@
 						  	</div>								
 						</div>   
 				    </div>
-				    <div class="col-lg-6">
+			    </div>
+			    <div class="row">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -105,7 +107,7 @@
 				<!-- /.row -->
 				
 				<div class="row">
-				    <div class="col-lg-6">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -116,7 +118,9 @@
 						  	</div>								
 						</div>   
 				    </div>
-				    <div class="col-lg-6">
+				    </div>
+			    <div class="row">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -132,7 +136,7 @@
 				<!-- /.row -->
 				
 				<div class="row">
-				    <div class="col-lg-6">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -143,7 +147,9 @@
 						  	</div>								
 						</div>   
 				    </div>
-				    <div class="col-lg-6">
+				</div>
+			    <div class="row">
+				    <div class="col-lg-12">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
@@ -825,6 +831,10 @@
 			
 			/*** Top ***/
 		 	$('.topMeasure').click(function(e) {
+		 		
+		 		$("#tTops").show();
+				$("#divContainerTops").hide();
+		 		
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
 				cnocConnector.invokeMashup(

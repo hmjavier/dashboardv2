@@ -8,8 +8,8 @@
 	<link rel="shortcut icon" href="./images/favicon.ico" />
 	<link rel="icon" type="image/png" href="cnoc.ico" />
 
-	<script type="text/javascript" src="../presto/hub/jsapi/loader.js"></script>
-	<link rel="stylesheet" type="text/css" href="../presto/hub/css/prestoweb.css" />
+	<script type="text/javascript" src="https://dashboard-i2.cnoc.telmexit.com/presto/hub/jsapi/loader.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://dashboard-i2.cnoc.telmexit.com/presto/hub/css/prestoweb.css" />
 	<script>
 		Presto.loadLib("presto-core", null, true);
 		Presto.loadLib("presto-util", null, true);
@@ -33,7 +33,7 @@
 			returnUrl = loc.slice(loc.indexOf("return_url=") + 11),
 			appName = "Presto",
 			connection = new Presto.Connection({
-				prestoUrl: '/presto'
+				prestoUrl: 'https://dashboard-i2.cnoc.telmexit.com/presto'
 			}),
 			cp = new Presto.Util.CookieProvider({
 				expiry: Presto.REMEMBERMEDAYS * 24 * 60 * 60 * 1000
@@ -118,7 +118,7 @@
 						onSuccess: function() {
 							cp.set("PrestoUsername", username);
 							connection.request({
-								url: "/presto/edge/api/rest/cnoc_user_ldap/Invoke?x-presto-resultFormat=json&user="+username,
+								url: "https://dashboard-i2.cnoc.telmexit.com/presto/edge/api/rest/cnoc_user_ldap/Invoke?x-presto-resultFormat=json&user="+username,
 								type: "get",
 								contentType: "application/x-www-form-urlencoded"
 							}, {

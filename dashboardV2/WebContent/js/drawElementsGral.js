@@ -165,7 +165,9 @@ var drawElementsGral = {
 			
 			
 			if(cnocConnector.codeNetGlobal === 'N000382'){
-
+				
+				
+				
 				// TOPS REST OPCHARTS				
 				cnocConnector.invokeMashup(
 						cnocConnector.service16,
@@ -877,8 +879,7 @@ var drawElementsGral = {
 	}, topGrid: function(datos, container, divTable) {
 		
 		$("#"+container).empty();
-		
-		console.log(datos);
+
 		var rowsData = new Array();
 		tableT = "";
 		try {
@@ -920,8 +921,6 @@ var drawElementsGral = {
 		
 		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '">'+tableT+'</table>');
 		
-		console.log(tableT);
-		
 		dTable = jQuery("#" + divTable).dataTable({
 			"sDom": 'T<"clear">lfrtip',
 			"oTableTools": {
@@ -943,6 +942,13 @@ var drawElementsGral = {
 		
 		
 		$("#" + divTable).delegate("tbody tr", "click", function () {
+			
+			
+			$( '#headerGridsDetailG' ).text("Tops");
+			
+			$("#tTops").hide();
+			$("#divContainerTops").show();
+			
 			dTable.$('tr.row_selected').removeClass('row_selected');
 			$(this).addClass('row_selected');
 			
@@ -952,9 +958,6 @@ var drawElementsGral = {
 			
 			
 			drawElementsGral.getTopOpFlow(node);
-			
-			
-			console.log(node);
 			
 		});
 		if(container==="tTops"){
