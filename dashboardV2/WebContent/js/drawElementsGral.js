@@ -196,7 +196,7 @@ var drawElementsGral = {
 			
 						
 			
-		},getTopOpFlow: function(node ){
+		},getTopOpFlow: function(node, ipOpflow){
 			
 			var unixtime = new Date().getTime() / 1000 | 0;
 			
@@ -216,7 +216,7 @@ var drawElementsGral = {
 						"site_name" : node,
 						"act" : "tableLoad",
 						"data" : getTopdata[i],
-						"ip" : "10.237.7.136"
+						"ip" : ipOpflow
 						},
 					callback : drawElementsGral.topOpFlowPyrs,
 					divContainers :  [$("#top"+i)],
@@ -230,9 +230,6 @@ var drawElementsGral = {
 			
 		},topOpFlowPyrs: function(datos, divContainers, divElements){
 		
-			console.log("........................................................");
-			console.log(datos);
-			
 			var table = "<table id='"+datos.table.id+"'>";
 			
 			table +="<thead><tr>";
@@ -282,9 +279,6 @@ var drawElementsGral = {
 
 			
 			divContainers[0].append(table);
-			
-			
-			console.log(table);
 			
 			jQuery("#" + datos.table.id).dataTable({
 				"sDom": 'T<"clear">lfrtip',		
@@ -939,12 +933,9 @@ var drawElementsGral = {
 			"bProcessing": true,
 			"bSort": false
 		});
-		
-		
+
 		$("#" + divTable).delegate("tbody tr", "click", function () {
-			
-			
-			$( '#headerGridsDetailG' ).text("Tops");
+		//$("#" + divTable).bind("tbody tr","click", function () {
 			
 			$("#tTops").hide();
 			$("#divContainerTops").show();
@@ -953,13 +944,31 @@ var drawElementsGral = {
 			$(this).addClass('row_selected');
 			
 			var nTds = $('td', dTable.$('tr.row_selected'));
+			var node = $(nTds[1]).text();				
+
+			$( '#headerGridsDetailG' ).text("Tops: "+node);
+			
 			console.log(nTds);
-			var node = $(nTds[0]).text();				
+			console.log("node: "+node);
 			
 			
-			drawElementsGral.getTopOpFlow(node);
-			
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
+				params : {
+					"node_name" : node 					
+					},
+				callback : function(response){
+					
+					if(response.records.length == 0){
+						alert("No existe Informacion de TOPS");
+					}else{
+						drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
+					}
+				},
+				divContainers :  [$("#top2")],
+				divElements : [$("#top2")]
+			});
 		});
+		
 		if(container==="tTops"){
 			modelView();
 		}
