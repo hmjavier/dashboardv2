@@ -12,8 +12,8 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
+	/*
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -44,9 +44,9 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	
-	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -83,7 +83,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				

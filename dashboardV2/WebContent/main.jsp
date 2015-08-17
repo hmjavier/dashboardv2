@@ -643,24 +643,17 @@
 						  	</div>
 							<div id="listBanorteATM" class="listBanorteATM"></div>
 						</div>
-						<!-- ./panel -->
-						<div class="panel panel-primary">
+						<!-- ./panel -->						
+				    </div>
+				    <div class="col-lg-6">
+				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
 						    	<i class="fa fa-list-alt fa-fw"></i> Backups down
 						  	</div>
 							<div id="listBackupsDown"></div>
 						</div>
-						<!-- ./panel -->
-				    </div>
-				    <div class="col-lg-6">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> IPSLA-GETVPN
-						  	</div>
-							<div id="listBanorteIPSLA" class="listBanorteIPSLA"></div>
-						</div>   
+						<!-- ./panel -->   
 				    </div>
 				</div>
 				<!-- /.row -->				

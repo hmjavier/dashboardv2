@@ -215,7 +215,7 @@ var drawElementsGral = {
 						drawElementsGral.listNodes('complete');
 						
 						/*** Draw cart Groups ***/
-						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
+//						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
 						
 					}
 					
@@ -238,6 +238,7 @@ var drawElementsGral = {
 				invokeUrl : endpoint.getNmisGroups,
 				params : {"networkCode" : codenet},
 				callback : function(response, divContainers, divElements) {
+					console.log(response);
 					
 					if (typeof response.records.record.length !== 'undefined') { // The variable is defined
 						
