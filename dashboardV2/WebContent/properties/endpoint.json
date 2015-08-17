@@ -1,6 +1,6 @@
 {
 
-"main" : "",
+"main" : "http://dashboarddev.cnoc.telmexit.com:8080",
 
 "getNmisStatus" : "/presto/edge/api/rest/ms_nmis_status/Invoke?x-presto-resultFormat=json",
 "getDegradedNodes" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",

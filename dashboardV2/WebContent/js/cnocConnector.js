@@ -12,8 +12,8 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	/*
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV 
+	
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -45,8 +45,8 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	*/
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD
+	
+	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -83,12 +83,12 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				
 		var dTable;
-		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG" || divTable==="listTunelStateG") {
+		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG" || divTable==="listTunelStateG"){
 			
 			var scrollY = "330";
 			if(divTable === "listNodesP"){
@@ -151,6 +151,8 @@ var cnocConnector = {
 				scrollY = "400";
 			}else if(divTable==="containerApG"){
 				
+			}else if(divTable==="topInUtilization"){
+				scrollY = "200";
 			}
 			
 			if(divTable === "tableInventory"){

@@ -8,8 +8,8 @@
 	<link rel="shortcut icon" href="./images/favicon.ico" />
 	<link rel="icon" type="image/png" href="cnoc.ico" />
 
-	<script type="text/javascript" src="https://dashboard-i2.cnoc.telmexit.com/presto/hub/jsapi/loader.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://dashboard-i2.cnoc.telmexit.com/presto/hub/css/prestoweb.css" />
+	<script type="text/javascript" src="http://dashboarddev.cnoc.telmexit.com:8080/presto/hub/jsapi/loader.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://dashboarddev.cnoc.telmexit.com:8080/presto/hub/css/prestoweb.css" />
 	<script>
 		Presto.loadLib("presto-core", null, true);
 		Presto.loadLib("presto-util", null, true);
@@ -33,7 +33,7 @@
 			returnUrl = loc.slice(loc.indexOf("return_url=") + 11),
 			appName = "Presto",
 			connection = new Presto.Connection({
-				prestoUrl: 'https://dashboard-i2.cnoc.telmexit.com/presto'
+				prestoUrl: 'http://dashboarddev.cnoc.telmexit.com:8080/presto'
 			}),
 			cp = new Presto.Util.CookieProvider({
 				expiry: Presto.REMEMBERMEDAYS * 24 * 60 * 60 * 1000
@@ -118,7 +118,7 @@
 						onSuccess: function() {
 							cp.set("PrestoUsername", username);
 							connection.request({
-								url: "https://dashboard-i2.cnoc.telmexit.com/presto/edge/api/rest/cnoc_user_ldap/Invoke?x-presto-resultFormat=json&user="+username,
+								url: "http://dashboarddev.cnoc.telmexit.com:8080/presto/edge/api/rest/cnoc_user_ldap/Invoke?x-presto-resultFormat=json&user="+username,
 								type: "get",
 								contentType: "application/x-www-form-urlencoded"
 							}, {
@@ -149,7 +149,7 @@
 										onSuccess : function(response) {
 
 											connection.request({
-												url : 'https://dashboard-i2.cnoc.telmexit.com/presto/edge/api/rest/ms_gral_user_cnoc_change_pass/Invoke?x-presto-resultFormat=json',
+												url : 'http://dashboarddev.cnoc.telmexit.com:8080/presto/edge/api/rest/ms_gral_user_cnoc_change_pass/Invoke?x-presto-resultFormat=json',
 												//sid : 'ms_gral_user_cnoc_change_pass',
 												//oid : 'Invoke',		
 												params : {						
@@ -163,12 +163,11 @@
 														onSuccess : function(response) {
 															var result = response;
 															console.log(response);
-															alert(response.records.record.flag);
-															
+															alert(response.records.record.flag);															
 															
 															var modules = module.split(";");
 															
-															if(response.records.record.flag == 1){
+															if(response.records.record.flag == 1) {
 																if (modules.length == 1) {
 																	if(module === "sisatck=true")
 																		returnUrl = "/dashboard/sisatck.jsp";
@@ -178,6 +177,8 @@
 																	returnUrl = "/dashboard/mainsct.jsp";
 																else if (codenets === "N000030")
 																	returnUrl = "/dashboardBanorte/main.jsp";
+																else if (codenets === "N000290")
+																	returnUrl = "/dashboardArca/main.jsp";																	
 																else if (ou === "PEXA-CUSTOM")
 																	returnUrl = "/dashboardPEX/main.jsp";
 																else if (module.indexOf("gen=true") > -1)
@@ -185,7 +186,7 @@
 																else
 																	returnUrl = "/dashboard/main.jsp";
 																
-																window.location.href = returnUrl;	
+																window.location.href = returnUrl;
 															}else {
 																window.location.href = "/dashboard/password.jsp";
 															}

@@ -15,7 +15,7 @@ var drawElementsGral = {
 		
 		dataChartMemory : [],
 		
-		init : function(codeNet) {			
+		init : function(codeNet) {
 			
 			if (codeNet != undefined) {
 				
@@ -33,8 +33,10 @@ var drawElementsGral = {
 			else
 				this.mapaGeneral(codenet, null ,false);
 			
+			/*** Getting Node Status ***/
 			drawElementsGral.getNodeStatus(codenet);
 			
+			/*** Getting IPSLA List ***/
 			drawElementsGral.getIpsla(codenet);
 			
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
@@ -55,6 +57,28 @@ var drawElementsGral = {
 				divContainers :  [ $("#listBackupsDown") ],
 				divElements : [ $("#listBackupsDownG") ]
 			});			
+
+			/*** Getting Tops Utilization ***/
+			cnocConnector.invokeMashup(
+				cnocConnector.service16,
+				{
+					"network_code" : cnocConnector.codeNetGlobal,
+					"topID" : "ifInUtil"
+				},
+				drawElementsGral.topGrid,
+				"topInUtilization",
+				"topInUtilizationG"
+			);
+			cnocConnector.invokeMashup(
+				cnocConnector.service16,
+				{
+					"network_code" : cnocConnector.codeNetGlobal,
+					"topID" : "ifOutUtil"
+				},
+				drawElementsGral.topGrid,
+				"topOutUtilization",
+				"topOutUtilizationG"
+			);
 		
 		}, 
 		
@@ -1115,24 +1139,94 @@ var drawElementsGral = {
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
 	}, topGrid: function(datos, container, divTable) {
+		
+		$("#"+container).empty();
+
 		var rowsData = new Array();
+		tableT = "";
 		try {
 			for ( var i = 0; i < datos.length; i++) {
-				var fields = new Array();
-				fields.push(datos[i].node);
-				fields.push(datos[i].value);
-				fields.push(datos[i].element);
-				rowsData.push(fields);
+				var _class = "success";
+				if(datos[i].value > 90){
+					_class = "danger";
+				}else if(datos[i].value > 80 && datos[i].value < 90){
+					_class = "warning";
+				}else if(datos[i].value < 80){
+					_class = "success";
+				}
+				
+				tableT += "<tr class='"+_class+"'>";
+				
+				tableT += '<td><div class="progress">';
+				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
+				tableT += datos[i].value+'%</div></div></td>';
+				
+				tableT += 
+				"<td>"+datos[i].node+"</td>" +
+				"<td>"+datos[i].value+"</td>" +
+				"<td>"+datos[i].element+"</td>";
+				
+				tableT += "</tr>";
 			}
+			
 		} catch (err) { console.log(err); };
 		var rowsHeaders = [ {
+			"sTitle" : "   "
+		},{
 			"sTitle" : "Node"
 		}, {
 			"sTitle" : "Value"
 		}, {
 			"sTitle" : "Element"
 		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+		
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '">'+tableT+'</table>');
+		
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			//"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": 350,
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		
+		$("#" + divTable).delegate("tbody tr", "click", function () {
+			
+			
+			$( '#headerGridsDetailG' ).text("Tops");
+			
+			$("#tTops").hide();
+			$("#divContainerTops").show();
+			
+			dTable.$('tr.row_selected').removeClass('row_selected');
+			$(this).addClass('row_selected');
+			
+			var nTds = $('td', dTable.$('tr.row_selected'));
+			console.log(nTds);
+			var node = $(nTds[0]).text();				
+			
+			
+			drawElementsGral.getTopOpFlow(node);
+			
+		});
+		if(container==="tTops"){
+			modelView();
+		}
+		
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},
 	/*** Old Tops 

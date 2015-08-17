@@ -38,7 +38,7 @@
 	<style>
 		.tooltipMap{ color: #000000; }
 		.datepicker{ z-index:1151 !important; }
-		.date input { height: 31px; }			
+		.date input { height: 31px; }
 		
 		table {
 			max-width: none
@@ -74,6 +74,95 @@
 		</div>
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
+	  
+	  <div class="divContainerTops" id ="divContainerTops" style="width:100%; height: 400px; overflow: scroll;">
+				<div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Talkers
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top0" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+			    </div>
+			    <div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Listener
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top1" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+				</div>
+				
+				<!-- /.row -->
+				
+				<div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top2" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+				    </div>
+			    <div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications Source
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top3" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+				</div>
+				
+				<!-- /.row -->
+				
+				<div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Protocols
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top4" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+				</div>
+			    <div class="row">
+				    <div class="col-lg-12">
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Conversations
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="top5" class="tops"></div>
+						  	</div>								
+						</div>   
+				    </div>
+				</div>
+				</div>
+	  
+	  
 	</div>
 	<div id="cmd" style="visibility: hidden; height:0px; width: 1000px;">		
 		<div>
@@ -235,12 +324,26 @@
                 <!-- /.row -->
 				<div class="row">
 				    <div class="col-lg-4">
-				    	<div class="panel panel-primary" id="containerGroups">
+						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<i class="fa fa-bar-chart-o fa-fw"></i> Groups
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization
 						  	</div>
-				    		<div id="chartGrupos" style="height: 500px;"></div>
-				    	</div>		
+						  	<div class="panel-body" style="overflow: scroll;">
+						  		<ul class="nav nav-tabs">
+								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">TOPS Utilization IN</a></li>
+								  <li><a data-toggle="tab" href="#topOutOPFlow">TOPS Utilization OUT</a></li>
+								</ul>
+								
+								<div class="tab-content">
+								  	<div id="topInOPFlow" class="tab-pane fade in active">						    
+							    		<div id="topInUtilization" style="height: 450px;"></div>
+							    	</div>
+								  	<div id="topOutOPFlow" class="tab-pane fade">						    
+						    			<div id="topOutUtilization" style="height: 450px;"></div>					    		
+							  		</div>
+								</div>
+						  	</div>
+						</div>
 				    </div>
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary" id="mapaAll">
@@ -258,11 +361,11 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-								  <li class="tops list-group-item contadores" id="listIncidentG">				  	
+								  <li class="list-group-item contadores" id="listIncidentG">
 								    <span class="badge" id="cIncident"></span>		    
 								    <a href="#">Incidents</a>
 								  </li>
-								  <li class="tops list-group-item contadores" id="listChangesG">
+								  <li class="list-group-item contadores" id="listChangesG">
 								    <span class="badge" id="cOpen"></span>
 								    <a href="#">Changes</a>
 								  </li>
@@ -315,11 +418,11 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-							  <li class="tops list-group-item contadores" id="relatedIncidents">
+							  <li class="list-group-item contadores" id="relatedIncidents">
 							    <span class="badge" id="relatedIncidentsC"></span>
 							    <a href="#">Related Incidents</a>
 							  </li>
-							  <li class="tops list-group-item contadores" id="relatedChanges">
+							  <li class="list-group-item contadores" id="relatedChanges">
 							    <span class="badge" id="relatedChangesC"></span>
 							    <a href="#">Related Changes</a>
 							  </li>
@@ -662,7 +765,6 @@
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
 			    		cnocConnector.service35 = serviceG24;
-			    					    		
 			    		
 			    }
 			});
@@ -694,7 +796,7 @@
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
 		 		drawElementsGral.listNodes('unreachable');
-			});				 	
+			});
 			
 		 	
 		 	Highcharts.setOptions({
@@ -723,6 +825,10 @@
 			
 			/*** Top ***/
 		 	$('.topMeasure').click(function(e) {
+		 		
+		 		$("#tTops").show();
+				$("#divContainerTops").hide();
+		 		
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
 				cnocConnector.invokeMashup(
