@@ -545,61 +545,7 @@ var cnocConnector = {
 
 		return null;
 
-	},drawChartGroups : function(type, container, nameChart, dataChart, categorias) {
-		var optChart = {
-				 chart: {
-					 	renderTo : container,
-						plotBackgroundColor : null,
-						plotBorderWidth : null,
-						plotShadow : false,
-		                type: type
-		            },
-		            title: {
-		                text: null
-		            },
-		            credits : {
-						enabled : false
-					},
-		            xAxis: {
-		                categories: categorias,
-		                labels : {
-							style : {
-								fontSize : '8px',
-								fontFamily : 'Verdana, sans-serif'
-							}
-						}
-		            },
-		            yAxis: {
-		                min: 0,
-		                title: {
-		                    text: 'Total Nodes'
-		                }
-		            },
-		            legend: {
-		                reversed: true
-		            },
-		            plotOptions: {
-		                series: {
-		                    stacking: 'normal',
-		                    events: {
-		                        click: function(event) {
-		                        	var status = "";
-		                        	if(event.point.series.name==="Normal"){
-		                        		status = "reachable";
-		                        	}else if(event.point.series.name==="Warning"){
-		                        		status = "degraded";
-		                        	}else if(event.point.series.name==="Critical"){
-		                        		status = "unreachable";
-		                        	}
-		                        	cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
-		                        }
-		                      }
-		                },
-		                color: ['#FF0000','#000000']
-		            },series: dataChart
-		};
-		return optChart;
-	},drawChart : function(type, container, nameChart, dataChart, categorias) {
+	}, drawChart : function(type, container, nameChart, dataChart, categorias) {
 		var optChart = {
 			chart : {
 				renderTo : container,
