@@ -814,23 +814,31 @@
 			});
 			
 			$('#listIncidentG').click(function(e){
+				$("#divContainerTops").hide();
+				$("#tTops").show();
 				$("#headerGridsDetailG").text("Incident Detail");
 				cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");			
 			});
 			
 			$('#listChangesG').click(function(e){
+				$("#divContainerTops").hide();
+				$("#tTops").show();
 				$("#headerGridsDetailG").text("Change Detail");
 				cnocConnector.invokeMashup(cnocConnector.service27, {"code_net" : cnocConnector.codeNetGlobal,"flag_stat" : "'t'"},drawElementsGral.gridChangesList, "tTops", "changesListTableG");						
 			});
 			
 			$('#relatedIncidents').click(function(e){
-				$("#headerGridsDetailG").text("Incident Detail");
+				$("#divContainerTops").hide();
+				$("#tTops").show();
+				$("#headerGridsDetailG").text("Related Tickets");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
 				cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.detailIncidentsNode, "tTops", "listIncidentGNode");
 			});
 			
 			$('#relatedChanges').click(function(e){
-				$("#headerGridsDetailG").text("Incident Detail");
+				$("#divContainerTops").hide();
+				$("#tTops").show();
+				$("#headerGridsDetailG").text("Related Chages");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
 				cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : cnocConnector.nodeGlobal,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.detailChangesNode, "tTops", "listChangeGNode");
 			});

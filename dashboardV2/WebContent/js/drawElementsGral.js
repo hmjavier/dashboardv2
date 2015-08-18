@@ -46,7 +46,7 @@ var drawElementsGral = {
 					"network_code" : cnocConnector.codeNetGlobal,
 					"topID" : "ifInUtil"
 				},
-				drawElementsGral.topGrid,
+				drawElementsGral.topGridMain,
 				"topInUtilization",
 				"topInUtilizationG"
 			);
@@ -56,7 +56,7 @@ var drawElementsGral = {
 					"network_code" : cnocConnector.codeNetGlobal,
 					"topID" : "ifOutUtil"
 				},
-				drawElementsGral.topGrid,
+				drawElementsGral.topGridMain,
 				"topOutUtilization",
 				"topOutUtilizationG"
 			);
@@ -1012,7 +1012,6 @@ var drawElementsGral = {
 		
 		$("#"+container).empty();
 
-		var rowsData = new Array();
 		tableT = "";
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -1072,45 +1071,112 @@ var drawElementsGral = {
 			"bSort": false
 		});
 
-		$("#" + divTable).delegate("tbody tr", "click", function () {
-		//$("#" + divTable).bind("tbody tr","click", function () {
-			
-			$("#tTops").hide();
-			$("#divContainerTops").show();
-			
-			dTable.$('tr.row_selected').removeClass('row_selected');
-			$(this).addClass('row_selected');
-			
-			var nTds = $('td', dTable.$('tr.row_selected'));
-			var node = $(nTds[1]).text();				
-
-			$( '#headerGridsDetailG' ).text("Tops: "+node);
-			
-			console.log(nTds);
-			console.log("node: "+node);
-			
-			
-			cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
-				params : {
-					"node_name" : node 					
-					},
-				callback : function(response){
-					
-					if(response.records.length == 0){
-						alert("No existe Informacion de TOPS");
-					}else{
-						drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
-					}
-				},
-				divContainers :  [$("#top2")],
-				divElements : [$("#top2")]
-			});
-		});
-		
 		if(container==="tTops"){
 			modelView();
 		}
+
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
+	}, topGridMain: function(datos, container, divTable) {
+		
+		$("#"+container).empty();
+
+		var tableT = "";
+		try {
+			for ( var i = 0; i < datos.length; i++) {
+				var _class = "success";
+				if(datos[i].value > 90){
+					_class = "danger";
+				}else if(datos[i].value > 80 && datos[i].value < 90){
+					_class = "warning";
+				}else if(datos[i].value < 80){
+					_class = "success";
+				}
+				
+				tableT += "<tr class='"+_class+"'>";
+				
+				tableT += '<td><div class="progress">';
+				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
+				tableT += datos[i].value+'%</div></div></td>';
+				
+				tableT += 
+				"<td>"+datos[i].node+"</td>" +
+				"<td>"+datos[i].value+"</td>" +
+				"<td>"+datos[i].element+"</td>";
+				
+				tableT += "</tr>";
+			}
+			
+		} catch (err) { console.log(err); };
+		var rowsHeaders = [ {
+			"sTitle" : "   "
+		},{
+			"sTitle" : "Node"
+		}, {
+			"sTitle" : "Value"
+		}, {
+			"sTitle" : "Element"
+		} ];
+		
+		
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '">'+tableT+'</table>');
+		
+		var dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			//"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": 350,
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+
+		console.log(dTable);
+		
+
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+					
+					$("#tTops").hide();
+					$("#divContainerTops").show();
+					
+					dTable.$('tr.row_selected').removeClass('row_selected');
+					$(this).addClass('row_selected');
+					
+					var nTds = $('td', dTable.$('tr.row_selected'));
+					var node = $(nTds[1]).text();				
+
+					$( '#headerGridsDetailG' ).text("Tops: "+node);
+					
+					console.log(nTds);
+					console.log("node: "+node);
+					
+					
+					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
+						params : {
+							"node_name" : node 					
+							},
+						callback : function(response){
+							
+							if(response.records.length == 0){
+								alert("No existe Informacion de TOPS");
+							}else{
+								drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
+							}
+						},
+						divContainers :  [$("#top2")],
+						divElements : [$("#top2")]
+					});
+				});
+
 		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},
