@@ -6,13 +6,17 @@
 var modalIP;
 
 var drawElementsGral = {
-		
-		nodes : [],
+
+		/*** List nodes by status ***/
+		reachableNodes : [],
+		degradedNodes : [],
+		unreachableNodes : [],		
+		groups : [],
 		
 		dataChartMemory : [],
 		
 		init : function(codeNet) {
-
+			
 			if (codeNet != undefined) {
 				
 				this.builder(codeNet);
@@ -23,180 +27,277 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-			console.log(codenet);
-			//cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
 			else
 				this.mapaGeneral(codenet, null ,false);
 			
-			/*** Getting NMIS Groups, Status and list o nodes ***/
-			var totalValues = [ $('#totalDiv'), $('#totalReachable'), $('#totalDegraded'), $('#totalUnreachable') ];
-			var totalDivs = [ $('#countAll'), $('#countReachable'), $('#countDegraded'),$('#countUnreachable') ];
+			/*** Getting Node Status ***/
+			drawElementsGral.getNodeStatus(codenet);			
 			
-			drawElementsGral.reachableNodes = [];
-			drawElementsGral.degradedNodes = [],
-			drawElementsGral.unreachableNodes = [];
+			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
+
+			/*** Getting Tops Utilization ***/
+			cnocConnector.invokeMashup(
+				cnocConnector.service16,
+				{
+					"network_code" : cnocConnector.codeNetGlobal,
+					"topID" : "ifInUtil"
+				},
+				drawElementsGral.topGrid,
+				"topInUtilization",
+				"topInUtilizationG"
+			);
+			cnocConnector.invokeMashup(
+				cnocConnector.service16,
+				{
+					"network_code" : cnocConnector.codeNetGlobal,
+					"topID" : "ifOutUtil"
+				},
+				drawElementsGral.topGrid,
+				"topOutUtilization",
+				"topOutUtilizationG"
+			);
+		
+		}, 
+		
+		/**
+		 * Getting NMIS Status and list nodes
+		 * @param codenet
+		 */
+		getNodeStatus: function(codenet) {
+						
+			var divContainers = [
+						$('#countAll'),			// Total Nodes
+						$('#countReachable'),	// Reachable Nodes 
+						$('#countDegraded'),	// Degraded Nodes
+						$('#countUnreachable'),	// Unreachable Nodes
+						$('#listNodes'),		// Node List 
+						$('#containerGroups')	// Groups Chart
+				];
 			
-			/*
+			var divElements = [
+						$('#totalDiv'),			// Total Nodes
+						$('#totalReachable'),	// Reachable Nodes
+						$('#totalDegraded'),	// Degraded Nodes
+						$('#totalUnreachable'),	// Unreachable Nodes
+						$('#listNodesG'),		// Node List
+						$('#chartGrupos')		// Groups Chart
+				];
+			
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getNmisStatus,
+				params : {"networkCode" : codenet},
+				callback : function(response, divContainers, divElements) {
+					
+					drawElementsGral.reachableNodes.length = 0;
+					drawElementsGral.degradedNodes.length = 0;
+					drawElementsGral.unreachableNodes.length = 0;
+					drawElementsGral.groups.length = 0;
+					
+					try {
+						if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+							if (response.records.record.length > 1) { // If response is an array
+								$.each(response.records.record, function(k,v) { // Loop through Nodes
+									/*** Node variable ***/
+									var node = {
+										'status' : v.status.toString(),
+										'name' : v.name.toString(),
+										'group' : v.group.toString(),
+										'updated' : v.updated.toString()
+									};
+									
+									var found = false;
+									
+									$.each(drawElementsGral.groups, function(m,n) {
+										if (n.groups === node.group) { // If found Group then add status
+											found = true;
+											if (node.status === 'reachable') { // Reachable nodes
+												drawElementsGral.reachableNodes.push(node);
+												n.reachable += 1;
+												return false;
+											
+											} else if (node.status === 'degraded') { // Degraded nodes
+												drawElementsGral.degradedNodes.push(node);
+												n.degraded += 1;
+												return false;
+											
+											} else if (node.status === 'unreachable') { // Unreachable Nodes
+												drawElementsGral.unreachableNodes.push(node);
+												n.unreachable += 1;
+												return false;
+											}
+										}
+									});
+									
+									if (!found) { // If not found then add Group and Nodes
+										var group = {
+											'groups' : node.group,
+											'reachable' : 0,
+											'degraded' : 0,
+											'unreachable' : 0
+										};
+										
+										if (node.status === 'reachable') { // Reachable nodes
+											drawElementsGral.reachableNodes.push(node);
+											group.reachable += 1;
+										} else if (node.status === 'degraded') { // Degraded nodes
+											drawElementsGral.degradedNodes.push(node);
+											group.degraded += 1;
+										} else if (node.status === 'unreachable') { // Unreachable Nodes
+											drawElementsGral.unreachableNodes.push(node);
+											group.unreachable += 1;
+										}
+										
+										drawElementsGral.groups.push(group);
+										
+									}
+								});
+								
+							} else { // Else response is not an array
+								/*** Node variable ***/
+								var node = {
+										'status' : response.records.record.toString(),
+										'name' : response.records.record.name.toString()
+									};
+								
+								if (node.status === 'reachable') // Reachable nodes									
+									drawElementsGral.reachableNodes.push(node);
+								else if (node.status === 'degraded') // Degraded nodes
+									drawElementsGral.degradedNodes.push(node);
+								else if (node.status === 'unreachable') // Unreachable Nodes
+									drawElementsGral.unreachableNodes.push(node);
+							}							
+						
+						} else {
+							console.log("response.records.record.length is undefined ");
+						}
+							
+					} catch (e) {
+						console.log(e);						
+					
+					} finally {
+						/*** Draw Tops Status Totals ***/
+						divElements[0].text(
+								drawElementsGral.reachableNodes.length +
+								drawElementsGral.degradedNodes.length +
+								drawElementsGral.unreachableNodes.length
+						);
+						divElements[1].text(drawElementsGral.reachableNodes.length);
+						divElements[2].text(drawElementsGral.degradedNodes.length);
+						divElements[3].text(drawElementsGral.unreachableNodes.length);
+						
+						// Unmask all div containers 
+						cnocFramework.unmask(divContainers);
+						
+						/*** Draw node list ***/
+						drawElementsGral.listNodes('complete');
+						
+						/*** Draw cart Groups ***/
+//						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
+						
+					}
+					
+				},
+				divContainers : divContainers,
+				divElements : divElements
+			});			
+		},
+		   
+		/**
+		 * Getting Nodes by Status
+		 * @param codenet
+		 */
+		getNodesByStatus : function (status, codenet) {
+			
+			drawElementsGral.degradedNodes = [];
+			
+			/*** Invoke NMIS Groups ***/
 			cnocFramework.invokeMashup({
 				invokeUrl : endpoint.getNmisGroups,
 				params : {"networkCode" : codenet},
 				callback : function(response, divContainers, divElements) {
+					console.log(response);
 					
-					var reachable = 0;
-					var degraded = 0;
-					var unreachable = 0;
-					var ipslaArray = []; // IPSLA node list
-					
-					var stopMask = response.records.record.length;
-					
-					try {
-						$.each(response.records.record, function(k,value) { // Loop through Groups 
-							cnocFramework.invokeMashup({
-								invokeUrl : endpoint.getNmisStatus,
-								params : {
-									"ip" : value.nmisserver.toString(),
-									"query" : '["config.group","' + value.group.toString() + '"]',
-									"properties" : '["node_name","status.nodestatus","info.status","info.echoRtt"]'
-								},
-								callback : function(response, divContainers, divElements) {									
-									
-									$.each(response, function(k,v) { // Loop through Nodes 
-										
-										// Node properties
-										var status = v.status.nodestatus.toString();
-										var nodeName = v.node_name.toString();
-										var event = '';										
-										
-										try { // Getting IPSLA 
-											$.each(v.info.echoRtt, function(m,n) {
-												if (n.CtrlAdminRttType.toString() === 'echo' && n.OperSense.toString() != 'ok') {
-													var ipsla = {
-														'nodeName' : nodeName,
-														'status' : n.OperSense,
-														'ipTarget' : n.JAdminTargetAddress,
-														'ipSource' : n.JAdminSourceAddress,
-														'index' : n.index
-													};
-													ipslaArray.push(ipsla);
-												}
-											});
-										} catch(err) {
-											;
-//											console.log(err);
-//											console.log("No IPSLA [" + nodeName + "]");
-										}
+					if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+						
+						var stopMask = response.records.record.length;
+						
+						try {							
+							$.each(response.records.record, function(k,value) { // Loop through Groups
+								/*** Invoke NMIS Nodes by Status ***/
+								cnocFramework.invokeMashup({
+									invokeUrl : endpoint.getDegradedNodes,
+									params : {
+										"ip" : value.nmisserver.toString(),
+										"query" : '["config.group","' + value.group.toString() + '","status.nodestatus","' + status +'"]',
+										"properties" : '["node_name","info.status"]'
+									},									
+									callback : function(response, divContainers, divElements) {
+										$.each(response, function(k,v) { // Loop through Nodes
+											// Node properties
+											var node = {
+												'name' : v.node_name.toString(),											
+												'event' : '',
+												'value' : '',
+												'updated': '',
+												'element': ''
+												
+											};
 
-										if (status === 'reachable') { // Reachable nodes
-											reachable++;
-										
-										} else if (status === 'degraded') {  // Degraded nodes
-											degraded++;											
 											for (var prop in v.info.status) { // Loop through info.status properties 
 												if (v.info.status[prop].status.toString() != 'ok') {
-													event = v.info.status[prop].event;
+													node.event = v.info.status[prop].event;
+													node.value = v.info.status[prop].value;
+													node.updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+													node.element = v.info.status[prop].element;
 													break;
-												}												
-											}																						
-										
-										} else if (status === 'unreachable') { // Unreachable Nodes
-											unreachable++;											
-											for (var prop in v.info.status) { // Loop through info.status properties 
-												if (v.info.status[prop].status.toString() != 'ok') {
-													event = v.info.status[prop].event;
-													break;
-												}												
-											}											
-										}
-										
-										// Push nodes 
-										drawElementsGral.nodes.push({
-											'name' : nodeName,
-											'status_value' : status,
-											'event' : event
+												}
+											}
+											
+											// Push nodes
+											drawElementsGral.degradedNodes.push(node);
+											
 										});
 										
-									});
-									
-									if(stopMask == 1) {
-										divElements[0].text(reachable + degraded + unreachable);
-										divElements[1].text(reachable);
-										divElements[2].text(degraded);
-										divElements[3].text(unreachable);
+										if(stopMask == 1) {										
+											
+											//Unmask all div containers 
+											cnocFramework.unmask(divContainers);
+											
+											// Draw complete node list
+											drawElementsGral.drawListNodesDegraded(drawElementsGral.degradedNodes, 'listNodes', 'listNodesG');										
+										}
 										
-										// Unmask all div containers
-										cnocFramework.unmask(divContainers);
+										stopMask--;
 										
-										// Draw complete node list
-										drawElementsGral.drawListNodes(drawElementsGral.nodes, 'listNodes', 'listNodesG');
-										
-										console.log(ipslaArray);
-										
-									}
-									
-									stopMask--;
-									
-								},
-								divContainers : totalDivs,
-								divElements : totalValues
+									},
+									divContainers : [ $('#listNodes') ],
+									divElements : [ $('#listNodesG') ]
+								});
+								
 							});
 							
-						});
+							
+						} catch (e) {
+							console.log(e);
+							
+							// Unmask all div containers 
+							cnocFramework.unmask(divContainers);
+						}
 						
-					} catch (e) {
-						console.log(e);
-						divElements[0].text(reachable + degraded + unreachable);
-						divElements[1].text(reachable);
-						divElements[2].text(degraded);
-						divElements[3].text(unreachable);
-						
-						// Unmask all div containers 
-						cnocFramework.unmask(divContainers);
-					}
+					} else {
+						console.log("response.records.record.length is undefined ");
+					}				
 				},
-				divContainers : [],
-				divElements : totalValues
+				divContainers : [ ],
+				divElements : [ ]
+				
 			});
-			*/
-			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");	
 			
-			
-			if(cnocConnector.codeNetGlobal === 'N000382'){
-				
-				
-				
-				// TOPS REST OPCHARTS				
-				cnocConnector.invokeMashup(
-						cnocConnector.service16,
-						{
-							"network_code" : cnocConnector.codeNetGlobal,
-							"topID" : "ifInUtil"
-						},
-						drawElementsGral.topGrid,
-						"topInUtilization",
-						"topInUtilizationG"
-				);
-				cnocConnector.invokeMashup(
-						cnocConnector.service16,
-						{
-							"network_code" : cnocConnector.codeNetGlobal,
-							"topID" : "ifOutUtil"
-						},
-						drawElementsGral.topGrid,
-						"topOutUtilization",
-						"topOutUtilizationG"
-				);
-				
-			}
-			
-			
-			
-						
-			
-		},getTopOpFlow: function(node, ipOpflow){
+		}, getTopOpFlow: function(node, ipOpflow){
 			
 			var unixtime = new Date().getTime() / 1000 | 0;
 			
@@ -299,35 +400,58 @@ var drawElementsGral = {
 			cnocFramework.unmask(divContainers);
 			/*$("#getTopNTalkersG").html(datos.html.body.div.table);*/
 			
-		}, listNodes : function(nodes, status) {
+		}, listNodes : function(status) {
 			
 			var nodeList = [];
 			
 			if (status === 'complete') { // Draw complete node list
-				nodeList = nodes;
+				nodeList = drawElementsGral.reachableNodes.concat(drawElementsGral.degradedNodes);
+				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
 			
 			} else if (status === 'reachable') { // Draw reachable node list
-				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
-						nodeList.push(v);
-				});
+				nodeList = nodeList.concat(drawElementsGral.reachableNodes);
 			
 			} else if (status === 'degraded') { // Draw degraded node list
-				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
-						nodeList.push(v);
-				});
+//				nodeList = nodeList.concat(drawElementsGral.degradedNodes);
+				drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
-				$.each(nodes, function(k,v) {
-					if (v.status_value === status)
-						nodeList.push(v);
-				});
+				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
 			}
 			
-			drawElementsGral.drawListNodes(nodeList, 'listNodes', 'listNodesG');
+			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
+		}, drawListNodesDegraded: function (datos, container, divTable) {
+			jQuery("#" + container).empty();	
+			var tableT = "";
+			
+			try {
+				$.each(datos, function(k,v) {
+					tableT +=
+						"<tr class='warning'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
+							"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
+							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
+						"</tr>";
+				});
+				
+			} catch (err) {
+				console.log(err);
+			};		
+			
+			var rowsHeaders = [
+				{ "sTitle" : "Node Name" },
+				{ "sTitle" : "Event" },
+				{ "sTitle" : "Value" },
+				{ "sTitle" : "Element" },
+				{ "sTitle" : "Updated" }
+			];
+			
+			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
+			
 		}, selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "general");		
@@ -809,36 +933,50 @@ var drawElementsGral = {
 			chart = new Highcharts.Chart(optChart);
 			
 			
-	}, drawListNodes: function (datos, container, divTable) {
-		jQuery("#" + container).empty();	
+	}, drawListNodes: function (datos, status, container, divTable) {
+		jQuery("#" + container).empty();
 		var tableT = "";
+		var rowsHeaders = [];
+		
+		if (status === 'unreachable') {
+			rowsHeaders = [
+			       			{ "sTitle" : "Node Name" },
+			       			{ "sTitle" : "Updated" }
+			       		];
+		
+		} else {
+			rowsHeaders = [ { "sTitle" : "Node Name" } ];			
+		}
 		
 		try {			
 			$.each(datos, function(k,v) {
 				var _class = '';
 				
-				if(v.status_value === 'reachable')
+				if(v.status === 'reachable')
 					_class = 'success';
-				else if(v.status_value === 'degraded')
+				else if(v.status === 'degraded')
 					_class = 'warning';
-				else if(v.status_value.toString()==="unreachable")
-					_class = 'danger';				
+				else if(v.status.toString()==="unreachable")
+					_class = 'danger';
+				
+				if (status === 'unreachable') {
+					tableT +=
+						"<tr class='" + _class + "'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +						
+							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
+						"</tr>";
 					
-				tableT +=
-					"<tr class='" + _class + "'>" +
-						"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
-						"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
-					"</tr>";
+				} else {
+					tableT +=
+						"<tr class='" + _class + "'>" +
+							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
+						"</tr>";					
+				}
 			});
 			
 		} catch (err) {
 			console.log(err);
 		};		
-		
-		var rowsHeaders = [
-			{ "sTitle" : "Node Name" },
-			{ "sTitle" : "Event" }
-		];
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 		

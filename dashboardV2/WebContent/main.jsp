@@ -33,7 +33,7 @@
 	<link rel="stylesheet" type="text/css" href="js/jquery-loadmask-0.4/jquery.loadmask.css">
 	
 	<!-- Datetimepicker -->
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">
+	<!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">-->
 	
 	<style>
 		.tooltipMap{ color: #000000; }
@@ -41,21 +41,20 @@
 		.date input { height: 31px; }
 		
 		table {
-		max-width: none
+			max-width: none
 		}
 		
 		.rceDataTable * {
-		box-sizing: initial;
+			box-sizing: initial;
 		}
 		
 		table.dataTable,
 		table.dataTable th,
 		table.dataTable td {
-		-webkit-box-sizing: content-box;
-		-moz-box-sizing: content-box;
-		box-sizing: content-box;
+			-webkit-box-sizing: content-box;
+			-moz-box-sizing: content-box;
+			box-sizing: content-box;
 		}
-		
 	</style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -325,8 +324,7 @@
                 <!-- /.row -->
 				<div class="row">
 				    <div class="col-lg-4">
-				    
-				    	<div class="panel panel-primary">
+						<div class="panel panel-primary">
 				    		<div class="panel-heading">
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization
 						  	</div>
@@ -346,7 +344,6 @@
 								</div>
 						  	</div>
 						</div>
-	
 				    </div>
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary" id="mapaAll">
@@ -364,7 +361,7 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-								  <li class="list-group-item contadores" id="listIncidentG">				  	
+								  <li class="list-group-item contadores" id="listIncidentG">
 								    <span class="badge" id="cIncident"></span>		    
 								    <a href="#">Incidents</a>
 								  </li>
@@ -689,9 +686,9 @@
 	<script src="js/bootstrap-tree.js" /></script>
 	
 	<!-- Datetimepicker -->
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/en-gb.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	-->
 	
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
@@ -714,7 +711,7 @@
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service11 = serviceG1;
-			    		cnocConnector.service12 = serviceG2;
+			    		//cnocConnector.service12 = serviceG2;
 			    		cnocConnector.service13 = serviceG3;
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
@@ -753,56 +750,23 @@
 		 
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
-				drawElementsGral.listNodes(drawElementsGral.nodes, 'complete');
+				drawElementsGral.listNodes('complete');
 			});
 		 	
 		 	$('#countReachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'reachable');
+		 		drawElementsGral.listNodes('reachable');
 			});
 	
 		 	$('#countDegraded').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'degraded');
+		 		drawElementsGral.listNodes('degraded');
 			});
 		 	
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'unreachable');
+		 		drawElementsGral.listNodes('unreachable');
 			});
-
-			/*** Degraded list nodes ***
-			cnocFramework.invokeMashup({
-				invokeUrl : endpoint.getNmisStatus,
-				params : {
-					"ip" : v.nmisserver.toString(),
-					"query" : '["config.group","' + v.group.toString() + '"]',
-					"properties" : '["node_name","status.nodestatus","info.status"]'
-				},
-				callback : function(response, divContainers, divElements) {
-					$.each(response, function(k,v) {
-						console.log(v.status.nodestatus);
-						if(v.status.nodestatus.toString() === 'reachable')
-							reachable++;
-						else if(v.status.nodestatus.toString() === 'degraded')
-							degraded++;
-						else if(v.status.nodestatus.toString() === 'unreachable')
-							unreachable++;										
-					});
-					
-					if(stopMask == 1) {
-						divElements[0].text(reachable + degraded + unreachable);
-						divElements[1].text(reachable);
-						divElements[2].text(degraded);
-						divElements[3].text(unreachable);
-					}
-					
-					stopMask--;
-					
-				},
-				divContainers : totalDivs,
-				divElements : totalValues
-			});*/		 	
 			
 		 	
 		 	Highcharts.setOptions({
