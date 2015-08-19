@@ -12,7 +12,7 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	/*
+	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -44,8 +44,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
-	
+	},
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -83,7 +83,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
+	},*/
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				
@@ -149,8 +149,6 @@ var cnocConnector = {
 				scrollY = "320";
 			} else if(divTable === "listBizserviceTi" || divTable === "openTicketsListTi"){
 				scrollY = "400";
-			}else if(divTable==="containerApG"){
-				
 			}else if(divTable==="topInUtilization"){
 				scrollY = "200";
 			}

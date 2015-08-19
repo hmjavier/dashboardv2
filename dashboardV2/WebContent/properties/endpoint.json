@@ -1,12 +1,14 @@
 {
 
-"main" : "http://dashboarddev.cnoc.telmexit.com:8080",
+"main" : "https://dashboard-i2.cnoc.telmexit.com",
 
 "getNmisStatus" : "/presto/edge/api/rest/ms_nmis_status/Invoke?x-presto-resultFormat=json",
 "getDegradedNodes" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",
 "getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json",
 "getBackups" : "/presto/edge/api/rest/ms_nmis_backups/Invoke?x-presto-resultFormat=json",
 "getIpsla" : "/presto/edge/api/rest/ms_nmis_ipsla/Invoke?x-presto-resultFormat=json",
-"getBackupsDown" : "/presto/edge/api/rest/ms_nmis_backups_down/Invoke?x-presto-resultFormat=json"
+"getBackupsDown" : "/presto/edge/api/rest/ms_nmis_backups_down/Invoke?x-presto-resultFormat=json",
+"getOpFlowTopN" : "/presto/edge/api/rest/ms_rest_opflow/Invoke?x-presto-resultFormat=json",
+"getIpOpflow": "/presto/edge/api/rest/ms_get_ipflow/Invoke?x-presto-resultFormat=json"
 
 }

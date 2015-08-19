@@ -15,7 +15,9 @@ var endpoint = {
 				endpoint.getDegradedNodes = endpoint.main + data.getDegradedNodes;
 				endpoint.getBackups = endpoint.main + data.getBackups;
 				endpoint.getIpsla = endpoint.main + data.getIpsla;
-				endpoint.getBackupsDown = endpoint.main + data.getBackupsDown;				
+				endpoint.getBackupsDown = endpoint.main + data.getBackupsDown;
+				endpoint.getOpFlowTopN = endpoint.main + data.getOpFlowTopN;
+				endpoint.getIpOpflow = endpoint.main + data.getIpOpflow;
 			}
 		});
 	}

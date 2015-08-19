@@ -65,7 +65,7 @@ var drawElementsGral = {
 					"network_code" : cnocConnector.codeNetGlobal,
 					"topID" : "ifInUtil"
 				},
-				drawElementsGral.topGrid,
+				drawElementsGral.topGridMain,
 				"topInUtilization",
 				"topInUtilizationG"
 			);
@@ -75,7 +75,7 @@ var drawElementsGral = {
 					"network_code" : cnocConnector.codeNetGlobal,
 					"topID" : "ifOutUtil"
 				},
-				drawElementsGral.topGrid,
+				drawElementsGral.topGridMain,
 				"topOutUtilization",
 				"topOutUtilizationG"
 			);
@@ -490,13 +490,116 @@ var drawElementsGral = {
 						
 						// Unmask all div containers 
 						cnocFramework.unmask(divContainers);
-					}					
+					}
 					
 				},
 				divContainers : [ $('#listBanorteIPSLA') ],
 				divElements : [ $('#listBanorteIPSLAG') ]
 				
 			});
+			
+		}, getTopOpFlow: function(node, ipOpflow){
+			
+			var unixtime = new Date().getTime() / 1000 | 0;
+			
+			//TOPS NETFLOW
+			var getTopdata = ["getTopNTalkers", "getTopNListeners", "getTopNApplications", "getTopNApplicationSources", "getTopNProtocols", "getRawFlowMatrix"];
+			for(var i=0; i<getTopdata.length; i++){
+				$(".tops").empty();
+				cnocFramework.invokeMashup({invokeUrl : endpoint.getOpFlowTopN,
+					params : {
+						"dns" : "true",
+						"period" : "15",
+						"time_tag_end" : unixtime,
+						"rate" : "",
+						"summary" : "bytes",
+						"summarise" : "",
+						"topn" : "10",
+						"site_name" : node,
+						"act" : "tableLoad",
+						"data" : getTopdata[i],
+						"ip" : ipOpflow
+						},
+					callback : drawElementsGral.topOpFlowPyrs,
+					divContainers :  [$("#top"+i)],
+					divElements : [$("#top"+i)]
+				});
+
+			}
+			
+			modelView();
+			
+			
+		},topOpFlowPyrs: function(datos, divContainers, divElements){
+		
+			var table = "<table id='"+datos.table.id+"'>";
+			
+			table +="<thead><tr>";
+			for(var idxth=0; idxth<datos.table.thead.tr.th.length; idxth++){
+				table += "<th>";
+				table += datos.table.thead.tr.th[idxth].content;
+				table += "</th>";
+			}
+			table +="</tr></thead>";
+			
+			table +="</tbody>";
+								
+			
+			for(var idxtr=0; idxtr<datos.table.tbody.tr.length; idxtr++){
+				table += "<tr>";
+				for(var idxtd=0; idxtd<datos.table.tbody.tr[idxtr].td.length; idxtd++){
+
+					if(idxtd==0){
+						if(datos.table.id === "getTopNProtocols"){
+							table += "<td>";
+							table += datos.table.tbody.tr[idxtr].td[idxtd];
+							table += "</td>";
+						}else{
+							table += "<td title='"+datos.table.tbody.tr[idxtr].td[idxtd].a[1].title+"'>";
+							table += datos.table.tbody.tr[idxtr].td[idxtd].a[1].content;
+							table += "</td>";
+						}						
+					}else if(idxtd==1 && (datos.table.id === "getTopNApplicationSources" || datos.table.id === "getRawFlowMatrix")){
+						table += "<td title='"+datos.table.tbody.tr[idxtr].td[idxtd].a[1].title+"'>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd].a[1].content;
+						table += "</td>";
+					}else if(datos.table.id === "getTopNApplications" && idxtd==1){
+						table += "<td>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd];
+						table += "</td>";
+					}else{
+						table += "<td>";
+						table += datos.table.tbody.tr[idxtr].td[idxtd].content;
+						table += "</td>";
+					}
+									
+				}
+				table += "</tr>";
+			}
+			
+			table += "</tbody></table>";
+
+			
+			divContainers[0].append(table);
+			
+			jQuery("#" + datos.table.id).dataTable({
+				"sDom": 'T<"clear">lfrtip',		
+				"oTableTools": {
+			        "aButtons": [
+			            "copy",
+			            "csv",
+			            "xls"
+			        ]
+			    },
+				 "sScrollX": "100%",
+				 "sScrollY": 300,
+				 "bScrollCollapse": true,
+				 "bProcessing": true,
+				 "iDisplayLength": 20
+			});
+			
+			cnocFramework.unmask(divContainers);
+			/*$("#getTopNTalkersG").html(datos.html.body.div.table);*/
 			
 		}, listNodes : function(status) {
 			
@@ -1143,7 +1246,6 @@ var drawElementsGral = {
 		
 		$("#"+container).empty();
 
-		var rowsData = new Array();
 		tableT = "";
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -1202,31 +1304,113 @@ var drawElementsGral = {
 			"bProcessing": true,
 			"bSort": false
 		});
-		
-		
-		$("#" + divTable).delegate("tbody tr", "click", function () {
-			
-			
-			$( '#headerGridsDetailG' ).text("Tops");
-			
-			$("#tTops").hide();
-			$("#divContainerTops").show();
-			
-			dTable.$('tr.row_selected').removeClass('row_selected');
-			$(this).addClass('row_selected');
-			
-			var nTds = $('td', dTable.$('tr.row_selected'));
-			console.log(nTds);
-			var node = $(nTds[0]).text();				
-			
-			
-			drawElementsGral.getTopOpFlow(node);
-			
-		});
+
 		if(container==="tTops"){
 			modelView();
 		}
+
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
+	}, topGridMain: function(datos, container, divTable) {
+		
+		$("#"+container).empty();
+
+		var tableT = "";
+		try {
+			for ( var i = 0; i < datos.length; i++) {
+				var _class = "success";
+				if(datos[i].value > 90){
+					_class = "danger";
+				}else if(datos[i].value > 80 && datos[i].value < 90){
+					_class = "warning";
+				}else if(datos[i].value < 80){
+					_class = "success";
+				}
+				
+				tableT += "<tr class='"+_class+"'>";
+				
+				tableT += '<td><div class="progress">';
+				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
+				tableT += datos[i].value+'%</div></div></td>';
+				
+				tableT += 
+				"<td>"+datos[i].node+"</td>" +
+				"<td>"+datos[i].value+"</td>" +
+				"<td>"+datos[i].element+"</td>";
+				
+				tableT += "</tr>";
+			}
+			
+		} catch (err) { console.log(err); };
+		var rowsHeaders = [ {
+			"sTitle" : "   "
+		},{
+			"sTitle" : "Node"
+		}, {
+			"sTitle" : "Value"
+		}, {
+			"sTitle" : "Element"
+		} ];
+		
+		
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '">'+tableT+'</table>');
+		
+		var dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			//"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": 350,
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+
+		console.log(dTable);
+		
+
+			$("#" + divTable).delegate("tbody tr", "click", function () {
+					
+					$("#tTops").hide();
+					$("#divContainerTops").show();
+					
+					dTable.$('tr.row_selected').removeClass('row_selected');
+					$(this).addClass('row_selected');
+					
+					var nTds = $('td', dTable.$('tr.row_selected'));
+					var node = $(nTds[1]).text();				
+
+					$( '#headerGridsDetailG' ).text("Tops: "+node);
+					
+					console.log(nTds);
+					console.log("node: "+node);
+					
+					
+					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
+						params : {
+							"node_name" : node 					
+							},
+						callback : function(response){
+							
+							if(response.records.length == 0){
+								alert("No existe Informacion de TOPS");
+							}else{
+								drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
+							}
+						},
+						divContainers :  [$("#top2")],
+						divElements : [$("#top2")]
+					});
+				});
+
 		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 	},
