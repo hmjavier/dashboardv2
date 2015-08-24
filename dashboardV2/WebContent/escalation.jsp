@@ -60,7 +60,7 @@
 
 
                 <div class="row">
-                	<div class="col-md-6 col-md-offset-3">
+                	<div class="col-md-5 col-md-offset-3">
                 		<div class="btn-group">    
 					    	<button type="button" class="btn btn-info">CSC</button>
 							<button type="button" class="btn btn-info">GFC</button>

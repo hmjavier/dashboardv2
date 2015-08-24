@@ -281,7 +281,9 @@ var drawElementsPerformance = {
 				var idResource = "";
 				try{
 					var tmp = $(this).text().split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					var lTmp = tmp.length; 
+					idResource = tmp[lTmp-1].trim();
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -300,7 +302,9 @@ var drawElementsPerformance = {
 				
 				try{
 					var tmp =  $(this).attr( 'id' ).split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					var lTmp = tmp.length; 
+					idResource = tmp[lTmp-1].trim();
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);

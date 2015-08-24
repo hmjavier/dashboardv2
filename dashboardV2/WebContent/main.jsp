@@ -112,14 +112,14 @@
 
 
                 <div class="row">
-<!--                     <div class="col-md-2 col-md-6 col-md-offset-1"> -->
+<!--                <div class="col-md-2 col-md-6 col-md-offset-1"> -->
                     <div class="col-md-3 col-md-6">
                         <div class="panel panel-primary" id="countAll">
                             <div class="panel-heading">
                                 <div class="row">
 									<div class="col-xs-12 text-center">
 										<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="totalDiv"></div>
+                                        	<div class="huge" id="countAll"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -133,13 +133,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
-                        <div class="panel panel-green" id="countReachable">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-green">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="totalReachable"></div>
+                                        	<div class="huge" id="countReachable"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -153,13 +153,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
-                        <div class="panel panel-yellow" id="countDegraded">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-yellow">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="totalDegraded"></div>
+                                        	<div class="huge" id="countDegraded"></div>
                                         </a>
                                     </div>
                                 </div>
@@ -173,13 +173,13 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
-                        <div class="panel panel-red" id="countUnreachable">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-red">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="totalUnreachable"></div>
+                                        	<div class="huge" id="countUnreachable"></div>
                                         </a>                                        
                                     </div>
                                 </div>
@@ -264,14 +264,14 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-							<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
-							<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
-							<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+							<li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li>
+							<li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li>
+							<!-- <li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
 							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
+							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li> -->
 					      </ul>
 						  </div>
 						</div>
@@ -524,7 +524,7 @@
     <!-- /#wrapper -->
 
 	<!-- jQuery Version 1.11.0 -->
-	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>	
+	<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.js"></script>
@@ -545,11 +545,6 @@
 	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
-	<!-- Endpoint Properties -->
-	<script src="js/cnoc/endpoint.js"></script>
-	<!-- CNOC Framework -->
-	<script src="js/cnoc/cnocFramework.js"></script>
-	
 	<!-- higcharts -->
 	<script type="text/javascript" src="js/highcharts.js"></script>
 	<script type="text/javascript" src="js/exporting.js"></script>
@@ -566,9 +561,9 @@
 	<script src="js/bootstrap-tree.js" /></script>
 	
 	<!-- Datetimepicker -->
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/en-gb.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>-->
 	
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
@@ -614,13 +609,9 @@
 			    		cnocConnector.service32 = serviceG21;
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
-			    		cnocConnector.service35 = serviceG24;
 			    		
 			    }
 			});
-			
-			/*** Load Enpoints services ***/
-	    	endpoint.getproperties();
 		
 		 	//$( "#sortableLeft" ).sortable({revert: true});
 		 	
@@ -628,58 +619,21 @@
 			generateMenu();
 		 	
 		 
-		 	$('#countAll').click(function() {
-		 		/*** Draw complete node list ***/
-				drawElementsGral.listNodes(drawElementsGral.nodes, 'complete');
+		 	$('#countAll').click(function(){
+		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":""},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
 			});
 		 	
-		 	$('#countReachable').click(function() {
-		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'reachable');
+		 	$('#countReachable').click(function(){
+		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"reachable"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
 			});
 	
-		 	$('#countDegraded').click(function() {
-		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'degraded');
+		 	$('#countDegraded').click(function(){
+		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"degraded"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
 			});
-		 	
-		 	$('#countUnreachable').click(function() {
-		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes(drawElementsGral.nodes, 'unreachable');
+		
+		 	$('#countUnreachable').click(function(){
+		 		cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":"unreachable"},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
 			});
-
-			/*** Degraded list nodes ***
-			cnocFramework.invokeMashup({
-				invokeUrl : endpoint.getNmisStatus,
-				params : {
-					"ip" : v.nmisserver.toString(),
-					"query" : '["config.group","' + v.group.toString() + '"]',
-					"properties" : '["node_name","status.nodestatus","info.status"]'
-				},
-				callback : function(response, divContainers, divElements) {
-					$.each(response, function(k,v) {
-						console.log(v.status.nodestatus);
-						if(v.status.nodestatus.toString() === 'reachable')
-							reachable++;
-						else if(v.status.nodestatus.toString() === 'degraded')
-							degraded++;
-						else if(v.status.nodestatus.toString() === 'unreachable')
-							unreachable++;										
-					});
-					
-					if(stopMask == 1) {
-						divElements[0].text(reachable + degraded + unreachable);
-						divElements[1].text(reachable);
-						divElements[2].text(degraded);
-						divElements[3].text(unreachable);
-					}
-					
-					stopMask--;
-					
-				},
-				divContainers : totalDivs,
-				divElements : totalValues
-			});*/		 	
 			
 		 	
 		 	Highcharts.setOptions({
@@ -694,7 +648,7 @@
 		    	$(this).addClass("active");
 		    });
 		    
-		    /*** Start Old Top
+		    /** Start Old Top **/
 		    $('#tCpuCountG').click(function(e){
 		 		$("#headerGridsDetailG").text("Top CPU");
 				cnocConnector.invokeMashup(cnocConnector.service16, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tCpuG");			
@@ -704,9 +658,9 @@
 				$("#headerGridsDetailG").text("Top Memory");
 				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
 			});
-		    End Old Top ***/
+		    /** End Old Top **/
 			
-			/*** Top ***/
+			/* Top
 		 	$('.topMeasure').click(function(e) {
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
@@ -720,7 +674,7 @@
 						"tTops",
 						"tTopsTable"
 					);
-			});
+			}); */
 			
 			$('#listIncidentG').click(function(e){
 				$("#headerGridsDetailG").text("Incident Detail");

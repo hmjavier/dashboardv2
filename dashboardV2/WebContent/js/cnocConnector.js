@@ -12,8 +12,8 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
+	/*
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -45,8 +45,8 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	
-	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
+	*/
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****/
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -83,7 +83,7 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				
@@ -111,7 +111,7 @@ var cnocConnector = {
 			    },
 				 "aoColumns" : rowsHeaders,
 				 "sScrollX": "100%",
-//				 "sScrollXInner": "365%",
+				 "sScrollXInner": "365%",
 				 "sScrollY": scrollY,
 				 "bScrollCollapse": true,
 				 "bProcessing": true,
@@ -122,7 +122,7 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 			
-		} else if ( divTable === 'tTopsTable' ) { /*** Top ***/
+		}/** Top else if ( divTable === 'tTopsTable' ) {
 			jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
 			dTable = jQuery("#" + divTable).dataTable({
 				"sDom": 'T<"clear">lfrtip',
@@ -143,7 +143,7 @@ var cnocConnector = {
 				"bSort": false
 			});
 			
-		} else {
+		} */ else {
 			var scrollY = "200";
 			if(divTable === "listCustomerCostosC"){
 				scrollY = "320";

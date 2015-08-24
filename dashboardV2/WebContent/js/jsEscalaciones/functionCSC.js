@@ -24,6 +24,7 @@ function buildCSC (data, container) {
 							'<option value="fincnoc@reduno.com.mx">FINCNOC</option>' +
 							'<option value="supervision.cnoc@reduno.com.mx">SUPERVISI&Oacute;N CNOC</option>' +
 							'<option value="voz.cnoc@reduno.com.mx">CNOC VOZ</option>' +
+							'<option value="cnoc.bbva@reduno.com.mx">BANCOMER</option>' +
 						'</select></td>' +
 				    '</tr>' + 
 				    '<tr>' + 

@@ -1,6 +1,4 @@
 #Configuration Server Dashboard
-hostname_Server = cnvjbprest003.cnoc.telmex.com
-ip_Server = 10.237.5.229
 serviceAuth = /presto/edge/api/rest/cnoc_global_variables/Invoke?x-presto-resultFormat=json
 serviceLogout = /presto/edge/api/rest/UserManagerService/logout
 getLdap = /presto/edge/api/rest/cnoc_global_variables/Invoke?x-presto-resultFormat=json
