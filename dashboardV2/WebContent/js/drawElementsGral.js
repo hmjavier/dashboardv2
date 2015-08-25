@@ -413,6 +413,7 @@ var drawElementsGral = {
 					
 					try {
 						if (typeof response.records.record.length !== 'undefined') { // The variable is defined
+							divElements[1].text(response.records.record.length);
 							$.each(response.records.record, function(k,v) {
 								var fields = new Array();
 								fields.push(v.name.toString());
@@ -427,7 +428,7 @@ var drawElementsGral = {
 							
 						} else {
 							console.log("response.records.record.length is undefined ");
-							
+							divElements[1].text(1);
 							var fields = new Array();
 							fields.push(response.records.record.name.toString());
 							fields.push(response.records.record.index.toString());
@@ -441,6 +442,7 @@ var drawElementsGral = {
 						
 					} catch(e) {
 						console.log(e);
+						divElements[1].text(0);
 						
 					} finally {
 						divContainers[0].empty();					
@@ -468,8 +470,8 @@ var drawElementsGral = {
 					}					
 					
 				},
-				divContainers : [ $('#listBanorteIPSLA') ],
-				divElements : [ $('#listBanorteIPSLAG') ]
+				divContainers : [ $('#listBanorteIPSLA'), $('#divIpsla') ],
+				divElements : [ $('#listBanorteIPSLAG'), $('#countIpsla') ]
 				
 			});
 			
@@ -590,11 +592,13 @@ var drawElementsGral = {
 										
 										var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
 										
-										if(parseInt(unreachableT)> (totalN * .02)){
+										//if(parseInt(unreachableT)> (totalN * .02)){
+										if(parseInt(unreachableT) >= 1) {
 											color = "#FF1600";
-										}else if(parseInt(degradedT)> (totalN * .05)){
+										//} else if(parseInt(degradedT)> (totalN * .05)) {
+										} else if(parseInt(degradedT) >= 1) {
 											color = "#FFE200";
-										}else {
+										} else {
 											color ="#22FF00";
 										}									
 									});

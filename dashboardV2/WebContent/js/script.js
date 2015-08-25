@@ -51,10 +51,12 @@ function logout(){
 		        url: cnocConnector.logout,
 		        error: function (jqXHR, textStatus, errorThrown) {
 		            console.log(jqXHR);
-		            window.location = "index.html";
+		            //window.location = "index.html";
+		            window.location = "/";
 		        },
 		        success: function(response){
-		        	window.location = "index.html";	
+		        	//window.location = "index.html";
+		        	 window.location = "/";
 		        }
 			});	
 		}

@@ -128,8 +128,8 @@
 
 
                 <div class="row">
-<!--                     <div class="col-md-2 col-md-6 col-md-offset-1"> -->
-                    <div class="col-md-3 col-md-6">
+					<div class="col-md-2 col-md-6 col-md-offset-1">
+<!--                     <div class="col-md-3 col-md-6"> -->
                         <div class="panel panel-primary" id="countAll">
                             <div class="panel-heading">
                                 <div class="row">
@@ -149,7 +149,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
+                    <div class="col-md-2 col-md-6">
                         <div class="panel panel-green" id="countReachable">
                             <div class="panel-heading">
                                 <div class="row">
@@ -169,7 +169,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
+                    <div class="col-md-2 col-md-6">
                         <div class="panel panel-yellow" id="countDegraded">
                             <div class="panel-heading">
                                 <div class="row">
@@ -189,7 +189,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-md-3 col-md-6">
+                    <div class="col-md-2 col-md-6">
                         <div class="panel panel-red" id="countUnreachable">
                             <div class="panel-heading">
                                 <div class="row">
@@ -209,28 +209,28 @@
                             </a>
                         </div>
                     </div>
-                    <!-- Unmanaged start -->
-                    <!-- <div class="col-md-2 col-md-6">
-                        <div class="panel panel-info">
+                    <!-- IPSLA start -->
+                    <div class="col-md-2 col-md-6">
+                        <div class="panel panel-info"  id="divIpsla">
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                     	<a href="#nodeList" style="color: #ffffff;">
-                                        	<div class="huge" id="countUnmanaged">0</div>
+                                        	<div class="huge" id="countIpsla">0</div>
                                         </a>                                        
                                     </div>
                                 </div>
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <span class="pull-left">Unmanaged</span>
+                                    <span class="pull-left">IPSLA-GETVPN</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
                         </div>
-                    </div> -->
-                    <!-- Unmanaged end -->
+                    </div>
+                    <!-- IPSLA end -->
                 </div>
                 <!-- /.row -->
 				<div class="row">
