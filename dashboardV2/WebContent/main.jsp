@@ -75,94 +75,93 @@
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
 	  
-	  <div class="divContainerTops" id ="divContainerTops" style="width:100%; height: 400px; overflow: scroll;">
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Talkers
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top0" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
+	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 1%; overflow: scroll; height: 500px;">
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Talkers
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top0" class="tops"></div>
+					  	</div>								
+					</div>   
 			    </div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Listener
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top1" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				
-				<!-- /.row -->
-				
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top2" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				    </div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications Source
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top3" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				
-				<!-- /.row -->
-				
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Protocols
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top4" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Conversations
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top5" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				</div>
-	  
-	  
+		    </div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Listener
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top1" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+			
+			<!-- /.row -->
+			
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top2" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			    </div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications Source
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top3" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+			
+			<!-- /.row -->
+			
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Protocols
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top4" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Conversations
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top5" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+		</div>
+
 	</div>
 	<div id="cmd" style="visibility: hidden; height:0px; width: 1000px;">		
 		<div>
@@ -330,8 +329,9 @@
 						  	</div>
 						  	<div class="panel-body" style="overflow: scroll;">
 						  		<ul class="nav nav-tabs">
-								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">TOPS Utilization IN</a></li>
-								  <li><a data-toggle="tab" href="#topOutOPFlow">TOPS Utilization OUT</a></li>
+								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">Utilization IN</a></li>
+								  <li><a data-toggle="tab" href="#topOutOPFlow">Utilization OUT</a></li>
+								  <li><a data-toggle="tab" href="#otherTop">TOPS</a></li>
 								</ul>
 								
 								<div class="tab-content">
@@ -340,6 +340,18 @@
 							    	</div>
 								  	<div id="topOutOPFlow" class="tab-pane fade">						    
 						    			<div id="topOutUtilization" style="height: 450px;"></div>					    		
+							  		</div>
+							  		<div id="otherTop" class="tab-pane fade">						    
+						    			<ul class="nav nav-pills">
+											<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
+											<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
+											<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+											<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
+					      				</ul>					    		
 							  		</div>
 								</div>
 						  	</div>
@@ -355,6 +367,7 @@
 				    </div>
 				    
 				    <div class="col-lg-3">
+						
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-book fa-fw"></i> Services
@@ -377,31 +390,8 @@
 					      </ul>
 						  </div>
 						</div>
+						
 						<div class="panel panel-primary">
-						  <div class="panel-heading">
-						    <i class="fa fa-long-arrow-up fa-fw"></i> Tops
-						  </div>
-						  <div class="panel-body">
-						  	<ul class="nav nav-pills">
-							<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
-							<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
-							<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
-							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
-					      </ul>
-						  </div>
-						</div>
-				    </div>
-			  	</div>
-			<!-- /.row -->
-			
-				<br>
-				  <div class="row">
-				    <div class="col-lg-3">
-				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
 						    	<i class="fa fa-list-alt fa-fw"></i> Node List
@@ -409,9 +399,48 @@
 							<div id="listNodes" class="listNodes"></div>
 							<br>
 							<br>
-						</div>   
+						</div>
+						
+						
 				    </div>
-				    <div class="col-lg-4">
+			  	</div>
+			<!-- /.row -->
+			
+			<br>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> List Interface
+						  	</div>
+						  	
+						  	<div class="panel-body" style="overflow: scroll; height: 400px;">
+						  		<div id="listInterfaces"></div>
+						  	</div>
+						</div>					  	
+						<!-- /.row -->
+					</div>
+					
+					<div class="col-lg-6">
+				  		<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
+						  	</div>
+						  	
+						  	<div class="panel-body" style="height: 400px;">
+						  	<div id="containerChartPerformanceInterfaz"></div>
+						  	</div>
+						</div>
+				  	</div>
+					
+				</div>
+			<!-- /.row -->
+				<br>
+				  <div class="row">
+				    <div class="col-lg-3">
+
 				    	<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-random fa-fw"></i> Relationships
@@ -450,6 +479,9 @@
 					      </ul>
 						  </div>
 						</div>
+				    					    	   
+				    </div>
+				    <div class="col-lg-4">
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-sitemap fa-fw"></i> Node Resources

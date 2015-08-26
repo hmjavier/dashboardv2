@@ -12,9 +12,9 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****/
-		$( "#" + divcontainer ).mask("Waiting...");
+	/*
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //
+			$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
 				type : 'GET',
@@ -44,9 +44,8 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},
-	
-	/*invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****
+	},*/
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD ****/
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -83,10 +82,11 @@ var cnocConnector = {
 			alert(error);
 			$( "#" + divcontainer ).unmask();
 		}
-	},*/
+	},
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				
+		
 		var dTable;
 		if(divTable === "listNodesG" || divTable ==="listNodeDetailG" || divTable === "listNodesP" || divTable === "listInterfacesG" || divTable === "listLogI" || divTable==="listNodesSctG" || divTable==="listTunelStateG"){
 			
@@ -97,6 +97,8 @@ var cnocConnector = {
 				scrollY = "500";
 			}else if(divTable === "listNodesSctG"){
 				scrollY = "300";
+			}else if(divTable === "listNodesG"){
+				scrollY = "200";
 			}
 			
 			jQuery("#" + container).append('<table class="table table-striped table-hover" id="'+ divTable + '">'+rowsData+'</table>');

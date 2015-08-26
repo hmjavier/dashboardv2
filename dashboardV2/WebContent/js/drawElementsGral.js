@@ -12,6 +12,7 @@ var drawElementsGral = {
 		degradedNodes : [],
 		unreachableNodes : [],		
 		groups : [],
+		intTops:"",
 		
 		dataChartMemory : [],
 		
@@ -27,7 +28,7 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-
+			console.log(codenet);
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
 			else
@@ -219,14 +220,14 @@ var drawElementsGral = {
 				invokeUrl : endpoint.getNmisGroups,
 				params : {"networkCode" : codenet},
 				callback : function(response, divContainers, divElements) {
-					console.log(response);
-					
+
 					if (typeof response.records.record.length !== 'undefined') { // The variable is defined
 						
 						var stopMask = response.records.record.length;
 						
 						try {							
 							$.each(response.records.record, function(k,value) { // Loop through Groups
+
 								/*** Invoke NMIS Nodes by Status ***/
 								cnocFramework.invokeMashup({
 									invokeUrl : endpoint.getDegradedNodes,
@@ -236,43 +237,50 @@ var drawElementsGral = {
 										"properties" : '["node_name","info.status"]'
 									},									
 									callback : function(response, divContainers, divElements) {
-										$.each(response, function(k,v) { // Loop through Nodes
-											// Node properties
-											var node = {
-												'name' : v.node_name.toString(),											
-												'event' : '',
-												'value' : '',
-												'updated': '',
-												'element': ''
-												
-											};
+										
+										
+											$.each(response, function(k,v) { // Loop through Nodes
+												try{
+												// Node properties
+												var node = {
+													'name' : v.node_name.toString(),											
+													'event' : '',
+													'value' : '',
+													'updated': '',
+													'element': ''
+													
+												};
 
-											for (var prop in v.info.status) { // Loop through info.status properties 
-												if (v.info.status[prop].status.toString() != 'ok') {
-													node.event = v.info.status[prop].event;
-													node.value = v.info.status[prop].value;
-													node.updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
-													node.element = v.info.status[prop].element;
-													break;
+												for (var prop in v.info.status) { // Loop through info.status properties 
+													if (v.info.status[prop].status.toString() != 'ok') {
+														node.event = v.info.status[prop].event;
+														node.value = v.info.status[prop].value;
+														node.updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+														node.element = v.info.status[prop].element;
+														break;
+													}
 												}
+												
+												// Push nodes
+												drawElementsGral.degradedNodes.push(node);
+												
+												}catch(e){
+													stopMask--;
+													
+												};
+												
+											});
+											
+											if(stopMask == 1) {										
+												
+												//Unmask all div containers 
+												cnocFramework.unmask(divContainers);
+												
+												// Draw complete node list
+												drawElementsGral.drawListNodesDegraded(drawElementsGral.degradedNodes, 'listNodes', 'listNodesG');										
 											}
 											
-											// Push nodes
-											drawElementsGral.degradedNodes.push(node);
-											
-										});
-										
-										if(stopMask == 1) {										
-											
-											//Unmask all div containers 
-											cnocFramework.unmask(divContainers);
-											
-											// Draw complete node list
-											drawElementsGral.drawListNodesDegraded(drawElementsGral.degradedNodes, 'listNodes', 'listNodesG');										
-										}
-										
-										stopMask--;
-										
+											stopMask--;
 									},
 									divContainers : [ $('#listNodes') ],
 									divElements : [ $('#listNodesG') ]
@@ -391,7 +399,7 @@ var drawElementsGral = {
 			        ]
 			    },
 				 "sScrollX": "100%",
-				 "sScrollY": 300,
+				 "sScrollY": 200,
 				 "bScrollCollapse": true,
 				 "bProcessing": true,
 				 "iDisplayLength": 20
@@ -517,9 +525,9 @@ var drawElementsGral = {
 										
 										var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
 										
-										if(parseInt(unreachableT)> (totalN * .02)){
+										if(parseInt(unreachableT) >= 1){
 											color = "#FF1600";
-										}else if(parseInt(degradedT)> (totalN * .05)){
+										}else if(parseInt(degradedT) >= 1){
 											color = "#FFE200";
 										}else {
 											color ="#22FF00";
@@ -1087,9 +1095,9 @@ var drawElementsGral = {
 				var _class = "success";
 				if(datos[i].value > 90){
 					_class = "danger";
-				}else if(datos[i].value > 80 && datos[i].value < 90){
+				}else if(datos[i].value > 70 && datos[i].value < 90){
 					_class = "warning";
-				}else if(datos[i].value < 80){
+				}else if(datos[i].value < 70){
 					_class = "success";
 				}
 				
@@ -1140,8 +1148,6 @@ var drawElementsGral = {
 			"bSort": false
 		});
 
-		console.log(dTable);
-		
 
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					
@@ -1153,12 +1159,19 @@ var drawElementsGral = {
 					
 					var nTds = $('td', dTable.$('tr.row_selected'));
 					var node = $(nTds[1]).text();				
-
+					
+					drawElementsGral.intTops = $(nTds[3]).text();
+					
 					$( '#headerGridsDetailG' ).text("Tops: "+node);
 					
-					console.log(nTds);
-					console.log("node: "+node);
+					/* GET DATA FOR TREE NODE RESOURCE */
+					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.treeData, "", "");
+					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
+					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
+					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
 					
+					console.log(node);
+					console.log(drawElementsGral.intTops);
 					
 					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
 						params : {

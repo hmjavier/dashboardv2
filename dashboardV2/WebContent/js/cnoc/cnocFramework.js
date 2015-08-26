@@ -34,6 +34,7 @@ var cnocFramework = {
 					console.log(jqXHR);
 					console.log(textStatus);
 					console.log(errorThrown);
+					request.callback(null, request.divContainers, request.divElements);
 				},
 				success : function(response, divContainers, divElements) {
 					try {

@@ -5,6 +5,7 @@
 
 var drawElementsPerformance = {
 		dataChartPerformance : [],
+		dataChartPerformanceUtil : [],
 		nodePerformance : "",
 		nmis : "",
 		idResourceInterfaz: "",
@@ -109,7 +110,7 @@ var drawElementsPerformance = {
 			});
 			
 		},selectInterfaz : function(datos, selector, opt) {
-									
+						
 			$("#treeContainerInterfaz").empty();			
 			
 			$("#treeContainerInterfaz").append("<div class='tree' id='treeNodeDetailInterfaz'>");
@@ -198,6 +199,15 @@ var drawElementsPerformance = {
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
 						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"</a></i></span>";
+						
+						var tmp = datos.results.datum[i].name.toString().split("--");						
+						
+						if(tmp[1].trim() === drawElementsGral.intTops){
+							drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
+							drawElementsPerformance.idResourceInterfaz = datos.results.datum[i].value.toString();
+							drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformanceInterfaz");
+						}
+						
 						if(datos.results.datum[i].active.toString() === "1"){
 							tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 							if(datos.results.datum[i].classes.length > 1){
@@ -214,6 +224,15 @@ var drawElementsPerformance = {
 					}					
 				}else{
 					tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum.name.toString()+" -- "+datos.results.datum.value.toString()+"</a></i></span>";
+					
+					var tmp = datos.results.datum.name.toString().split("--");						
+					
+					if(tmp[1].trim() === drawElementsGral.intTops){
+						drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
+						drawElementsPerformance.idResourceInterfaz = datos.results.datum.value.toString();
+						drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformanceInterfaz");
+					}
+					
 					if(datos.results.datum.active.toString() === "1"){
 						tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 						if(datos.results.datum.classes.length > 1){
@@ -281,15 +300,16 @@ var drawElementsPerformance = {
 				var idResource = "";
 				try{
 					var tmp = $(this).text().split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					idResource = tmp[(tmp.length) - 1];
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
 					drawElementsPerformance.intfNodePerformance = $(this).text();
 				}				
-				drawElementsPerformance.idResourceInterfaz = idResource;
+				drawElementsPerformance.idResourceInterfaz = idResource.trim();
 
-				drawElementsPerformance.drawInterfaceUtil("autil");
+				drawElementsPerformance.drawInterfaceUtil("autil","");
 			});
 			
 			$( ".intfChartQos" ).click(function() {
@@ -300,7 +320,8 @@ var drawElementsPerformance = {
 				
 				try{
 					var tmp =  $(this).attr( 'id' ).split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					idResource = tmp[(tmp.length) - 1];
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -308,7 +329,7 @@ var drawElementsPerformance = {
 				}
 				
 				drawElementsPerformance.subtitlePerformance = "QOS: "+tmp[0]+ " -- " +tmp[1]+"</br>"+$(this).text();
-				drawElementsPerformance.idResourceInterfaz = idResource;				
+				drawElementsPerformance.idResourceInterfaz = idResource.trim();				
 				drawElementsPerformance.drawInterfaceQos(classQos);
 				
 			});
@@ -416,7 +437,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
 			
-		},drawInterfaceUtil: function(unidad){		
+		},drawInterfaceUtil: function(unidad, divId){		
 			drawElementsPerformance.chartIdPerformance = "4";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -430,7 +451,14 @@ var drawElementsPerformance = {
 			}
 			
 			var autil = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"lineType": "line", "graph_type":"interface","index_graph_type":"'+unidad+'","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformance.nmis};
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, autil, "containerChartPerformance", "autil", null, true);
+			
+			if(divId === "containerChartPerformanceInterfaz"){
+				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, autil, "containerChartPerformanceInterfaz", "autil", null, true);
+			}else{
+				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, autil, "containerChartPerformance", "autil", null, true);
+			}
+			
+			
 
 		},drawInterfaceErrors: function(){
 			drawElementsPerformance.chartIdPerformance = "5";
@@ -507,9 +535,17 @@ var drawElementsPerformance = {
 			
 			$( "#" + container ).mask("Waiting...");
 			
+			
 			function onDataReceived(series) {
-				drawElementsPerformance.dataChartPerformance.push(series);
-				cnocConnector.drawChartPerformance(drawElementsPerformance.dataChartPerformance, container, otherMetrics);		
+				
+				if(container === "containerChartPerformanceInterfaz"){
+					drawElementsPerformance.dataChartPerformanceUtil.push(series);
+					cnocConnector.drawChartPerformance(drawElementsPerformance.dataChartPerformanceUtil, container, otherMetrics);
+				}else{
+					drawElementsPerformance.dataChartPerformance.push(series);
+					cnocConnector.drawChartPerformance(drawElementsPerformance.dataChartPerformance, container, otherMetrics);
+				}
+										
 				$( "#" + container ).unmask();
 	       	}
 			
@@ -558,7 +594,7 @@ var drawElementsPerformance = {
 			}else if(drawElementsPerformance.chartIdPerformance === "3"){
 				drawElementsPerformance.drawChartMemoryProc();
 			}else if(drawElementsPerformance.chartIdPerformance === "4"){
-				drawElementsPerformance.drawInterfaceUtil("autil");
+				drawElementsPerformance.drawInterfaceUtil("autil","");
 			}else if(drawElementsPerformance.chartIdPerformance === "5"){
 				drawElementsPerformance.drawInterfaceErrors();
 			}else if(drawElementsPerformance.chartIdPerformance === "6"){
