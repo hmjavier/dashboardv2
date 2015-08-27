@@ -203,6 +203,7 @@ var drawElementsPerformance = {
 						var tmp = datos.results.datum[i].name.toString().split("--");						
 						
 						if(tmp[1].trim() === drawElementsGral.intTops){
+							drawElementsPerformance.dataChartPerformanceUtil.length = 0;
 							drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
 							drawElementsPerformance.idResourceInterfaz = datos.results.datum[i].value.toString();
 							drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformanceInterfaz");
@@ -228,6 +229,7 @@ var drawElementsPerformance = {
 					var tmp = datos.results.datum.name.toString().split("--");						
 					
 					if(tmp[1].trim() === drawElementsGral.intTops){
+						drawElementsPerformance.dataChartPerformanceUtil.length = 0;
 						drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
 						drawElementsPerformance.idResourceInterfaz = datos.results.datum.value.toString();
 						drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformanceInterfaz");
