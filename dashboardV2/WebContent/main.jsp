@@ -76,6 +76,22 @@
 	  <div id="tTops"></div>
 	  
 	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 1%; overflow: scroll; height: 500px;">
+	  	
+	  	<!--
+	  		<div class="row">
+	  			<div class="col-lg-12">
+				  		<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
+						  	</div>
+						  	
+						  	<div class="panel-body" style="height: 400px;">
+						  	<div id="containerChartPerformanceInterfaz"></div>
+						  	</div>
+						</div>
+				  	</div>
+	  		</div>-->
 			<div class="row">
 			    <div class="col-lg-12">
 			    	<div class="panel panel-primary">
@@ -419,7 +435,6 @@
 						  		<div id="listInterfaces"></div>
 						  	</div>
 						</div>					  	
-						<!-- /.row -->
 					</div>
 					
 					<div class="col-lg-6">
@@ -632,9 +647,20 @@
 									</div>
 									<div class="row" style="padding-left: 7px; padding-right: 7px;">
 										<div class="col-lg-12  form-group has-success">
-								    		<div id="listInterfaces"></div>
+								    		<!--<div id="listInterfaces"></div>-->
+								    		<!-- <div class="panel panel-primary">
+									    		<div class="panel-heading">
+									    			<a name="nodeList"></a>
+											    	<i class="fa fa-list-alt fa-fw"></i> List Interface
+											  	</div>
+											  	
+											  	<div class="panel-body" style="overflow: scroll; height: 150px;">
+											  		<div id="listInterfaces"></div>
+											  	</div>
+											</div>	-->
 								  		</div>
 									</div>
+
 									<div class="row" style="padding-left: 12px; padding-right: 7px;">
 										<a class="btn btn-primary btn-sm nodeDetailViewHide" href="#" role="button" id="nodeDetailViewHide">Hide Detail &laquo;</a>
 									</div>
