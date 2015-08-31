@@ -420,7 +420,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
 			
-		},drawInterfaceUtil: function(unidad){		
+		},drawInterfaceUtil: function(unidad){
 			drawElementsPerformance.chartIdPerformance = "4";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;

@@ -224,13 +224,17 @@ var drawElementsPerformanceGraph = {
 			try{
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
-						var nodeTmp = datos.results.datum[i].url.toString().split("/");
+						var nodeString = datos.results.datum[i].url.toString();
+						nodeString = nodeString.replace("/en","");
+						var nodeTmp = nodeString.split("/");
 						var node = nodeTmp[4];
 						var interfaces = node +"|"+datos.results.datum[i].tokens[1]+"|"+datos.results.datum[i].value+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum[i].tokens[0];
 						drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
-					}					
+					}
 				}else{
-					var nodeTmp = datos.results.datum.url.toString().split("/");
+					var nodeString = datos.results.datum.url.toString();
+					nodeString = nodeString.replace("/en","");
+					var nodeTmp = nodeString.split("/");
 					var node = nodeTmp[4];
 					var interfaces = node +"|"+datos.results.datum.tokens[1]+"|"+datos.results.datum.value+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum.tokens[0];
 					drawElementsPerformanceGraph.dataChartInterface.push(interfaces);

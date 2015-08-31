@@ -191,8 +191,6 @@
 		    path:'prop/', 
 		    mode:'both',
 		    callback: function() {
-		    		cnocConnector.ipserver = ip_Server;
-		    		cnocConnector.hostname = hostname_Server;
 		    		cnocConnector.logout = serviceLogout;
 		    		cnocConnector.incidents = incidentService;
 		    		cnocConnector.getLdap = getLdap;

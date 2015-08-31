@@ -32,13 +32,13 @@
 	<!-- jQuery Loadmask -->
 	<link rel="stylesheet" type="text/css" href="js/jquery-loadmask-0.4/jquery.loadmask.css">
 	
-	<!-- Datetimepicker -->
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">
+	<!-- Datetimepicker
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css">-->
 	
 	<style>
 		.tooltipMap{ color: #000000; }
-		.datepicker{ z-index:1151 !important; }
-		.date input { height: 31px; }
+		/*.datepicker{ z-index:1151 !important; }
+		.date input { height: 31px; }*/
 	</style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -113,8 +113,8 @@
 
                 <div class="row">
 <!--                <div class="col-md-2 col-md-6 col-md-offset-1"> -->
-                    <div class="col-md-3 col-md-6">
-                        <div class="panel panel-primary" id="countAll">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="row">
 									<div class="col-xs-12 text-center">
