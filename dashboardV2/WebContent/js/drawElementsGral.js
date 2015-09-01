@@ -1374,9 +1374,6 @@ var drawElementsGral = {
 			"bSort": false
 		});
 
-		console.log(dTable);
-		
-
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					
 					$("#tTops").hide();
@@ -1386,13 +1383,9 @@ var drawElementsGral = {
 					$(this).addClass('row_selected');
 					
 					var nTds = $('td', dTable.$('tr.row_selected'));
-					var node = $(nTds[1]).text();				
+					var node = $(nTds[1]).text();
 
 					$( '#headerGridsDetailG' ).text("Tops: "+node);
-					
-					console.log(nTds);
-					console.log("node: "+node);
-					
 					
 					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
 						params : {

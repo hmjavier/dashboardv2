@@ -26,8 +26,6 @@ var drawElementsPerformanceV1 = {
 		},builder: function(codenet){				
 			cnocConnector.invokeMashup(cnocConnector.service1, {"endpoint" : "http://10.237.7.27/omk/opCharts/nodes"},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");			
 		},sample:function(datos, container, divtable){
-			console.log("sample");
-			console.log(datos);
 			$("#sample").html(datos.records.record.datablock);
 		},selectCustom : function(datos, selector, opt) {
 
@@ -359,9 +357,6 @@ var drawElementsPerformanceV1 = {
 			var startDate = ((new Date().getTime()).toString()).substring(0,10)-86400;
 			var endDate = ((new Date().getTime()).toString()).substring(0,10);
 			
-
-			console.log(startDate);
-			console.log(endDate);
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.endUnix = endDate;
 			drawElementsPerformance.endDate = "";

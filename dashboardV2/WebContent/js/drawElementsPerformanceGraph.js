@@ -42,7 +42,6 @@ var drawElementsPerformanceGraph = {
 			var selText = cnocConnector.drawSelectNodePerformanceGraph(datos, "SelectNode", "performance");
 
 		},drawChartHealth:function(name){
-			console.log(name);
 			drawElementsPerformanceGraph.chartIdPerformance = "1";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.metricUnit = "";

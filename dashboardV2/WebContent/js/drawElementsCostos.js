@@ -15,7 +15,6 @@ var drawElementsCostos = {
 			
 		
 		}, drawChartSector: function(datos, container, divPie){
-			console.log(datos);
 			var dataSector = new Array();
 		    try {
 		      if (datos.records.record.length > 1) {
@@ -126,14 +125,12 @@ var drawElementsCostos = {
 					dataCostoTercero.push(totc3);
 					dataCostoTercero.push(totc4);
 					dataCostoTercero.push(totc5);
-					console.log(dataCostoTercero);
 					
 					dataOptimizacion.push(toto1);
 					dataOptimizacion.push(toto2);
 					dataOptimizacion.push(toto3);
 					dataOptimizacion.push(toto4);
 					dataOptimizacion.push(toto5);
-					console.log(dataOptimizacion);
 					
 					var dataChart = {name:"Costo NOC Tercero", data: dataCostoTercero};
 

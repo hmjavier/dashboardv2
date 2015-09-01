@@ -562,8 +562,6 @@ var drawElementsSct = {
 			onDataReceived(dataChart);
 			
 		}, chartFilter_3: function(datos, container, divTable){
-			console.log("filtro 3");
-			console.log(datos);
 			var categorias = new Array();
 			var up = new Array();
 			var down = new Array();
