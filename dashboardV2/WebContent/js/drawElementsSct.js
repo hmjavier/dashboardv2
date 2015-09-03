@@ -368,12 +368,14 @@ var drawElementsSct = {
 						width: 53
 						}]
 				};
+			
 			var markers = [];
 				  
+			console.log(datos);
+			
 			$.each(datos.records.record, function(key, value) {
 //				site.push(value.ci_name);
-				var latLng = new google.maps.LatLng(Number(value.latitude),
-					Number(value.longitude));
+				var latLng = new google.maps.LatLng(Number(value.latitude),	Number(value.longitude));
 				var marker = new google.maps.Marker({
 					'position': latLng,
 					title: value.ci_name

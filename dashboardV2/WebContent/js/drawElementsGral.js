@@ -40,6 +40,18 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
 
+			
+			/* get Nodes Op flow */
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
+				params : {
+					"node_name" : ""
+					},
+				callback : drawElementsGral.getListNodesIpFlow,
+				divContainers :  [$("#listNodesOpFlow")],
+				divElements : [$("#listNodesOpFlowG")]
+			});
+			
+			
 			/*** Getting Tops Utilization ***/
 			cnocConnector.invokeMashup(
 				cnocConnector.service16,
@@ -62,7 +74,59 @@ var drawElementsGral = {
 				"topOutUtilizationG"
 			);
 		
-		}, 
+		},
+		getListNodesIpFlow: function(datos, divContainers, divElements){
+
+			jQuery(divContainers[0].selector).empty();
+			var tableT = "";
+			try {
+				if (datos.records.record.length > 1) {
+					for ( var i = 0; i < datos.records.record.length; i++) {
+						
+						tableT += "<tr>";
+						tableT += "<td>"+datos.records.record[i].host_name_pyrs.toString()+"</td>";						
+						tableT += "<td><a href='"+datos.records.record[i].ip_publica_opflow.toString()+"' target='_blank'>Op Flow</a></td>";
+						tableT += "</tr>";
+					}
+				} else {
+					tableT += "<tr>";
+					tableT += "<td>"+datos.records.record.host_name_pyrs.toString()+"</td>";						
+					tableT += "<td><a href='"+datos.records.record.ip_publica_opflow.toString()+"' target='_blank'>Op Flow</a></td>";
+					tableT += "</tr>";
+				}
+			} catch (err) {	};
+			
+			var rowsHeaders = [ {
+				"sTitle" : "Node"
+			}, {
+				"sTitle" : "URL"
+			} ];
+			
+			jQuery(divContainers[0].selector).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divElements[0].selector.replace("#","") + '">'+tableT+'</table>');
+			
+			dTable = jQuery(divElements[0].selector).dataTable({
+				"sDom": 'T<"clear">lfrtip',
+				"oTableTools": {
+			        "aButtons": [
+			            "copy",
+			            "csv",
+			            "xls"
+			            ]
+			    },
+				//"aaData" : rowsData,
+				"aoColumns" : rowsHeaders,
+				"sScrollX": "100%",
+				"sScrollXInner": "100%",
+				"sScrollY": 250,
+				"bScrollCollapse": true,
+				"bProcessing": true,
+				"bSort": true
+			});
+			
+			//cnocConnector.drawGrid(divContainers[0].selector.replace("#",""), divElements[0].selector.replace("#",""), tableT, rowsHeaders, false);
+			
+			
+		},
 		
 		/**
 		 * Getting NMIS Status and list nodes
@@ -306,6 +370,9 @@ var drawElementsGral = {
 			});
 			
 		}, getTopOpFlow: function(node, ipOpflow){
+			
+			
+			$("#containerChartPerformanceInterfaz").empty();
 			
 			var unixtime = new Date().getTime() / 1000 | 0;
 			
@@ -551,6 +618,65 @@ var drawElementsGral = {
 							var mapaNacional;
 							map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
 							
+
+							
+							var mcOptions = {
+									gridSize: 50,
+									maxZoom: null,
+									styles: [{
+										height: 53,
+										url: "https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png",
+										width: 53
+										}]
+								};
+							var markers = [["CORPORATIVO MELCHOR OCAMPO", 19.4368498, -99.1698503],
+							               ["CORPORATIVO TLALPAN", 19.3154851,-99.1392778],
+							               ["CEFEREPSI (Cuautla)", 18.732997,-98.852470],
+							               ["CEFERESO 1", 19.4208245,-99.7489222],
+							               ["CEFERESO 2", 20.55513,-103.1940544],							               
+							               ["CEFERESO 3", 25.847222,-97.633333],
+							               ["CEFERESO 4", 21.6022755,-104.9350977],
+							               ["CEFERESO 5", 19.6243176,-97.2202492],
+							               ["CEFERESO 6", 17.658838, -93.495386],
+							               ["CEFERESO 7", 25.772033,-103.5282365],
+							               ["CEFERESO 8", 25.6144173,-108.7808333],
+							               ["CEFERESO 9", 31.4905016,-106.4830877],
+							               ["CEFERESO 10", 27.1234485,-101.2783019],							               
+							               ["CEFERESO 11", 28.9713153,-111.2931132],
+							               ["CEFERESO 12", 21.643132,-101.4672237],
+							               ["CEFERESO 13", 16.347846, -96.601367],
+							               ["CEFERESO 14", 25.8344281,-103.5449413],
+							               ["CEFERESO 15", 15.251569, -92.593011],
+							               ["CEFERESO 16", 18.7376478,-99.4259862],
+							               ["ISLAS MARIAS", 21.4717597,-106.4661461],
+							               ["COMPLEJO PENITENCARIO FEDERAL PAPANTLA (VERACRUZ)", 20.445531, -97.325356]
+											];
+							
+							var markerTmp = [];
+
+							for (var i = 0; i < markers.length; i++) {
+								  var latLng = new google.maps.LatLng(markers[i][1],markers[i][2]);
+								  var marker = new google.maps.Marker(
+										  {
+											  'position': latLng,
+											  title: markers[i][0],
+										  });
+								  markerTmp.push(marker);
+							}
+							
+							var markerCluster = new MarkerClusterer(map, markerTmp, mcOptions);
+							/*
+							
+							var latLng = new google.maps.LatLng(19.4208245, -99.7489222);
+							
+							var marker = new google.maps.Marker({
+								animation: google.maps.Animation.DROP,
+								'position': latLng,
+								title: 'Centro Federal de Readaptacion No. 1 "Altiplano"',
+								map: map
+							});
+							*/
+							
 							infoWindow = new google.maps.InfoWindow({
 							        content: "Cargando . . ."
 							});
@@ -591,20 +717,21 @@ var drawElementsGral = {
 						            	var info = this.info;
 						                var total = this.totalIncidents;
 						                var contentString = '<div class="tooltipMap"><b>Total Nodes by Status:</b><br>' + 'State: ' + info + ' <br>' + total + '<br></div>';
+						                jQuery("#mapa_info").html(contentString);
 						                // Replace the info window's content and position.
-						                infoWindow.setContent(contentString);
+						                /*infoWindow.setContent(contentString);
 						                infoWindow.setPosition(event.latLng);
-						                infoWindow.open(map);
+						                infoWindow.open(map);*/
 						            });
-						            infoWindow = new google.maps.InfoWindow();						            
+						            //infoWindow = new google.maps.InfoWindow();						            
 
-						            	google.maps.event.addListener(map, 'zoom_changed', function() {						            		
-							            	var zoomLevel = map.getZoom();
+					            	google.maps.event.addListener(map, 'zoom_changed', function() {						            		
+						            	var zoomLevel = map.getZoom();
 //							            	console.log(zoomLevel);
-							                if (zoomLevel == 3) {
-							                	drawElementsGral.mapaGeneral(codenet, null , false);
-							                }
-						        		});
+						                if (zoomLevel == 3) {
+						                	drawElementsGral.mapaGeneral(codenet, null , false);
+						                }
+					        		});
 
 						          } //Cierre IF
 						        } // Cierre FOR states
@@ -1093,19 +1220,19 @@ var drawElementsGral = {
 		try {
 			for ( var i = 0; i < datos.length; i++) {
 				var _class = "success";
-				if(datos[i].value > 90){
+				if(datos[i].value >= 90){
 					_class = "danger";
-				}else if(datos[i].value > 70 && datos[i].value < 90){
+				}else if(datos[i].value >= 80 && datos[i].value < 90){
 					_class = "warning";
-				}else if(datos[i].value < 70){
+				}else if(datos[i].value < 80){
 					_class = "success";
 				}
 				
 				tableT += "<tr class='"+_class+"'>";
 				
-				tableT += '<td><div class="progress">';
+				/*tableT += '<td><div class="progress">';
 				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
-				tableT += datos[i].value+'%</div></div></td>';
+				tableT += datos[i].value+'%</div></div></td>';*/
 				
 				tableT += 
 				"<td>"+datos[i].node+"</td>" +
@@ -1117,8 +1244,6 @@ var drawElementsGral = {
 			
 		} catch (err) { console.log(err); };
 		var rowsHeaders = [ {
-			"sTitle" : "   "
-		},{
 			"sTitle" : "Node"
 		}, {
 			"sTitle" : "Value"
@@ -1151,6 +1276,7 @@ var drawElementsGral = {
 
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					
+
 					$("#tTops").hide();
 					$("#divContainerTops").show();
 					
@@ -1158,39 +1284,73 @@ var drawElementsGral = {
 					$(this).addClass('row_selected');
 					
 					var nTds = $('td', dTable.$('tr.row_selected'));
-					var node = $(nTds[1]).text();				
+					var node = $(nTds[0]).text();	
 					
-					drawElementsGral.intTops = $(nTds[3]).text();
+					cnocConnector.nodeGlobal = node;
+					
+					drawElementsGral.intTops = $(nTds[2]).text();
 					
 					$( '#headerGridsDetailG' ).text("Tops: "+node);
 					
 					/* GET DATA FOR TREE NODE RESOURCE */
 					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.treeData, "", "");
+					
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
 					
-					console.log(node);
-					console.log(drawElementsGral.intTops);
+					/*ENABLE IPACCOUNTING*/
+					cnocConnector.getIpAccounting();
 					
-					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
-						params : {
-							"node_name" : node 					
-							},
-						callback : function(response){
-							
-							if(response.records.length == 0){
-								alert("No existe Informacion de TOPS");
-							}else{
-								drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
-							}
-						},
-						divContainers :  [$("#top2")],
-						divElements : [$("#top2")]
-					});
+					/*getTopsOpflow*/
+					
+					drawElementsGral.getTopsOpflowF();
+
 				});
 
 		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+	},getTopsOpflowF: function(){
+		
+		cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
+			params : {
+				"node_name" : cnocConnector.nodeGlobal 					
+				},
+			callback : function(response){
+				
+				if(response.records.length == 0){
+					alert("No existe Informacion de OpFlow");
+				}else{
+					
+					//window.open(response.records.record.ip_publica_opflow, '_blank');
+					
+					drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
+				}
+			},
+			divContainers :  [$("#top2")],
+			divElements : [$("#top2")]
+		});
+		
+	},getUrlOpflowF: function(node){
+		
+		cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
+			params : {
+				"node_name" : node 					
+				},
+			callback : function(response){
+				
+				if(response.records.length == 0){
+					//alert("No existe Informacion de OpFlow");
+				}else{
+					
+					window.open(response.records.record.ip_publica_opflow, '_blank');
+					
+					//drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
+				}
+			},
+			divContainers :  [$("#top2")],
+			divElements : [$("#top2")]
+		});
 		
 	},
 	/*** Old Tops 

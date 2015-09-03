@@ -68,30 +68,29 @@
 
 <body>
 	<div class="overlay" id="overlay" style="display:none;"></div>
-	<div class="box panel panel-primary" id="box" >
+	<div class="box panel panel-primary" id="box"  style="overflow: scroll; height: 500px;">
 		<div class="panel-heading">
 			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>
 		</div>
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
 	  
-	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 1%; overflow: scroll; height: 500px;">
+	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 2%;">
 	  	
-	  	<!--
 	  		<div class="row">
 	  			<div class="col-lg-12">
-				  		<div class="panel panel-primary">
+				  		<div class="panel panel-primary" >
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
 						  	</div>
 						  	
-						  	<div class="panel-body" style="height: 400px;">
+						  	<div class="panel-body">
 						  	<div id="containerChartPerformanceInterfaz"></div>
 						  	</div>
 						</div>
 				  	</div>
-	  		</div>-->
+	  		</div>
 			<div class="row">
 			    <div class="col-lg-12">
 			    	<div class="panel panel-primary">
@@ -338,26 +337,32 @@
                 </div>
                 <!-- /.row -->
 				<div class="row">
-				    <div class="col-lg-4">
+					<div class="col-lg-5">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization IN
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="topInUtilization" style="height: 450px;"></div>
+						  	</div>
+						</div>
+					</div>
+					<div class="col-lg-5">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization OUT
+						  	</div>
+						  	<div class="panel-body" >
+						  		<div id="topOutUtilization" style="height: 450px;"></div>
+						  	</div>
+						</div>
+					</div>
+				    <div class="col-lg-2">
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS 
 						  	</div>
-						  	<div class="panel-body" style="overflow: scroll;">
-						  		<ul class="nav nav-tabs">
-								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">Utilization IN</a></li>
-								  <li><a data-toggle="tab" href="#topOutOPFlow">Utilization OUT</a></li>
-								  <li><a data-toggle="tab" href="#otherTop">TOPS</a></li>
-								</ul>
-								
-								<div class="tab-content">
-								  	<div id="topInOPFlow" class="tab-pane fade in active">						    
-							    		<div id="topInUtilization" style="height: 450px;"></div>
-							    	</div>
-								  	<div id="topOutOPFlow" class="tab-pane fade">						    
-						    			<div id="topOutUtilization" style="height: 450px;"></div>					    		
-							  		</div>
-							  		<div id="otherTop" class="tab-pane fade">						    
+						  	<div class="panel-body">
 						    			<ul class="nav nav-pills">
 											<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
 											<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
@@ -368,21 +373,47 @@
 											<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
 											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
 					      				</ul>					    		
-							  		</div>
-								</div>
 						  	</div>
 						</div>
 				    </div>
-				    <div class="col-lg-5">
+				    
+
+			  	</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-7">
 				    	<div class="panel panel-primary" id="mapaAll">
 				    		<div class="panel-heading">
 						    	<i class="fa fa-globe fa-fw"></i> Nodes By State
 						  	</div>
+						  	<div id="mapa_info" style=" z-index: 1000;  position: absolute; top: 75%;  left: 5%; background-color:white;  border: 1px solid rgba(255,255,255,0);"></div>
 				    		<div id="mapGral" class="mapGral"></div>
 				    	</div>		
 				    </div>
-				    
-				    <div class="col-lg-3">
+				<div class="col-lg-5">
+
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Nodes
+						  	</div>
+						  	<!-- <div id="listNodes" class="listNodes"></div>-->
+						  	<div class="panel-body">
+						  		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+							        <li class="active"><a href="#listNodesGral" data-toggle="tab">Node List</a></li>
+							        <li><a href="#listNodesOpFlowGG" data-toggle="tab">List Nodes OpFlow</a></li>
+							    </ul>
+							    <div id="my-tab-content" class="tab-content">
+							        <div class="tab-pane active" id="listNodesGral">
+							            <div id="listNodes" class="listNodes"></div>
+							        </div>
+							        <div class="tab-pane" id="listNodesOpFlowGG">
+							            <div id="listNodesOpFlow" class="listNodesOpFlow"></div>
+							        </div>
+							    </div>
+						  	</div>
+						</div>
+						
 						
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
@@ -407,23 +438,10 @@
 						  </div>
 						</div>
 						
-						<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Node List
-						  	</div>
-							<div id="listNodes" class="listNodes"></div>
-							<br>
-							<br>
-						</div>
-						
-						
 				    </div>
-			  	</div>
-			<!-- /.row -->
-			
+			</div>			
 			<br>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-lg-6">
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
@@ -450,7 +468,7 @@
 						</div>
 				  	</div>
 					
-				</div>
+				</div>-->
 			<!-- /.row -->
 				<br>
 				  <div class="row">
@@ -647,7 +665,7 @@
 									</div>
 									<div class="row" style="padding-left: 7px; padding-right: 7px;">
 										<div class="col-lg-12  form-group has-success">
-								    		<!--<div id="listInterfaces"></div>-->
+								    		<div id="listInterfaces"></div>
 								    		<!-- <div class="panel panel-primary">
 									    		<div class="panel-heading">
 									    			<a name="nodeList"></a>
@@ -736,6 +754,7 @@
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
 	<!-- google maps -->
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
 	
 	<!-- remove css/js -->
 	<script type="text/javascript" src="js/script.js"></script>	
@@ -808,21 +827,25 @@
 		 
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
+		 			$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 				drawElementsGral.listNodes('complete');
 			});
 		 	
 		 	$('#countReachable').click(function() {
 		 		/*** Draw complete node list ***/
+		 		$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('reachable');
 			});
 	
 		 	$('#countDegraded').click(function() {
 		 		/*** Draw complete node list ***/
+		 		$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('degraded');
 			});
 		 	
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
+		 			$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('unreachable');
 			});
 			
@@ -833,7 +856,6 @@
 		    });
 		 	
 		 	drawElementsGral.init();
-
 		 	$(".tops").on("click", function() {
 		    	$(".tops").removeClass("active");
 		    	$(this).addClass("active");
@@ -991,7 +1013,6 @@
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
-
 			var refresh = setInterval(function(){
 				drawElementsGral.init();
 			},300000);

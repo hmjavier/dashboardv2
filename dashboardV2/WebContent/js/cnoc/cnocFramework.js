@@ -17,6 +17,7 @@ var cnocFramework = {
 	},
 	
 	/*** Invoke mashups ***/
+	
 	invokeMashup : function(request) {
 		
 		/*** Mask all div containers ***/
