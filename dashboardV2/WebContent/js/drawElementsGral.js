@@ -44,7 +44,7 @@ var drawElementsGral = {
 			/* get Nodes Op flow */
 			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
 				params : {
-					"node_name" : ""
+					"codenet" : codenet
 					},
 				callback : drawElementsGral.getListNodesIpFlow,
 				divContainers :  [$("#listNodesOpFlow")],
