@@ -264,14 +264,15 @@
 						  </div>
 						  <div class="panel-body">
 						  	<ul class="nav nav-pills">
-							<li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li>
-							<li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li>
-							<!-- <li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+							<li class="tops list-group-item contadores topOld" id="tMemoryCountG"><a href="#">Top Memory</a></li>
+							<li class="tops list-group-item contadores topOld" id="tCpuCountG"><a href="#">Top CPU</a></li>
+							<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
 							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
 							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li> -->
+							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
+							<li class="list-group-item contadores topNRT" id="tNrtCountG"><a href="#">Network Response Time</a></li>
 					      </ul>
 						  </div>
 						</div>
@@ -609,6 +610,8 @@
 			    		cnocConnector.service32 = serviceG21;
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
+			    		cnocConnector.service35 = serviceG24;
+			    		cnocConnector.service36 = serviceG25;
 			    		
 			    }
 			});
@@ -658,23 +661,30 @@
 				$("#headerGridsDetailG").text("Top Memory");
 				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
 			});
-		    /** End Old Top **/
 			
-			/* Top
+			$('#tNrtCountG').click(function(e){
+				$("#headerGridsDetailG").text("Top NRT");
+				cnocConnector.invokeMashup(cnocConnector.service36, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tNrtG");			
+			});			
+			
+		    /** End Old Top START **/
+			
+			/*** Top New Version ***/
 		 	$('.topMeasure').click(function(e) {
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
 				cnocConnector.invokeMashup(
-						cnocConnector.service16,
+						cnocConnector.service35,
 						{
 							"network_code" : cnocConnector.codeNetGlobal,
 							"topID" : currentId
 						},
-						drawElementsGral.topGrid,
+						drawElementsGral.newTopGrid,
 						"tTops",
 						"tTopsTable"
 					);
-			}); */
+			});
+		 	/*** Top New Version END ***/
 			
 			$('#listIncidentG').click(function(e){
 				$("#headerGridsDetailG").text("Incident Detail");

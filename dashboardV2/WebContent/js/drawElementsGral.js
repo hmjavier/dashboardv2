@@ -21,6 +21,17 @@ var drawElementsGral = {
 
 		},builder: function(codenet) {
 			
+			if(codenet === 'N000079') {
+				$( '.topOld' ).hide();
+				$( '.topMeasure' ).show();
+				$( '.topNRT' ).show();
+				
+			} else {
+				$( '.topOld' ).show();
+				$( '.topMeasure' ).hide();
+				$( '.topNRT' ).hide();
+			}
+			
 			cnocConnector.invokeMashup(cnocConnector.service13, {"codenet" : codenet},drawElementsGral.drawListNodes, "listNodes", "listNodesG");			
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
 
@@ -31,7 +42,7 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "degraded"},drawElementsGral.countStatus, "countDegraded", "countDegradedG");
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "unreachable"},drawElementsGral.countStatus, "countUnreachable", "countUnreachableG");
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");			
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");
 			
 		},selectCustom : function(datos, selector, opt) {
 
@@ -238,13 +249,11 @@ var drawElementsGral = {
 							
 							infoWindow = new google.maps.InfoWindow({
 							        content: "Cargando . . ."
-							});
-							
+							});							
 							
 							var countries = {};
 
 						    var totalServicios = 0;
-
 						    
 						    for (var i = 0; i < records.length; i++) {
 							      var record = records[i];
@@ -579,7 +588,7 @@ var drawElementsGral = {
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
-	},/* topGrid: function(datos, container, divTable) {
+	}, newTopGrid: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -597,9 +606,34 @@ var drawElementsGral = {
 		}, {
 			"sTitle" : "Element"
 		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
-	}, */
+		jQuery("#" + container).empty();
+		
+		/** Top else if ( divTable === 'tTopsTable' ) {**/
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": "200",
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		modelView();
+		
+	},
 	topGrid: function(datos, container, divTable){
 		var rowsData = new Array();
 		try {
@@ -622,7 +656,32 @@ var drawElementsGral = {
 		}, {
 			"sTitle" : "Node Name"
 		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+		jQuery("#" + container).empty();
+		
+		/** Top else if ( divTable === 'tTopsTable' ) {**/
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": "200",
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		modelView();
 		
 	}, detailIncidents: function(datos, container, divTable) {
 		var rowsData = new Array();
