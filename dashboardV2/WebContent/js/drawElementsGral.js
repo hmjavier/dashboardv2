@@ -651,11 +651,24 @@ var drawElementsGral = {
 				rowsData.push(fields);
 			}
 		} catch (err) {	};
-		var rowsHeaders = [ {
-			"sTitle" : "Percent"
-		}, {
-			"sTitle" : "Node Name"
-		} ];
+		
+		var rowsHeaders = [];
+		
+		if(divTable === 'tNrtG') {
+			rowsHeaders = [ {
+				"sTitle" : "Response Time (ms)"
+			}, {
+				"sTitle" : "Node Name"
+			} ];
+			
+		} else {
+			rowsHeaders = [ {
+				"sTitle" : "Percent"
+			}, {
+				"sTitle" : "Node Name"
+			} ];
+		}
+		
 		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
 		jQuery("#" + container).empty();

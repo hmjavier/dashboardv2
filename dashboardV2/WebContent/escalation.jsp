@@ -156,6 +156,7 @@
 			    		cnocConnector.logout = serviceLogout;
 			    		cnocConnector.service1 = serviceESC1;
 			    		cnocConnector.service2 = serviceESC2;
+			    		cnocConnector.service3 = serviceESC3;			    		
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
