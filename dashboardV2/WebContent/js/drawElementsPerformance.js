@@ -535,7 +535,25 @@ var drawElementsPerformance = {
 	   						onDataReceived(dataChart);
 	   					}
 	   				}else{
-	   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
+
+						if(labelMetric === "DropByte-Out" || labelMetric === "PrePolicyByte-Out" || labelMetric === "DropByte-In" || labelMetric === "PrePolicyByte-In"){
+		   					var data = [];
+		   					$.each( response.replyData.data[0].data, function( index, value ){
+		   						var dataTmp = [];
+		   						$.each( value, function( index, value ){
+		   							if(index === 1){
+		   								dataTmp.push(value * 8);
+		   							}else{
+		   								dataTmp.push(value);
+		   							}
+		   						});
+		   						data.push(dataTmp);
+		   					});
+		   					dataChart = {color:color, name:labelMetric, data: data};
+	   					}else{
+	   						dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
+	   					}
+	   					
 	   					onDataReceived(dataChart);
 	   				}
 	   			}
