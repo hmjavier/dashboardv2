@@ -1102,9 +1102,12 @@ var drawElementsGral = {
 			time.empty();
 			time.append(
 					'<option value="0">Do not clear IP Accounting</option>' +
+					'<option value="300000">Clear and wait 5 minutes</option>' +
 					'<option value="600000">Clear and wait 10 minutes</option>' +
 					'<option value="900000">Clear and wait 15 minutes</option>' +
-					'<option value="1200000">Clear and wait 20 minutes</option>'	
+					'<option value="1200000">Clear and wait 20 minutes</option>' +
+					'<option value="1800000">Clear and wait 30 minutes</option>' +
+					'<option value="3600000">Clear and wait 60 minutes</option>'
 			);
 		}
 		

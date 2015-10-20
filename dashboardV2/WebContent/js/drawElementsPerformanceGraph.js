@@ -284,13 +284,13 @@ var drawElementsPerformanceGraph = {
 				if (datos.results.datum.length > 1) {				
 					
 					for(var i=0; i<datos.results.datum.length; i++){						
-						var nodeTmp = datos.results.datum[i].url.toString().split("/");
+						var nodeTmp = datos.results.datum[i].url.toString().replace("/en").split("/");
 						var node = nodeTmp[4];
 						var interfaces = node +"|"+datos.results.datum[i].value.toString()+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum[i].tokens[0];
 						drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
 					}					
 				}else{
-					var nodeTmp = datos.results.datum.url.toString().split("/");
+					var nodeTmp = datos.results.datum.url.toString().replace("/en").split("/");
 					var node = nodeTmp[3];
 					var interfaces = node +"|"+datos.results.datum.value.toString()+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum.tokens[0];
 					drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
