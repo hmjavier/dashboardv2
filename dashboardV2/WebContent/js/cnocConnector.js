@@ -13,7 +13,7 @@ var cnocConnector = {
 	community1:'',
 	community2:'',
 	/*
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** DEV ****
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV ****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -46,7 +46,7 @@ var cnocConnector = {
 		}
 	},
 	*/
-	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { /***** PROD *****/
+	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
 			$.ajax({
@@ -122,28 +122,7 @@ var cnocConnector = {
 				 dTable.fnAdjustColumnSizing();
 			 },10);
 			
-		}/** Top else if ( divTable === 'tTopsTable' ) {
-			jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
-			dTable = jQuery("#" + divTable).dataTable({
-				"sDom": 'T<"clear">lfrtip',
-				"oTableTools": {
-			        "aButtons": [
-			            "copy",
-			            "csv",
-			            "xls"
-			            ]
-			    },
-				"aaData" : rowsData,
-				"aoColumns" : rowsHeaders,
-				"sScrollX": "100%",
-				"sScrollXInner": "100%",
-				"sScrollY": "200",
-				"bScrollCollapse": true,
-				"bProcessing": true,
-				"bSort": false
-			});
-			
-		} */ else {
+		} else {
 			var scrollY = "200";
 			if(divTable === "listCustomerCostosC"){
 				scrollY = "320";

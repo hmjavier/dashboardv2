@@ -19,19 +19,21 @@ var drawElementsGral = {
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsGral.selectCustom, "SelectCustomer", "opt");
 			}
 
-		},builder: function(codenet){				
+		},builder: function(codenet) {
+			
+			if(codenet === 'N000079') {
+				$( '.topOld' ).hide();
+				$( '.topMeasure' ).show();
+				$( '.topNRT' ).show();
 				
-			cnocConnector.invokeMashup(cnocConnector.service13, {"codenet" : codenet},drawElementsGral.drawListNodes, "listNodes", "listNodesG");
+			} else {
+				$( '.topOld' ).show();
+				$( '.topMeasure' ).hide();
+				$( '.topNRT' ).hide();
+			}
 			
+			cnocConnector.invokeMashup(cnocConnector.service13, {"codenet" : codenet},drawElementsGral.drawListNodes, "listNodes", "listNodesG");			
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
-			
-			
-			/*if(codenet.indexOf('L')>=0 || codenet.indexOf('N000269')>=0){
-				this.mapaMundial(codenet);
-			}else{
-				this.mapaGeneral(codenet);
-			}*/
-			
 
 			this.mapaGeneral(codenet, null ,false);
 			
@@ -40,7 +42,7 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "degraded"},drawElementsGral.countStatus, "countDegraded", "countDegradedG");
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "unreachable"},drawElementsGral.countStatus, "countUnreachable", "countUnreachableG");
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
-			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");			
+			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");
 			
 		},selectCustom : function(datos, selector, opt) {
 
@@ -247,13 +249,11 @@ var drawElementsGral = {
 							
 							infoWindow = new google.maps.InfoWindow({
 							        content: "Cargando . . ."
-							});
-							
+							});							
 							
 							var countries = {};
 
 						    var totalServicios = 0;
-
 						    
 						    for (var i = 0; i < records.length; i++) {
 							      var record = records[i];
@@ -261,15 +261,13 @@ var drawElementsGral = {
 							      countries[record['country']] = record;
 							      totalServicios += parseFloat(record['conteo']);
 							    }
-						    console.log(countries);
+
 						    var rows = polygons.mundial.records.record;
 
 						    jQuery.each(rows, function(index, item) {
 						      var poly = [];
-						      //console.log(item[0]);
 						      if (item[0] === "Antarctica")
 						    	  return true;
-				        
 
 						      if (item[1].type == 'GeometryCollection') {
 
@@ -328,120 +326,9 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-						//response = null;
 						console.log("fallo");
-						//drawElementsGral.mapaGeneral(codenet);
 					}
-					
-
-					/*
-					$.each( response, function( key, val ) {
-						var array = [];
-						var reachableT = 0;
-						var degradedT = 0;
-						var unreachableT = 0;
-						var color ="#22FF00";
-						$.each( val, function( key, val ) {
-							if(key.toString() === "reachable"){
-								reachableT = val;
-							}
-							
-							if(key.toString() === "degraded"){
-								degradedT = val;
-							}
-							
-							if(key.toString() === "unreachable"){
-								unreachableT = val;
-							}
-						});
-						
-						var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
-						
-						if(parseInt(unreachableT)> (totalN * .02)){
-							color = "#FF1600";
-						}else if(parseInt(degradedT)> (totalN * .05)){
-							color = "#FFE200";
-						}else {
-							color ="#22FF00";
-						}
-						
-						array.push(key);
-						array.push("Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT);
-						array.push(color);
-						states.push(array);
-						
-					});
-
-		            var mapOptions = {
-							zoom: 5,
-							center: new google.maps.LatLng(21.8833, -102.3),
-							mapTypeId: google.maps.MapTypeId.TERRAIN, 
-							infoWindow: null,
-							styles: stylesMap
-						};
-					var mapaNacional;
-					map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
-					
-					infoWindow = new google.maps.InfoWindow({
-					        content: "Cargando . . ."
-					});
-					
-					 var bounds = new google.maps.LatLngBounds();
-				     var estados = polygons.mexico.records.record;
-
-				      for (var i = 0; i < estados.length; i++) {
-				        var estado = estados[i];
-				        var polygon = [];	
-
-				        for (var a = 0; a< states.length; a++) {				        	
-				        	
-				        	//if(states[a][0].indexOf(estado['name'].toUpperCase()) >-1 ){
-				        	if(states[a][0] === estado['name'].toUpperCase() ){
-
-				            var coords = estado['coords'];
-				            for (var j = 0; j < coords.length; j++) {
-				              var coord = coords[j];
-				              var point = new google.maps.LatLng(coord[1], coord[0]);
-				              polygon.push(point);
-				              bounds.extend(point);
-				            }
-				            // Construct the polygon.
-				            mapaNacional = new google.maps.Polygon({
-				              paths: polygon,
-				              strokeColor: states[a][2],
-				              strokeOpacity: 0.8,
-				              strokeWeight: 3,
-				              fillColor: states[a][2],
-				              fillOpacity: 0.35,
-				              info: states[a][0],
-				              totalIncidents: states[a][1]
-				            });
-				            mapaNacional.setMap(map);
-				            // Add a listener for the click event.
-				            google.maps.event.addListener(mapaNacional, 'mouseover', function(event){
-				            	var info = this.info;
-				                var total = this.totalIncidents;
-				                var contentString = '<div class="tooltipMap"><b>Total Nodes by Status:</b><br>' + 'State: ' + info + ' <br>' + total + '<br></div>';
-				                // Replace the info window's content and position.
-				                infoWindow.setContent(contentString);
-				                infoWindow.setPosition(event.latLng);
-				                infoWindow.open(map);
-				            });
-				            infoWindow = new google.maps.InfoWindow();
-				            
-				            if(codenet === 'N000269'){
-				            	google.maps.event.addListener(map, 'zoom_changed', function() {
-					            	var zoomLevel = map.getZoom();					            	
-					                if (zoomLevel == 3) {
-					                	drawElementsGral.mapaMundial(codenet);
-					                }
-				        		});
-				            }
-
-				          } //Cierre IF
-				        } // Cierre FOR states
-				      }*/
-				      $( "#mapGral").unmask();
+					$( "#mapGral").unmask();
 				}
 			});
 
@@ -701,7 +588,7 @@ var drawElementsGral = {
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
-	},/* topGrid: function(datos, container, divTable) {
+	}, newTopGrid: function(datos, container, divTable) {
 		var rowsData = new Array();
 		try {
 			for ( var i = 0; i < datos.length; i++) {
@@ -719,9 +606,34 @@ var drawElementsGral = {
 		}, {
 			"sTitle" : "Element"
 		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		
-	}, */
+		jQuery("#" + container).empty();
+		
+		/** Top else if ( divTable === 'tTopsTable' ) {**/
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": "200",
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		modelView();
+		
+	},
 	topGrid: function(datos, container, divTable){
 		var rowsData = new Array();
 		try {
@@ -739,12 +651,50 @@ var drawElementsGral = {
 				rowsData.push(fields);
 			}
 		} catch (err) {	};
-		var rowsHeaders = [ {
-			"sTitle" : "Percent"
-		}, {
-			"sTitle" : "Node Name"
-		} ];
-		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+		var rowsHeaders = [];
+		
+		if(divTable === 'tNrtG') {
+			rowsHeaders = [ {
+				"sTitle" : "Response Time (ms)"
+			}, {
+				"sTitle" : "Node Name"
+			} ];
+			
+		} else {
+			rowsHeaders = [ {
+				"sTitle" : "Percent"
+			}, {
+				"sTitle" : "Node Name"
+			} ];
+		}
+		
+		//cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
+		
+		jQuery("#" + container).empty();
+		
+		/** Top else if ( divTable === 'tTopsTable' ) {**/
+		jQuery("#" + container).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable + '"></table>');
+		dTable = jQuery("#" + divTable).dataTable({
+			"sDom": 'T<"clear">lfrtip',
+			"oTableTools": {
+		        "aButtons": [
+		            "copy",
+		            "csv",
+		            "xls"
+		            ]
+		    },
+			"aaData" : rowsData,
+			"aoColumns" : rowsHeaders,
+			"sScrollX": "100%",
+			"sScrollXInner": "100%",
+			"sScrollY": "200",
+			"bScrollCollapse": true,
+			"bProcessing": true,
+			"bSort": false
+		});
+		
+		modelView();
 		
 	}, detailIncidents: function(datos, container, divTable) {
 		var rowsData = new Array();
@@ -1152,9 +1102,12 @@ var drawElementsGral = {
 			time.empty();
 			time.append(
 					'<option value="0">Do not clear IP Accounting</option>' +
+					'<option value="300000">Clear and wait 5 minutes</option>' +
 					'<option value="600000">Clear and wait 10 minutes</option>' +
 					'<option value="900000">Clear and wait 15 minutes</option>' +
-					'<option value="1200000">Clear and wait 20 minutes</option>'	
+					'<option value="1200000">Clear and wait 20 minutes</option>' +
+					'<option value="1800000">Clear and wait 30 minutes</option>' +
+					'<option value="3600000">Clear and wait 60 minutes</option>'
 			);
 		}
 		

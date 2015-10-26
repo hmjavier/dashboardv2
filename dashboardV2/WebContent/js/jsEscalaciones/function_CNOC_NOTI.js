@@ -23,7 +23,8 @@ function build_CNOC_NOTI (data, container) {
 							'<option value="opercnoc@reduno.com.mx">OPERACIONES CNOC</option>' + 
 							'<option value="fincnoc@reduno.com.mx">FINCNOC</option>' + 
 							'<option value="supervision.cnoc@reduno.com.mx">SUPERVIS&Oacute;N CNOC</option>' + 
-							'<option value="voz.cnoc@reduno.com.mx">CNOC VOZ</option>' + 
+							'<option value="voz.cnoc@reduno.com.mx">CNOC VOZ</option>' +
+							'<option value="cnoc.bbva@reduno.com.mx">BANCOMER</option>' + 
 						'</select></td>' +
 					'</tr>' + 
 				    '<tr>' + 

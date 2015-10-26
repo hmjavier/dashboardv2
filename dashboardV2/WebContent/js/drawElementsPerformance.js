@@ -281,7 +281,9 @@ var drawElementsPerformance = {
 				var idResource = "";
 				try{
 					var tmp = $(this).text().split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					var lTmp = tmp.length; 
+					idResource = tmp[lTmp-1].trim();
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -300,7 +302,9 @@ var drawElementsPerformance = {
 				
 				try{
 					var tmp =  $(this).attr( 'id' ).split("--");
-					idResource = (tmp[2]).trim().substring(0,20);
+					//idResource = (tmp[2]).trim().substring(0,20);
+					var lTmp = tmp.length; 
+					idResource = tmp[lTmp-1].trim();
 					drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1]; 
 				}catch(e){
 					console.log(e);
@@ -416,7 +420,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
 			
-		},drawInterfaceUtil: function(unidad){		
+		},drawInterfaceUtil: function(unidad){
 			drawElementsPerformance.chartIdPerformance = "4";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -534,9 +538,39 @@ var drawElementsPerformance = {
 	   						dataChart = {color:colorP[idx], name:name, data: jsonData};
 	   						onDataReceived(dataChart);
 	   					}
-	   				}else{
-	   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
-	   					onDataReceived(dataChart);
+	   				} else {
+					   	if (labelMetric === "DropByte-Out"
+							|| labelMetric === "PrePolicyByte-Out"
+							|| labelMetric === "DropByte-In"
+							|| labelMetric === "PrePolicyByte-In") {
+						var data = [];
+						$.each(response.replyData.data[0].data, function(index,
+								value) {
+							var dataTmp = [];
+							$.each(value, function(index, value) {
+								if (index === 1) {
+									dataTmp.push(value * 8);
+								} else {
+									dataTmp.push(value);
+								}
+							});
+							data.push(dataTmp);
+						});
+						dataChart = {
+							color : color,
+							name : labelMetric,
+							data : data
+						};
+					} else {
+						dataChart = {
+							color : color,
+							name : labelMetric,
+							data : response.replyData.data[0].data
+						};
+					}
+
+					onDataReceived(dataChart);
+
 	   				}
 	   			}
 	   		});

@@ -153,19 +153,19 @@
 					<div class="col-lg-3">
 				    	<div class="panel panel-primary" id="containerChartSector">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Sector</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Sector
 						  	</div>
 				    		<div id="chartSector" style="height: 150px;"></div>
 				    	</div>
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents Phase</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Incidents Phase
 						  	</div>
 				    		<div id="chartIncidentsPhase" style="height: 150px;"></div>
 				    	</div>
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents By Status</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Incidents By Status
 						  	</div>
 				    		<div id="chartIncidentsStatus" style="height: 150px;"></div>
 				    	</div>		
@@ -173,13 +173,13 @@
 				    <div class="col-lg-3">
 				    	<div class="panel panel-primary" id="containerChartCompaniesSector">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Companies By Sector</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Companies By Sector
 						  	</div>
 				    		<div id="chartCompaniesSector" class="chartCompaniesBySector"></div>		    		
 				    	</div>
 				    	<div class="panel panel-primary" id="containerChartIncidentsGroups" >
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents By Groups</h3>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Incidents By Groups
 						  	</div>
 				    		<div id="chartIncidentsGroups" class="chartIncidentsGroups"></div>		    		
 				    	</div>		
@@ -187,7 +187,7 @@
 				    <div class="col-lg-6">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents By State</h3>
+						    	<i class="fa fa-globe fa-fw"></i> Incidents By State
 						  	</div>
 				    		<div id="mapIncidents" class="chartCompaniesBySector"></div>		    		
 				    	</div>		
@@ -200,7 +200,7 @@
 					<div class="col-lg-6">
 			    		<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incidents Detail</h3>
+						    	<i class="fa fa-list-alt fa-fw"></i> Incidents Detail
 						  	</div>
 				    		<div id="listIncidents" class="listIncidents"></div>		    		
 			    		</div>		
@@ -208,7 +208,7 @@
 				    <div class="col-lg-6">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Incident Activities</h3>
+						    	<i class="fa fa-list-alt fa-fw"></i> Incident Activities
 						  	</div>
 				    		<div id="activitiesIncidents" class="listIncidents"></div>		    		
 				    	</div>		
@@ -219,9 +219,9 @@
 				    <div class="col-lg-5">
 				      	<div class="panel panel-primary">
 						  <div class="panel-heading">
-						    <h3 class="panel-title">Node Details</h3>
+						    <i class="fa fa-list fa-fw"></i> Node Details
 						  </div>
-						  <div class="panel-body">		  	
+						  <div class="panel-body">
 							<!-- <div id="listNodeDetail"></div>-->
 							<div class="alert alert-info" style="display: none;" id="msgPingOnly">
 							    <a href="#" class="close" data-dismiss="alert">&times;</a>
@@ -342,14 +342,14 @@
 		    		<div class="col-lg-7">
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Related Incidents</h3>
+						    	<i class="fa fa-random fa-fw"></i> Related Incidents
 						  	</div>
 				    		<div id="listIncidentsRelated" class="listIncidentsRelated"></div>		    		
 				    	</div>
 				    	
 				    	<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<h3 class="panel-title">Related Changes</h3>
+						    	<i class="fa fa-random fa-fw"></i> Related Changes
 						  	</div>
 				    		<div id="listChangesRelated" class="listIncidentsRelated"></div>		    		
 				    	</div>		
