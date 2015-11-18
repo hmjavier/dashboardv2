@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="robots" content="noindex">
+	<meta name="googlebot" content="noindex">
 
     <title>:::Customer Network Operation Center (CNOC):::</title>
 	<link rel="icon" type="image/x-icon" href="cnoc.ico" />
@@ -70,9 +72,38 @@
 	<div class="overlay" id="overlay" style="display:none;"></div>
 	<div class="box panel panel-primary" id="box"  style="overflow: scroll; height: 500px;">
 		<div class="panel-heading">
-			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>
+			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>			
 		</div>
-		<a class="boxclose" id="boxclose"></a>  
+		<a class="boxclose" id="boxclose"></a>
+		
+		<div id="topGroupsListDiv" class="topGroupsListDiv">
+			<table style='width:30%; color: black; margin-left: 30%;'>
+				<tr>
+					<td>Select Top:</td>
+					<td>
+						<select id='topGroupList' data-placeholder='' style='width:100%; color: black;' tabindex='1'>
+							<!--<option value='BGP Peer Down'></option>-->
+							<option value='Proactive CPU'>CPU Load</option>
+							<option value='Proactive Memory Free'>Memory Used</option>
+							
+							<option value='Proactive Interface Error Input Packets'>In Error Rates</option>
+							<option value='Proactive Interface Error Output Packets'>Out Error Rates</option>
+							
+							<option value='Proactive Interface Discards Output Packets'>Out Discards Rates</option>
+							<option value='Proactive Interface Discards Input Packets'>In Discards Rates</option>
+							
+							<option value='Proactive Interface Input Utilisation'>In Utilization</option>
+							<option value='Proactive Interface Output Utilisation'>Out Utilization</option>
+							
+							<option value='Proactive Response Time'>Response Time</option>
+							
+							<!-- <option value='Proactive Interface Availability'></option>-->																					
+							<!--<option value='Proactive Reachability'></option>-->				
+						</select>
+					</td>
+				</tr>
+			</table>				
+		</div>	  
 	  <div id="tTops"></div>
 	  
 	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 2%;">
@@ -343,7 +374,7 @@
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization IN
 						  	</div>
 						  	<div class="panel-body">
-						  		<div id="topInUtilization" style="height: 450px;"></div>
+						  		<div id="topInUtilization" style="height: 450px; "></div>
 						  	</div>
 						</div>
 					</div>
@@ -360,18 +391,16 @@
 				    <div class="col-lg-2">
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS 
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Groups 
 						  	</div>
-						  	<div class="panel-body">
-						    			<ul class="nav nav-pills">
-											<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
-											<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
-											<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+						  	<div class="panel-body" style="height: 450px; overflow-y: auto;">
+						    			<ul class="nav nav-pills groupsPyrs" id="groupsPyrs">
+											<!--<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
 											<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
 											<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
 											<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
 											<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>-->
 					      				</ul>					    		
 						  	</div>
 						</div>
@@ -788,7 +817,7 @@
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service11 = serviceG1;
-			    		//cnocConnector.service12 = serviceG2;
+			    		cnocConnector.serviceGroups = serviceG2;
 			    		cnocConnector.service13 = serviceG3;
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
@@ -812,6 +841,7 @@
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
 			    		cnocConnector.service35 = serviceG24;
+			    		cnocConnector.serviceGetTopForGroup = serviceG25;
 			    		
 			    }
 			});
@@ -824,7 +854,6 @@
 			/*Genera Menu*/
 			generateMenu();
 		 	
-		 
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
 		 			$('.nav-tabs a[href="#listNodesGral"]').tab('show');
@@ -854,12 +883,25 @@
 		 		//colors: ['#reachable', '#unreachable', 'degraded']
 		        colors: ['#17FF00', '#FF0202', '#FFE400']		 	
 		    });
-		 	
+
 		 	drawElementsGral.init();
 		 	$(".tops").on("click", function() {
 		    	$(".tops").removeClass("active");
 		    	$(this).addClass("active");
 		    });
+		 	
+		 	
+		 	/*LIST TOPS*/
+			$("#topGroupList").chosen({
+				allow_single_deselect : true
+			}).change(function() {
+
+				var sTop = $("#topGroupList option:selected").val();
+				$( '#headerGridsDetailG' ).text("Group: " + drawElementsGral.groupId+"   Top: "+sTop);
+				drawElementsGral.getTopForGroupTable(drawElementsGral.groupId, sTop);					
+			});;
+			$("#topGroupsListDiv").hide();		
+			
 		    
 		    /*** Start Old Top
 		    $('#tCpuCountG').click(function(e){
@@ -872,27 +914,7 @@
 				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
 			});
 		    End Old Top ***/
-			
-			/*** Top ***/
-		 	$('.topMeasure').click(function(e) {
-		 		
-		 		$("#tTops").show();
-				$("#divContainerTops").hide();
-		 		
-		 		var currentId = $( this ).attr( 'id' );
-		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
-				cnocConnector.invokeMashup(
-						cnocConnector.service16,
-						{
-							"network_code" : cnocConnector.codeNetGlobal,
-							"topID" : currentId
-						},
-						drawElementsGral.topGrid,
-						"tTops",
-						"tTopsTable"
-					);
-			});
-			
+
 			$('#listIncidentG').click(function(e){
 				$("#divContainerTops").hide();
 				$("#tTops").show();
@@ -1013,9 +1035,14 @@
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
+			
+			/*var refresh = setInterval(function(){
+				drawElementsGral.init();
+			},7200);*/
+			
 			var refresh = setInterval(function(){
 				drawElementsGral.init();
-			},300000);
+			},120000);
 			
 			$( '.chartFirewall' ).hide();
 			

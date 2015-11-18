@@ -72,7 +72,8 @@
 			    mode:'both',
 			    callback: function() {
 			    		cnocConnector.logout = serviceLogout;
-			    		cnocConnector.service1 = serviceLDAP1; 
+			    		cnocConnector.service1 = serviceLDAP1;
+			    		cnocConnector.service2 = serviceLDAP2;
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
@@ -83,11 +84,11 @@
 			
 			$("#SelectCustomer").hide();
 
-			$( ".logout").click(function(event){	
+			$( ".logout").click(function(event) {
 				logout();
 			});
 			
-			$( ".back").click(function(event){
+			$( ".back").click(function(event) {
 				home();
 			});
 			
@@ -131,6 +132,24 @@
 					"Your password must contain at least one special character."
 				);
 			
+			$.validator.addMethod(
+					"notEqualValues",
+					function(value, element) { return $('#currentPassword').val() != $('#newPassword').val() },
+					"Please enter a different password"
+				);
+			
+			$.validator.addMethod(
+					"NoBrackets",
+					function(value, element, param) { return this.optional(element) || !param.test(value); },
+					"Please do not use brackets [] {}"
+				);			
+			
+			$.validator.addMethod(
+					"NoSingleQuotes",
+					function(value, element, param) { return this.optional(element) || !param.test(value); },
+					"Single quotes ' not allowed"
+				);
+			
 			$("#formPass").validate({
 				rules: {
 					currentPassword: {
@@ -142,7 +161,10 @@
 						ContainsAtLeastOneCapitalLetter: true,
 						ContainsAtLeastOneDigit: true,
 						ContainsAtLeastOneLowerCase: true,
-						ContainsAtLeastOneSpecialCharacter: true
+						ContainsAtLeastOneSpecialCharacter: true,
+						notEqualValues: true,
+						NoBrackets: /[\[\]\{\}]/,
+						NoSingleQuotes: /[']/
 					},
 					retypedPassword: {
 						required: true,
@@ -184,12 +206,12 @@
 		<div class="panel-heading">
 			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>
 		</div>
-		<a class="boxclose" id="boxclose"></a>  
+		<a class="boxclose" id="boxclose"></a>
 	  <div id="tTops"></div>
 	</div>
     <div id="wrapper">
 		
-        <!-- MENU  -->		
+        <!-- MENU  -->
 		<%@ include file="menu.jsp" %>
 
         <div id="page-wrapper">
@@ -222,7 +244,7 @@
 								    <div class="col-sm-10">
 								      <input id="retypedPassword" name="retypedPassword" type="password" placeholder="retype password" maxlength="50" size="20">
 								    </div>
-								  </div>								  
+								  </div>
 								  <div class="form-group">
 								    <div class="col-sm-offset-2 col-sm-10">
 										<div class="span5" id="validity_label"></div>

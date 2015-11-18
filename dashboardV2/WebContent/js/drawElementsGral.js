@@ -13,6 +13,7 @@ var drawElementsGral = {
 		unreachableNodes : [],		
 		groups : [],
 		intTops:"",
+		groupId:"",
 		
 		dataChartMemory : [],
 		
@@ -28,7 +29,6 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-			console.log(codenet);
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
 			else
@@ -39,7 +39,7 @@ var drawElementsGral = {
 			
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
-
+			cnocConnector.invokeMashup(cnocConnector.serviceGroups, {"codenet" : codenet},drawElementsGral.getGroups, "groups", "groupsG");
 			
 			/* get Nodes Op flow */
 			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
@@ -74,6 +74,52 @@ var drawElementsGral = {
 				"topOutUtilizationG"
 			);
 		
+		},getGroups: function(datos, divContainers, divElements){
+
+			$("#groupsPyrs").empty();
+			
+			for(var i=0; i < datos.records.record.length; i++){
+				$("#groupsPyrs").append("<li class='list-group-item contadores topMeasure' id='"+datos.records.record[i].groups.toString()+"'><a href='#'>"+datos.records.record[i].groups.toString()+"</a></li>");
+			}	
+			
+			/*** Top ***/
+		 	$('.topMeasure').click(function(e) {
+		 		
+		 		$("#tTops").show();
+		 		$("#topGroupsListDiv").show();
+				$("#divContainerTops").hide();
+		 		
+				$('#topGroupList').val('').trigger("chosen:updated");
+				
+		 		drawElementsGral.groupId =  $( this ).attr( 'id' );
+		 		$( '#headerGridsDetailG' ).text("Group: " + drawElementsGral.groupId+"   Top: Proactive CPU");
+		 		
+		 		drawElementsGral.getTopForGroupTable(drawElementsGral.groupId, "Proactive CPU");
+				/*cnocConnector.invokeMashup(
+						cnocConnector.serviceGetTopForGroup,
+						{
+							"network_code" : cnocConnector.codeNetGlobal,
+							"topID" : currentId
+						},
+						drawElementsGral.topGrid,
+						"tTops",
+						"tTopsTable"
+				);*/
+
+			});
+			
+		},getTopForGroupTable:function(groupId, metric){
+			cnocConnector.invokeMashup(
+	 				cnocConnector.serviceGetTopForGroup,
+					{
+						"codenet" : cnocConnector.codeNetGlobal,
+						"groupName" : groupId,
+					    "metric": metric
+					},
+					drawElementsGral.topGrid,
+					"tTops",
+					"tTopsTable"
+			);
 		},
 		getListNodesIpFlow: function(datos, divContainers, divElements){
 
@@ -380,7 +426,8 @@ var drawElementsGral = {
 			var getTopdata = ["getTopNTalkers", "getTopNListeners", "getTopNApplications", "getTopNApplicationSources", "getTopNProtocols", "getRawFlowMatrix"];
 			for(var i=0; i<getTopdata.length; i++){
 				$(".tops").empty();
-				cnocFramework.invokeMashup({invokeUrl : endpoint.getOpFlowTopN,
+				cnocFramework.invokeMashup({
+					invokeUrl : endpoint.getOpFlowTopN,
 					params : {
 						"dns" : "true",
 						"period" : "15",
@@ -405,7 +452,10 @@ var drawElementsGral = {
 			
 			
 		},topOpFlowPyrs: function(datos, divContainers, divElements){
+			
 		
+			$(divContainers[0].selector).empty();
+			
 			var table = "<table id='"+datos.table.id+"'>";
 			
 			table +="<thead><tr>";
@@ -488,7 +538,8 @@ var drawElementsGral = {
 			
 			} else if (status === 'degraded') { // Draw degraded node list
 //				nodeList = nodeList.concat(drawElementsGral.degradedNodes);
-				drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				//drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				drawElementsGral.getListNodesDegraded();
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
 				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
@@ -497,36 +548,104 @@ var drawElementsGral = {
 			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
+		},getListNodesDegraded: function(){
+			
+			/*** Invoke NMIS Nodes by Status ***/
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getDegradedNodesList,
+				params : {
+					"networkCode" : cnocConnector.codeNetGlobal,
+					"flag" : "1"
+				},									
+				callback : drawElementsGral.drawListNodesDegraded,				
+				divContainers : [ $('#listNodes') ],
+				divElements : [ $('#listNodesG') ]
+			});
+			
+			
 		}, drawListNodesDegraded: function (datos, container, divTable) {
-			jQuery("#" + container).empty();	
-			var tableT = "";
 			
-			try {
-				$.each(datos, function(k,v) {
-					tableT +=
-						"<tr class='warning'>" +
-							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
-							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
-						"</tr>";
-				});
+			
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getDegradedNodesList,
+				params : {
+					"networkCode" : cnocConnector.codeNetGlobal,
+					"flag" : "2"
+				},									
+				callback : function(datosSnmp, container, divTable){
+
+					jQuery("#listNodes").empty();	
+					var tableT = "";
+					
+							
+						//if(typeof datos.records.record.length !== 'undefined'){
+						try{
+							if (datos.records.record.length > 1) {
+								for ( var i = 0; i < datos.records.record.length; i++) {
+									
+									tableT +=
+										"<tr class='warning'>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].event.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].value_column.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].element.toString()+"</a></td>" +						
+											"<td><a href='#nodeResource'>"+datos.records.record[i].updated.toString()+"</a></td>" +
+										"</tr>";
+								}
+							} else {								
+									tableT +=
+										"<tr class='warning'>" +
+											"<td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record.event.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record.value_column.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record.element.toString()+"</a></td>" +						
+											"<td><a href='#nodeResource'>"+datos.records.record.updated.toString()+"</a></td>" +
+										"</tr>";								
+							}
+						}catch(e){}
+						
+						try{
+								/***********************************************************************************************/
+								/*  DATOS SNMP DOWN */
+								
+								if (datosSnmp.records.record.length > 1) {
+									for ( var i = 0; i < datosSnmp.records.record.length; i++) {
+										
+										tableT +=
+											"<tr class='warning'>" +
+												"<td><a href='#nodeResource'>"+datosSnmp.records.record[i].name.toString()+"</a></td>" +
+												"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
+												"<td><a href='#nodeResource'></a></td>" +
+												"<td><a href='#nodeResource'></a></td>" +						
+												"<td><a href='#nodeResource'></a></td>" +
+											"</tr>";
+									}
+								} else {
+									tableT +=
+										"<tr class='warning'>" +
+											"<td><a href='#nodeResource'>"+datosSnmp.records.record.name.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
+											"<td><a href='#nodeResource'></a></td>" +
+											"<td><a href='#nodeResource'></a></td>" +						
+											"<td><a href='#nodeResource'></a></td>" +
+										"</tr>";
+								}
+						}catch(e){}
+
+					var rowsHeaders = [
+						{ "sTitle" : "Node Name" },
+						{ "sTitle" : "Event" },
+						{ "sTitle" : "Value" },
+						{ "sTitle" : "Element" },
+						{ "sTitle" : "Updated" }
+					];
+					
+					cnocConnector.drawGrid("listNodes", "listNodesG", tableT, rowsHeaders, false);
+				},				
+				divContainers : [ $('#listNodes') ],
+				divElements : [ $('#listNodesG') ]
+			});
 				
-			} catch (err) {
-				console.log(err);
-			};		
-			
-			var rowsHeaders = [
-				{ "sTitle" : "Node Name" },
-				{ "sTitle" : "Event" },
-				{ "sTitle" : "Value" },
-				{ "sTitle" : "Element" },
-				{ "sTitle" : "Updated" }
-			];
-			
-			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
-			
 		}, selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "general");		
@@ -868,7 +987,6 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-						console.log("fallo");
 					}
 					$( "#mapGral").unmask();
 				}
@@ -1143,35 +1261,77 @@ var drawElementsGral = {
 		
 		var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 	
-	}, topGrid: function(datos, container, divTable) {
+	}, topGrid: function(response, container, divTable) {
+		
+		console.log(response);
 		
 		$("#"+container).empty();
 
 		tableT = "";
 		try {
-			for ( var i = 0; i < datos.length; i++) {
+			
+			if (response.records.record.length > 1) {
+				for ( var i = 0; i < response.records.record.length; i++) {
+					var datos = response.records.record[i];
+					
+					var _class = "success";
+					if(datos.value > 90){
+						_class = "danger";
+					}else if(datos.value > 80 && datos.value < 90){
+						_class = "warning";
+					}else if(datos.value < 80){
+						_class = "success";
+					}
+					
+					tableT += "<tr class='"+_class+"'>";
+					
+					tableT += '<td><div class="progress">';
+					tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos.value+' %">';
+					
+					if(datos.event === 'Proactive Response Time'){
+						tableT += datos.value+' ms</div></div></td>';
+					}else{
+						tableT += datos.value+' %</div></div></td>';
+					}	
+					
+					tableT += "<td>"+datos.node+"</td>";
+					
+					if(datos.event === 'Proactive Response Time'){
+						tableT += "<td>"+datos.value+" ms</td>";
+					}else{
+						tableT += "<td>"+datos.value+" %</td>";
+					}					
+					
+					tableT += "<td>"+datos.element+"</td>";					
+					tableT += "</tr>";
+				}			
+			}else{
+				var datos = response.records.record;
+				
 				var _class = "success";
-				if(datos[i].value > 90){
+				if(datos.value > 90){
 					_class = "danger";
-				}else if(datos[i].value > 80 && datos[i].value < 90){
+				}else if(datos.value > 80 && datos.value < 90){
 					_class = "warning";
-				}else if(datos[i].value < 80){
+				}else if(datos.value < 80){
 					_class = "success";
 				}
 				
 				tableT += "<tr class='"+_class+"'>";
 				
 				tableT += '<td><div class="progress">';
-				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos[i].value+'%">';
-				tableT += datos[i].value+'%</div></div></td>';
+				tableT += '<div class="progress-bar progress-bar-'+_class+' progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:'+datos.value+'%">';
+				tableT += datos.value+'%</div></div></td>';
 				
 				tableT += 
-				"<td>"+datos[i].node+"</td>" +
-				"<td>"+datos[i].value+"</td>" +
-				"<td>"+datos[i].element+"</td>";
+				"<td>"+datos.node+"</td>" +
+				"<td>"+datos.value+"</td>" +
+				"<td>"+datos.element+"</td>";
 				
 				tableT += "</tr>";
 			}
+			
+			
 			
 		} catch (err) { console.log(err); };
 		var rowsHeaders = [ {
@@ -1276,9 +1436,9 @@ var drawElementsGral = {
 
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					
-
+					//$( '.container-fluid' ).mask("Waiting...");
 					$("#tTops").hide();
-					$("#divContainerTops").show();
+					$("#divContainerTops").show();					
 					
 					dTable.$('tr.row_selected').removeClass('row_selected');
 					$(this).addClass('row_selected');
@@ -1291,7 +1451,7 @@ var drawElementsGral = {
 					drawElementsGral.intTops = $(nTds[2]).text();
 					
 					$( '#headerGridsDetailG' ).text("Tops: "+node);
-					
+					$( '#topGroupsListDiv' ).hide();
 					/* GET DATA FOR TREE NODE RESOURCE */
 					cnocConnector.invokeMashup(cnocConnector.service26, {"hostname" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.treeData, "", "");
 					
@@ -1303,7 +1463,7 @@ var drawElementsGral = {
 					cnocConnector.getIpAccounting();
 					
 					/*getTopsOpflow*/
-					
+
 					drawElementsGral.getTopsOpflowF();
 
 				});
