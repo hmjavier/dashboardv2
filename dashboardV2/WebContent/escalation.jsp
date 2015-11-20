@@ -60,7 +60,7 @@
 
 
                 <div class="row">
-                	<div class="col-md-5 col-md-offset-3">
+                	<div class="col-md-6 col-md-offset-3">
                 		<div class="btn-group">    
 					    	<button type="button" class="btn btn-info">CSC</button>
 							<button type="button" class="btn btn-info">GFC</button>
@@ -68,6 +68,8 @@
 							<button type="button" class="btn btn-info">ESCALACION CASE</button>
 							<button type="button" class="btn btn-info">SMS-INT</button>
 							<button type="button" class="btn btn-info">SMS-CLIE</button>
+							<!-- Nuevo nivel de escalacion solicitado -->
+							<button type="button" class="btn btn-info">VSYS</button>
 							<!-- <button type="button" class="btn btn-info">Teldat</button> -->
 							<!-- <button id="getButton" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>-->
 						</div>						
@@ -136,6 +138,8 @@
 	<script src="js/jsEscalaciones/function_ESCALACION_CASE.js"></script>
 	<script src="js/jsEscalaciones/function_SMS_INT.js"></script>
 	<script src="js/jsEscalaciones/function_SMS_CLIE.js"></script>
+	<!--libreria para VSYS -->
+	<script src="js/jsEscalaciones/function_VSYS.js"></script>
 	<script src="js/jsEscalaciones/function_Teldat.js"></script>
 	
 	<!-- jQuery Loadmask -->
@@ -156,7 +160,8 @@
 			    		cnocConnector.logout = serviceLogout;
 			    		cnocConnector.service1 = serviceESC1;
 			    		cnocConnector.service2 = serviceESC2;
-			    		cnocConnector.service3 = serviceESC3;			    		
+			    		cnocConnector.service3 = serviceESC3;
+			    		cnocConnector.service4 = serviceESC4;
 			    		cnocConnector.menu = serviceMenu;
 			    		cnocConnector.nmis_urls = nmis_urls;
 			    }
@@ -230,6 +235,16 @@
 				    		"chartEscalation", // Container
 				    		"formEscalation" // Div
 				    	);
+		 		//-----------------------------------------------------
+		 		//Nuevo valor para el boton solicitado
+		 		} else if (report == 'VSYS') {
+		 			cnocConnector.invokeMashup(
+				    		cnocConnector.service1, // Service ID
+				    		{"im" : $('#im').val()}, // Parameters
+				    		drawElementsEscalation.get_VSYS, // Callback
+				    		"chartEscalation", // Container
+				    		"formEscalation" // Div
+				    	);		 		
 		 		}  else if (report == 'Teldat') {
 		 			cnocConnector.invokeMashup(
 				    		cnocConnector.service1, // Service ID

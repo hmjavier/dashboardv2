@@ -30,6 +30,11 @@
 				"id": "SMS-CLIE",
 				"to": "sms@cfg1.uninet.net.mx",
 				"cc": ""
+			},
+			{
+				"id": "VSYS",
+				"to": "noc@vsys.com; supervision@vsys.com",
+				"cc": ""
 			}
 		]
 	}

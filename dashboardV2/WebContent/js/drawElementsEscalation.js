@@ -59,6 +59,17 @@ var drawElementsEscalation = {
 			bootbox.alert("Can't retrieve information");
 		else
 			build_SMS_CLIE(data, container);
+		
+	//------------------------------------------------------------
+	}, get_VSYS: function(data, container) {				
+		
+		if (data.records == '' || data == null)
+			//alert("Can't retrieve information");
+			bootbox.alert("Can't retrieve information");
+		else
+			build_VSYS(data, container);
+		
+		
 	
 	}, get_Teldat: function(data, container) {				
 		
