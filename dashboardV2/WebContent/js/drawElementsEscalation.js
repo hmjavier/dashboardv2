@@ -67,8 +67,7 @@ var drawElementsEscalation = {
 			//alert("Can't retrieve information");
 			bootbox.alert("Can't retrieve information");
 		else
-			build_VSYS(data, container);
-		
+			build_VSYS(data, container);		
 		
 	
 	}, get_Teldat: function(data, container) {				
