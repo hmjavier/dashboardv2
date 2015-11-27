@@ -72,7 +72,7 @@
 							<button type="button" class="btn btn-info glyphicon glyphicon-hdd">Equipment Inventory</button>		
 						</div>
 						<button id="go" type="button" class="btn btn-success glyphicon glyphicon-save">Get</button>
-                	</div>					
+                	</div>
                 </div>
                 <br>
                 <div class="row">
