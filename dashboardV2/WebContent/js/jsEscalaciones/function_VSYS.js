@@ -53,7 +53,7 @@ function build_VSYS (data, container) {
 				    '</tr>' +
 				    '<tr>' + 
 					    '<td>Contacto:</td>' + 
-					    '<td><input type="text" id="contacto_person_ES" class="form-control" maxlength="130" value="' + data.records.record.opened_by + '" /></td>' + 
+					    '<td><input type="text" id="contacto_person_ES" class="form-control" maxlength="130" value="' + data.records.record.contacto_person + '" /></td>' + 
 				    '</tr>' + 
 				    '<tr>' + 
 					    '<td>Tel&eacute;fono:</td>' + 
