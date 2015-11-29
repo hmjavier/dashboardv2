@@ -27,13 +27,14 @@ var cnocFramework = {
 		try {
 			$.ajax({
 				type : 'GET',
-				dataType : 'jsonp',
+				dataType : 'json',
 				url : request.invokeUrl,
 				data : request.params,
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR);
 					console.log(textStatus);
 					console.log(errorThrown);
+					request.callback(null, request.divContainers, request.divElements);
 				},
 				success : function(response, divContainers, divElements) {
 					try {

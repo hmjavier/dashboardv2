@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="robots" content="noindex">
+	<meta name="googlebot" content="noindex">
 
     <title>:::Customer Network Operation Center (CNOC):::</title>
 	<link rel="icon" type="image/x-icon" href="cnoc.ico" />
@@ -68,101 +70,144 @@
 
 <body>
 	<div class="overlay" id="overlay" style="display:none;"></div>
-	<div class="box panel panel-primary" id="box" >
+	<div class="box panel panel-primary" id="box"  style="overflow: scroll; height: 500px;">
 		<div class="panel-heading">
-			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>
+			<h3 id="headerGridsDetailG" class="panel-title" style="font-size-adjust: inherit;"></h3>			
 		</div>
-		<a class="boxclose" id="boxclose"></a>  
+		<a class="boxclose" id="boxclose"></a>
+		
+		<div id="topGroupsListDiv" class="topGroupsListDiv">
+			<table style='width:30%; color: black; margin-left: 30%;'>
+				<tr>
+					<td>Select Top:</td>
+					<td>
+						<select id='topGroupList' data-placeholder='' style='width:100%; color: black;' tabindex='1'>
+							<!--<option value='BGP Peer Down'></option>-->
+							<option value='Proactive CPU'>CPU Load</option>
+							<option value='Proactive Memory Free'>Memory Used</option>
+							
+							<option value='Proactive Interface Error Input Packets'>In Error Rates</option>
+							<option value='Proactive Interface Error Output Packets'>Out Error Rates</option>
+							
+							<option value='Proactive Interface Discards Output Packets'>Out Discards Rates</option>
+							<option value='Proactive Interface Discards Input Packets'>In Discards Rates</option>
+							
+							<option value='Proactive Interface Input Utilisation'>In Utilization</option>
+							<option value='Proactive Interface Output Utilisation'>Out Utilization</option>
+							
+							<option value='Proactive Response Time'>Response Time</option>
+							
+							<!-- <option value='Proactive Interface Availability'></option>-->																					
+							<!--<option value='Proactive Reachability'></option>-->				
+						</select>
+					</td>
+				</tr>
+			</table>				
+		</div>	  
 	  <div id="tTops"></div>
 	  
-	  <div class="divContainerTops" id ="divContainerTops" style="width:100%; height: 400px; overflow: scroll;">
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
+	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 2%;">
+	  	
+	  		<div class="row">
+	  			<div class="col-lg-12">
+				  		<div class="panel panel-primary" >
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Talkers
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
 						  	</div>
+						  	
 						  	<div class="panel-body">
-						  		<div id="top0" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
+						  	<div id="containerChartPerformanceInterfaz"></div>
+						  	</div>
+						</div>
+				  	</div>
+	  		</div>
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Talkers
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top0" class="tops"></div>
+					  	</div>								
+					</div>   
 			    </div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Listener
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top1" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				
-				<!-- /.row -->
-				
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top2" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				    </div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications Source
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top3" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				
-				<!-- /.row -->
-				
-				<div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Protocols
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top4" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-			    <div class="row">
-				    <div class="col-lg-12">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Conversations
-						  	</div>
-						  	<div class="panel-body">
-						  		<div id="top5" class="tops"></div>
-						  	</div>								
-						</div>   
-				    </div>
-				</div>
-				</div>
-	  
-	  
+		    </div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Listener
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top1" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+			
+			<!-- /.row -->
+			
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top2" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			    </div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Applications Source
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top3" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+			
+			<!-- /.row -->
+			
+			<div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Protocols
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top4" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+		    <div class="row">
+			    <div class="col-lg-12">
+			    	<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-list-alt fa-fw"></i> Top 10 Conversations
+					  	</div>
+					  	<div class="panel-body">
+					  		<div id="top5" class="tops"></div>
+					  	</div>								
+					</div>   
+			    </div>
+			</div>
+		</div>
+
 	</div>
 	<div id="cmd" style="visibility: hidden; height:0px; width: 1000px;">		
 		<div>
@@ -323,38 +368,82 @@
                 </div>
                 <!-- /.row -->
 				<div class="row">
-				    <div class="col-lg-4">
+					<div class="col-lg-5">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization IN
+						  	</div>
+						  	<div class="panel-body">
+						  		<div id="topInUtilization" style="height: 450px; "></div>
+						  	</div>
+						</div>
+					</div>
+					<div class="col-lg-5">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization OUT
+						  	</div>
+						  	<div class="panel-body" >
+						  		<div id="topOutUtilization" style="height: 450px;"></div>
+						  	</div>
+						</div>
+					</div>
+				    <div class="col-lg-2">
 						<div class="panel panel-primary">
 				    		<div class="panel-heading">
-						    	<i class="fa fa-bar-chart-o fa-fw"></i> TOPS Utilization
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Groups 
 						  	</div>
-						  	<div class="panel-body" style="overflow: scroll;">
-						  		<ul class="nav nav-tabs">
-								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">TOPS Utilization IN</a></li>
-								  <li><a data-toggle="tab" href="#topOutOPFlow">TOPS Utilization OUT</a></li>
-								</ul>
-								
-								<div class="tab-content">
-								  	<div id="topInOPFlow" class="tab-pane fade in active">						    
-							    		<div id="topInUtilization" style="height: 450px;"></div>
-							    	</div>
-								  	<div id="topOutOPFlow" class="tab-pane fade">						    
-						    			<div id="topOutUtilization" style="height: 450px;"></div>					    		
-							  		</div>
-								</div>
+						  	<div class="panel-body" style="height: 450px; overflow-y: auto;">
+						    			<ul class="nav nav-pills groupsPyrs" id="groupsPyrs">
+											<!--<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
+											<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
+											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>-->
+					      				</ul>					    		
 						  	</div>
 						</div>
 				    </div>
-				    <div class="col-lg-5">
+				    
+
+			  	</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-7">
 				    	<div class="panel panel-primary" id="mapaAll">
 				    		<div class="panel-heading">
 						    	<i class="fa fa-globe fa-fw"></i> Nodes By State
 						  	</div>
+						  	<div id="mapa_info" style=" z-index: 1000;  position: absolute; top: 75%;  left: 5%; background-color:white;  border: 1px solid rgba(255,255,255,0);"></div>
 				    		<div id="mapGral" class="mapGral"></div>
 				    	</div>		
 				    </div>
-				    
-				    <div class="col-lg-3">
+				<div class="col-lg-5">
+
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Nodes
+						  	</div>
+						  	<!-- <div id="listNodes" class="listNodes"></div>-->
+						  	<div class="panel-body">
+						  		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+							        <li class="active"><a href="#listNodesGral" data-toggle="tab">Node List</a></li>
+							        <li><a href="#listNodesOpFlowGG" data-toggle="tab">List Nodes OpFlow</a></li>
+							    </ul>
+							    <div id="my-tab-content" class="tab-content">
+							        <div class="tab-pane active" id="listNodesGral">
+							            <div id="listNodes" class="listNodes"></div>
+							        </div>
+							        <div class="tab-pane" id="listNodesOpFlowGG">
+							            <div id="listNodesOpFlow" class="listNodesOpFlow"></div>
+							        </div>
+							    </div>
+						  	</div>
+						</div>
+						
+						
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-book fa-fw"></i> Services
@@ -377,41 +466,43 @@
 					      </ul>
 						  </div>
 						</div>
-						<div class="panel panel-primary">
-						  <div class="panel-heading">
-						    <i class="fa fa-long-arrow-up fa-fw"></i> Tops
-						  </div>
-						  <div class="panel-body">
-						  	<ul class="nav nav-pills">
-							<!-- <li class="tops list-group-item contadores" id="tMemoryCountG"><a href="#">Top Memory</a></li> -->
-							<!-- <li class="tops list-group-item contadores" id="tCpuCountG"><a href="#">Top CPU</a></li> -->
-							<li class="list-group-item contadores topMeasure" id="cpuLoad"><a href="#">CPU Load</a></li>
-							<li class="list-group-item contadores topMeasure" id="MemoryUsed"><a href="#">Memory Used</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifInUtil"><a href="#">In Utilization</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutUtil"><a href="#">Out Utilization</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifInErrorRates"><a href="#">In Error Rates</a></li>
-							<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
-					      </ul>
-						  </div>
-						</div>
+						
 				    </div>
-			  	</div>
+			</div>			
+			<br>
+				<!-- <div class="row">
+					<div class="col-lg-6">
+						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> List Interface
+						  	</div>
+						  	
+						  	<div class="panel-body" style="overflow: scroll; height: 400px;">
+						  		<div id="listInterfaces"></div>
+						  	</div>
+						</div>					  	
+					</div>
+					
+					<div class="col-lg-6">
+				  		<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
+						  	</div>
+						  	
+						  	<div class="panel-body" style="height: 400px;">
+						  	<div id="containerChartPerformanceInterfaz"></div>
+						  	</div>
+						</div>
+				  	</div>
+					
+				</div>-->
 			<!-- /.row -->
-			
 				<br>
 				  <div class="row">
 				    <div class="col-lg-3">
-				    	<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-list-alt fa-fw"></i> Node List
-						  	</div>
-							<div id="listNodes" class="listNodes"></div>
-							<br>
-							<br>
-						</div>   
-				    </div>
-				    <div class="col-lg-4">
+
 				    	<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-random fa-fw"></i> Relationships
@@ -450,6 +541,9 @@
 					      </ul>
 						  </div>
 						</div>
+				    					    	   
+				    </div>
+				    <div class="col-lg-4">
 						<div class="panel panel-primary">
 						  <div class="panel-heading">
 						    <i class="fa fa-sitemap fa-fw"></i> Node Resources
@@ -601,8 +695,19 @@
 									<div class="row" style="padding-left: 7px; padding-right: 7px;">
 										<div class="col-lg-12  form-group has-success">
 								    		<div id="listInterfaces"></div>
+								    		<!-- <div class="panel panel-primary">
+									    		<div class="panel-heading">
+									    			<a name="nodeList"></a>
+											    	<i class="fa fa-list-alt fa-fw"></i> List Interface
+											  	</div>
+											  	
+											  	<div class="panel-body" style="overflow: scroll; height: 150px;">
+											  		<div id="listInterfaces"></div>
+											  	</div>
+											</div>	-->
 								  		</div>
 									</div>
+
 									<div class="row" style="padding-left: 12px; padding-right: 7px;">
 										<a class="btn btn-primary btn-sm nodeDetailViewHide" href="#" role="button" id="nodeDetailViewHide">Hide Detail &laquo;</a>
 									</div>
@@ -678,6 +783,7 @@
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
 	<!-- google maps -->
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script src="https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
 	
 	<!-- remove css/js -->
 	<script type="text/javascript" src="js/script.js"></script>	
@@ -711,7 +817,7 @@
 			    		cnocConnector.service5 = serviceC5;
 			    		cnocConnector.service9 = serviceC9;
 			    		cnocConnector.service11 = serviceG1;
-			    		//cnocConnector.service12 = serviceG2;
+			    		cnocConnector.serviceGroups = serviceG2;
 			    		cnocConnector.service13 = serviceG3;
 			    		cnocConnector.service14 = serviceG4;
 			    		cnocConnector.service15 = serviceG5;
@@ -735,6 +841,7 @@
 			    		cnocConnector.service33 = serviceG22;
 			    		cnocConnector.service34 = serviceG23;
 			    		cnocConnector.service35 = serviceG24;
+			    		cnocConnector.serviceGetTopForGroup = serviceG25;
 			    		
 			    }
 			});
@@ -747,24 +854,27 @@
 			/*Genera Menu*/
 			generateMenu();
 		 	
-		 
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
+		 			$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 				drawElementsGral.listNodes('complete');
 			});
 		 	
 		 	$('#countReachable').click(function() {
 		 		/*** Draw complete node list ***/
+		 		$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('reachable');
 			});
 	
 		 	$('#countDegraded').click(function() {
 		 		/*** Draw complete node list ***/
+		 		$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('degraded');
 			});
 		 	
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
+		 			$('.nav-tabs a[href="#listNodesGral"]').tab('show');
 		 		drawElementsGral.listNodes('unreachable');
 			});
 			
@@ -773,13 +883,25 @@
 		 		//colors: ['#reachable', '#unreachable', 'degraded']
 		        colors: ['#17FF00', '#FF0202', '#FFE400']		 	
 		    });
-		 	
-		 	drawElementsGral.init();
 
+		 	drawElementsGral.init();
 		 	$(".tops").on("click", function() {
 		    	$(".tops").removeClass("active");
 		    	$(this).addClass("active");
 		    });
+		 	
+		 	
+		 	/*LIST TOPS*/
+			$("#topGroupList").chosen({
+				allow_single_deselect : true
+			}).change(function() {
+
+				var sTop = $("#topGroupList option:selected").val();
+				$( '#headerGridsDetailG' ).text("Group: " + drawElementsGral.groupId+"   Top: "+sTop);
+				drawElementsGral.getTopForGroupTable(drawElementsGral.groupId, sTop);					
+			});;
+			$("#topGroupsListDiv").hide();		
+			
 		    
 		    /*** Start Old Top
 		    $('#tCpuCountG').click(function(e){
@@ -792,27 +914,7 @@
 				cnocConnector.invokeMashup(cnocConnector.service17, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.topGrid, "tTops", "tMemoryG");			
 			});
 		    End Old Top ***/
-			
-			/*** Top ***/
-		 	$('.topMeasure').click(function(e) {
-		 		
-		 		$("#tTops").show();
-				$("#divContainerTops").hide();
-		 		
-		 		var currentId = $( this ).attr( 'id' );
-		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
-				cnocConnector.invokeMashup(
-						cnocConnector.service16,
-						{
-							"network_code" : cnocConnector.codeNetGlobal,
-							"topID" : currentId
-						},
-						drawElementsGral.topGrid,
-						"tTops",
-						"tTopsTable"
-					);
-			});
-			
+
 			$('#listIncidentG').click(function(e){
 				$("#divContainerTops").hide();
 				$("#tTops").show();
@@ -933,10 +1035,14 @@
 				Highcharts.setOptions(Highcharts.themeB);
 				drawElementsGral.builder(cnocConnector.codeNetGlobal);
 			});
-
+			
+			/*var refresh = setInterval(function(){
+				drawElementsGral.init();
+			},7200);*/
+			
 			var refresh = setInterval(function(){
 				drawElementsGral.init();
-			},300000);
+			},120000);
 			
 			$( '.chartFirewall' ).hide();
 			
