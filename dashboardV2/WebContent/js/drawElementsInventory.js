@@ -368,7 +368,7 @@ var drawElementsInventory = {
 				}, {
 					"sTitle" : "ALCANCE"
 				} ];
-	    }	    
+	    }
 		
 		cnocConnector.drawGrid(container, divTable, rowsData, rowsHeaders, false);
 		

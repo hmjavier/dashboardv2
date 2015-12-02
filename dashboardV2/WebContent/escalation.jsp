@@ -244,7 +244,7 @@
 				    		drawElementsEscalation.get_VSYS, // Callback
 				    		"chartEscalation", // Container
 				    		"formEscalation" // Div
-				    	);		 		
+				    	);
 		 		}  else if (report == 'Teldat') {
 		 			cnocConnector.invokeMashup(
 				    		cnocConnector.service1, // Service ID
