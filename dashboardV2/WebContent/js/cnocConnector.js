@@ -379,7 +379,8 @@ var cnocConnector = {
 												"codenet" : cnocConnector.codeNetGlobal
 											},
 											function (response) {
-												if (response.records.record.nodetype.toString() === 'router' && 
+												if ((response.records.record.nodetype.toString() === 'router' ||
+													response.records.record.nodetype.toString() === 'switch' ) && 
 														response.records.record.nodevendor.toString() === 'Cisco Systems')
 													$("#ipAccountingNS").show();
 												else
@@ -399,7 +400,8 @@ var cnocConnector = {
 												"codenet" : cnocConnector.codeNetGlobal
 											},
 											function (response) {
-												if (response.records.record.nodetype.toString() === 'router' && 
+												if ((response.records.record.nodetype.toString() === 'router' ||
+														response.records.record.nodetype.toString() === 'switch' ) && 
 														response.records.record.nodevendor.toString() === 'Cisco Systems')
 													$("#ipAccountingNS").show();
 												else
