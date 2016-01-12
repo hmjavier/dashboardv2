@@ -57,7 +57,7 @@ var cnocConnector = {
 				statusCode : {
 					401 : function() {
 						alert('Session Time Out');
-						window.location = "/dashboard/index.html";
+						window.location = "/dashboardDHL/index.html";
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -71,7 +71,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboard/index.html";
+							window.location = "/dashboardDHL/index.html";
 						}
 					} catch (err) {
 						callback(response, divcontainer,divelements);
@@ -962,20 +962,31 @@ var cnocConnector = {
 	},drawSelect : function(datos, container, module) {
 
 		if (datos.records.record.length > 1) {
+			
+			var all = "IN (";
+			
+			$.each(datos.records.record, function(k,v) {
+				all = all + "'" + v.network_code + "'" + ",";
+			});			
+			
+			all = all.slice(0, all.length-1)+")"
+			
+			$("#" + container).append(
+					'<option rel="all" value="'	+ all + '">Select all</option>');
 
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
-						"<option rel='"+datos.records.record[i].dept_name.toString()+"' value='"
-								+ datos.records.record[i].network_code.toString() + "'>"
+						'<option rel="'+datos.records.record[i].dept_name.toString() + '" value="'
+								+ " = '" + datos.records.record[i].network_code.toString() + "'" + '">'
 								+ datos.records.record[i].dept_name.toString()
-								+ "</option>");
+								+ '</option>');
 			}
 		} else {
 			jQuery("#" + container).append(
-					"<option rel='"+datos.records.record.dept_name.toString()+"' value='"
-							+ datos.records.record.network_code.toString()
-							+ "'>" + datos.records.record.dept_name.toString()
-							+ "</option>");
+					'<option rel="'+datos.records.record.dept_name.toString()+'" value="'
+							+ "= '" + datos.records.record.network_code.toString() + "'" + '">'
+							+ datos.records.record.dept_name.toString()
+							+ '</option>');
 
 		}
 

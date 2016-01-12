@@ -34,8 +34,11 @@ var drawElementsGral = {
 			
 			cnocConnector.invokeMashup(cnocConnector.service13, {"codenet" : codenet},drawElementsGral.drawListNodes, "listNodes", "listNodesG");			
 			cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
-
-			this.mapaGeneral(codenet, null ,false);
+			
+			if (codenet.indexOf('(')>=0) // If Select all
+				this.mapaGeneral(codenet, null ,false, "true");
+			else
+				this.mapaGeneral(codenet, null ,false);
 			
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : ""},drawElementsGral.countStatus, "countAll", "countAllG");
 			cnocConnector.invokeMashup(cnocConnector.service11, {"codenet" : codenet,"status" : "reachable"},drawElementsGral.countStatus, "countReachable", "countReachableG");
@@ -61,7 +64,7 @@ var drawElementsGral = {
 			
 			var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 			
-		},mapaGeneral:function(codenet, typeData, flgNacional){
+		},mapaGeneral:function(codenet, typeData, flgNacional, isGroup){
 			$( "#mapGral").mask("Waiting...");
 			var states = [];
 
@@ -69,7 +72,7 @@ var drawElementsGral = {
 				type : 'GET',
 				dataType : 'jsonp',
 				url: cnocConnector.service20,
-				data: {network_code:codenet, type:typeData},
+				data: {network_code:codenet, type:typeData, isGroup:isGroup},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("error");
 					console.log(jqXHR);
@@ -315,9 +318,15 @@ var drawElementsGral = {
 						            infoWindow = new google.maps.InfoWindow();
 						            
 									if(codenet.indexOf('N')>=0){
-										google.maps.event.addListener(mapaNacional, 'click', function(){
-							            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true);
-							            });	
+										if (codenet.indexOf('(')>=0) {
+											google.maps.event.addListener(mapaNacional, 'click', function(){
+								            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true, "true");
+								            });
+										} else {
+											google.maps.event.addListener(mapaNacional, 'click', function(){
+								            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true);
+								            });
+										}	
 									}
 
 						      	}
