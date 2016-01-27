@@ -328,7 +328,6 @@ var drawElementsGral = {
 								            });
 										}	
 									}
-
 						      	}
 						    });
 							
