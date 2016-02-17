@@ -200,6 +200,8 @@
 																		returnUrl = "/dashboardLiverpool/main.jsp";
 																	else if (codenets === "N000382")
 																		returnUrl = "/dashboardPyrs/main.jsp";
+																	else if (codenets === "N000362")
+																		returnUrl = "/dashboardSantander/main.jsp";
 																	else if (response.response.records.record.nmis_db === "10.237.7.202" || response.response.records.record.nmis_db === "10.237.7.203")
 																		returnUrl = "/dashboardV2/main.jsp"
 																	else if (ou === "PEXA-CUSTOM")
@@ -207,11 +209,11 @@
 																	else if (module.indexOf("gen=true") > -1)
 																		returnUrl = "/dashboard/main.jsp";
 																	else
-																		returnUrl = "/dashboard/main.jsp";
+																		returnUrl = "/dashboardBanorte/main.jsp";
 																
 																} catch (err) {
 																	console.log(err);
-																	returnUrl = "/dashboard/main.jsp";
+																	returnUrl = "/dashboardBanorte/main.jsp";
 																}
 																
 																window.location.href = returnUrl;

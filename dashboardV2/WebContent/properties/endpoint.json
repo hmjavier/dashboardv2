@@ -1,12 +1,20 @@
 {
 
 "main" : "",
+"path":"/dashboardBanorte",
+
+"logout":"/presto/edge/api/rest/UserManagerService/logout",
 
 "getNmisStatus" : "/presto/edge/api/rest/ms_nmis_status/Invoke?x-presto-resultFormat=json",
 "getDegradedNodes" : "/presto/edge/api/rest/ms_rest_nmis_status/Invoke?x-presto-resultFormat=json",
 "getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json",
 "getBackups" : "/presto/edge/api/rest/ms_nmis_backups/Invoke?x-presto-resultFormat=json",
 "getIpsla" : "/presto/edge/api/rest/ms_nmis_ipsla/Invoke?x-presto-resultFormat=json",
-"getBackupsDown" : "/presto/edge/api/rest/ms_nmis_backups_down/Invoke?x-presto-resultFormat=json"
+"getBackupsDown" : "/presto/edge/api/rest/ms_nmis_backups_down/Invoke?x-presto-resultFormat=json",
+"getCurrentUser":"/presto/edge/api/rest/cnoc_global_variables/Invoke?x-presto-resultFormat=json",
+"getNetworkCodes" : "/presto/edge/api/rest/ms_getNetworkCodes/Invoke?x-presto-resultFormat=json",
+"getfilters" : "/presto/edge/api/rest/ms_se_ci_filter/Invoke?x-presto-resultFormat=json",
+"getIncidents" : "/presto/edge/api/rest/ms_se_incidents/Invoke?x-presto-resultFormat=json",
+"getActivities" : "/presto/edge/api/rest/ms_se_activities/Invoke?x-presto-resultFormat=json"
 
 }
